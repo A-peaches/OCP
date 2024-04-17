@@ -145,17 +145,20 @@
   <div id="center">
     <router-view />
   </div>
+  <div id="footer">
+    <FooterView />
+  </div>
 </template>
 
+<script>
+import FooterView from "./components/FooterView.vue";
+export default {
+  components: {
+    FooterView,
+  },
+};
+</script>
 <style>
-#app {
-  font-family: "MyFont", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
 nav {
   padding: 30px;
 }
