@@ -2,17 +2,13 @@
   <div
     id="header"
     class="sticky-top"
-    style="padding: 15px; background-color: rgba(255, 255, 255, 0.8)"
+    style=" background-color: rgba(255, 255, 255, 0.8)"
   >
     <ul class="nav justify-content-center">
-      <nav class="navbar navbar-expand-lg bg-body-white">
+      <nav class="navbar navbar-expand-lg bg-body-white" style="padding:0px">
         <div class="container-fluid">
           <router-link to="/" class="nav-link" aria-current="page">
-            <a
-              class="navbar-brand title"
-              style="margin-right: 140px; font-size: 18pt"
-              >🐼 판다 커피
-            </a>
+            <img src='./assets/logo.png' id="titleLogo">
           </router-link>
           <button
             class="navbar-toggler"
@@ -178,6 +174,7 @@ nav {
 }
 .nav li a {
   color: black;
+  font-size: 17pt;
 }
 .black {
   color: black;
@@ -188,5 +185,11 @@ nav a.router-link-exact-active {
 ul a.dropdown-item:active {
   background-color: rgba(128, 128, 128, 0.062);
   transform: translateY(2px);
+}
+
+#titleLogo {
+  width : 220px;
+  height : 138px;
+  margin-right: 110px;
 }
 </style>
