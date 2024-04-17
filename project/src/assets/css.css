@@ -14,7 +14,6 @@ nav, div, body{
 
 #header {
     width: 100%;
-    padding : 15px;
     height : auto;
     border : 2px solid black;
 }
@@ -31,4 +30,7 @@ nav, div, body{
     width : 100%;
     height : auto;
     border : 2px solid black;
+    padding-top : 15px;
+    padding-bottom : 15px;
+    text-align: left;
 }
