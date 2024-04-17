@@ -2,7 +2,7 @@
     font-family: "MyFont";
     src: url('MyFont.ttf');
 }
-
+/*  */
 @font-face {
     font-family: "MyFont2";
     src: url('MyFont2.ttf');
@@ -14,20 +14,23 @@ nav, div, body{
 
 #header {
     width: 100%;
-    padding : 15px;
-    height : 100px;
+    height : auto;
     border : 2px solid black;
 }
 
 #center{
     width: 100%;
-    height : 650px;
+    height : auto;
     border : 2px solid blue;
-    padding : 15px;
+    padding-top : 15px;
+    padding-bottom : 15px;
 }
 
 #footer {
     width : 100%;
     height : auto;
     border : 2px solid black;
+    padding-top : 15px;
+    padding-bottom : 15px;
+    text-align: left;
 }

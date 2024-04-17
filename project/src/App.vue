@@ -1,5 +1,9 @@
 <template>
-  <div id="header">
+  <div
+    id="header"
+    class="sticky-top"
+    style="padding: 15px; background-color: rgba(255, 255, 255, 0.8)"
+  >
     <ul class="nav justify-content-center">
       <nav class="navbar navbar-expand-lg bg-body-white">
         <div class="container-fluid">
@@ -141,17 +145,20 @@
   <div id="center">
     <router-view />
   </div>
+  <div id="footer">
+    <FooterView />
+  </div>
 </template>
 
+<script>
+import FooterView from "./components/FooterView.vue";
+export default {
+  components: {
+    FooterView,
+  },
+};
+</script>
 <style>
-#app {
-  font-family: "MyFont", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
 nav {
   padding: 30px;
 }
