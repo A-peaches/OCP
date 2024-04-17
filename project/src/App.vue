@@ -25,8 +25,8 @@
             <div class="navbar-nav">
               <ul class="nav nav-underline">
                 <li class="nav-item">
-                  <router-link to="/" class="nav-link" aria-current="page"
-                    >홈</router-link
+                  <router-link to="/intro" class="nav-link" aria-current="page"
+                    >소개</router-link
                   >
                 </li>
                 <li class="nav-item dropdown">
@@ -177,5 +177,9 @@ nav {
 }
 nav a.router-link-exact-active {
   color: gray;
+}
+ul a.dropdown-item:active {
+  background-color: rgba(128, 128, 128, 0.062);
+  transform: translateY(2px);
 }
 </style>
