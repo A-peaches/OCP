@@ -1,5 +1,9 @@
 <template>
-  <div id="header">
+  <div
+    id="header"
+    class="sticky-top"
+    style="padding: 15px; background-color: rgba(255, 255, 255, 0.8)"
+  >
     <ul class="nav justify-content-center">
       <nav class="navbar navbar-expand-lg bg-body-white">
         <div class="container-fluid">
