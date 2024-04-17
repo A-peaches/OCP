@@ -3,7 +3,7 @@
   <div id = "header">
    <nav class="navbar navbar-expand-lg bg-body-white">
     <div class="container-fluid">
-      <a class="navbar-brand title" href="#">🐼 판다 커피^^ </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a class="navbar-brand title" href="#">🐼 판다 커피 </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       
       <button
         class="navbar-toggler"
