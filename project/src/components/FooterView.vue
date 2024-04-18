@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div id="footerDiv" style="margin-left: 100px; font-size: 14px;">
+    <div id="footerDiv">
         
         <p style="font-size: 18px;">🐼 판다 커피</p>
      
@@ -19,7 +19,7 @@
         <div style="display: inline-block; margin-right: 30px; " id="p1">
             <p >
             <span>© Only Coffee Panda(OCP). All Rights Reserved.</span>
-             <span class="float-end" style="margin-right: 80px" ><img src='../assets/insta.png' class="img">
+             <span class="float-end" ><img src='../assets/insta.png' class="img">
             <img src='../assets/kakao.png' class="img">
             <img src='../assets/youtube.png' class="img"></span>
              </p>
@@ -36,7 +36,11 @@ export default {
 
 <style>
     #footerDiv{
-        padding : 5px 10px 5px 10px;
+        width : 100%;
+        padding:0px 200px;
+        font-size: 14px;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }    
 
     .img{

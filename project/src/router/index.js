@@ -8,6 +8,11 @@ const routes = [
     component: HomeView,
   },
   {
+    path: "/location",
+    name: "location",
+    component: () => import("../views/LocationView.vue"),
+  },
+  {
     path: "/about",
     name: "about",
     component: () => import("../views/AboutView.vue"),
@@ -16,6 +21,16 @@ const routes = [
     path: "/intro",
     name: "intro",
     component: () => import("../views/intro.vue"),
+  },
+  {
+    path: "/notice",
+    name: "notice",
+    component: () => import("../views/NoticeView.vue"),
+  },
+  {
+    path: "/bean",
+    name: "bean",
+    component: () => import("../views/BeanStory.vue"),
   },
   {
     path: "/login",
