@@ -57,7 +57,7 @@
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/bean" class="nav-link"
                           >원두이야기</router-link
                         ></a
                       >
