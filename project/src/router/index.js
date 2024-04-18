@@ -6,12 +6,11 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
-  }
-  ,
+  },
   {
-    path: '/location',
-    name: 'location',
-    component: () => import('../views/LocationView.vue')
+    path: "/location",
+    name: "location",
+    component: () => import("../views/LocationView.vue"),
   },
   {
     path: "/about",
@@ -26,20 +25,24 @@ const routes = [
   {
     path: "/notice",
     name: "notice",
-    component: () => import("../views/NoticeView.vue")
+    component: () => import("../views/NoticeView.vue"),
   },
   {
     path: "/bean",
     name: "bean",
-    component: () => import("../views/BeanStory.vue")
+    component: () => import("../views/BeanStory.vue"),
   },
   {
     path: "/login",
     name: "login",
     component: () => import("../views/login.vue"),
-  }
+  },
+  {
+    path: "/allmenu",
+    name: "allmenu",
+    component: () => import("../views/Allmenu.vue"),
+  },
 ];
-
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
