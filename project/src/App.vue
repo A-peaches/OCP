@@ -105,7 +105,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">오시는 길</a>
+                  <router-link to="/location" class="nav-link" aria-current="page">오시는 길</router-link>
                 </li>
                 <li class="nav-item dropdown">
                   <a
@@ -119,7 +119,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/notice" class="nav-link"
                           >공지사항</router-link
                         ></a
                       >

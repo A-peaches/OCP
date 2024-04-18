@@ -6,6 +6,12 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+  }
+  ,
+  {
+    path: '/location',
+    name: 'location',
+    component: () => import('../views/LocationView.vue')
   },
   {
     path: "/about",
@@ -18,6 +24,11 @@ const routes = [
     component: () => import("../views/intro.vue"),
   },
   {
+    path: "/notice",
+    name: "notice",
+    component: () => import("../views/NoticeView.vue")
+  },
+  {
     path: "/bean",
     name: "bean",
     component: () => import("../views/BeanStory.vue")
@@ -28,6 +39,7 @@ const routes = [
     component: () => import("../views/login.vue"),
   }
 ];
+
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
