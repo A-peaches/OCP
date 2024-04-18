@@ -18,10 +18,15 @@ const routes = [
     component: () => import("../views/intro.vue"),
   },
   {
+    path: "/bean",
+    name: "bean",
+    component: () => import("../views/BeanStory.vue")
+  },
+  {
     path: "/login",
     name: "login",
     component: () => import("../views/login.vue"),
-  },
+  }
 ];
 
 const router = createRouter({
