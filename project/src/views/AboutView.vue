@@ -4,3 +4,8 @@
     <p>여기는 어바웃 페이지 !!!</p>
   </div>
 </template>
+<style>
+.about {
+  width: 100%;
+}
+</style>
