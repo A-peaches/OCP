@@ -2,7 +2,10 @@
   <div
     id="header"
     class="sticky-top"
-    style="background-color: rgba(255, 255, 255, 0.8)"
+    style="
+      background-color: rgba(243, 228, 189, 0.125);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    "
   >
     <ul class="nav justify-content-center">
       <nav
@@ -10,8 +13,11 @@
         style="padding: 0px 50px"
       >
         <div class="container-fluid">
-          <router-link to="/" class="nav-link" aria-current="page">
-            <img src="./assets/logo.png" id="titleLogo" />
+          <router-link to="/" class="nav-link" aria-current="page" style="h">
+            <p id="title">
+              <img src="./assets/panda.png" id="titleLogo" />
+              Panda Coffee
+            </p>
           </router-link>
           <button
             class="navbar-toggler"
@@ -134,16 +140,26 @@
                     </li>
                   </ul>
                 </li>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <form
+                  class="d-grid gap-2 d-md-flex justify-content-md-end"
+                  role="search"
+                >
+                  <button
+                    class="btn btn-outline-dark btn-custom"
+                    id="btn_border"
+                    type="submit"
+                  >
+                    <router-link to="/login" class="nav-link">
+                      <img src="@/assets/Login.png" alt="login"
+                    /></router-link>
+                  </button>
+                </form>
               </ul>
             </div>
           </div>
         </div>
       </nav>
-      <form class="d-grid gap-2 d-md-flex justify-content-md-end" role="search">
-        <button class="btn btn-outline-dark btn-custom" type="submit">
-          sign in
-        </button>
-      </form>
     </ul>
   </div>
   <div id="center">
@@ -166,7 +182,9 @@ export default {
 nav {
   padding: 30px;
 }
-
+.nav nav-underline {
+  padding-right: 100px;
+}
 .navbar-nav .nav-item {
   margin-right: 110px; /* 오른쪽 간격 조절 */
 }
@@ -182,7 +200,7 @@ nav {
 }
 .nav li a {
   color: black;
-  font-size: 17pt;
+  font-size: 15pt;
 }
 
 .black {
@@ -200,16 +218,34 @@ ul a.dropdown-item:active {
   align-items: center;
   justify-items: center;
 }
+#btn_border {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+.btn-custom img {
+  max-width: 45px; /* 이미지의 최대 너비를 100%로 설정하여 버튼 너비에 맞춤 */
+  height: 33px; /* 이미지의 높이를 자동으로 조정하여 가로세로 비율 유지 */
+  margin-right: 5px; /* 이미지와 텍스트 사이 여백 조절 */
+}
 .custom-button-container {
   position: relative; /* 부모 요소에 대해 상대적 위치 지정 */
   top: 50px; /* 원하는 위치로 조절 */
 }
 
 #titleLogo {
-  width: 220px;
-  height: 138px;
-  margin-right: 110px;
+  margin-bottom: 8px;
+  width: 130px;
+  height: 65px;
 }
+
+#title {
+  font-size: 33px;
+  font-family: "Concert One";
+  margin-right: 100px;
+  margin-bottom: 0;
+}
+
 .nav.justify-content-center {
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
