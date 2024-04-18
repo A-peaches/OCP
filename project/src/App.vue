@@ -2,13 +2,16 @@
   <div
     id="header"
     class="sticky-top"
-    style=" background-color: rgba(255, 255, 255, 0.8)"
+    style="background-color: rgba(255, 255, 255, 0.8)"
   >
     <ul class="nav justify-content-center">
-      <nav class="navbar navbar-expand-lg bg-body-white" style="padding:0px">
+      <nav
+        class="navbar navbar-expand-lg bg-body-white"
+        style="padding: 0px 50px"
+      >
         <div class="container-fluid">
           <router-link to="/" class="nav-link" aria-current="page">
-            <img src='./assets/logo.png' id="titleLogo">
+            <img src="./assets/logo.png" id="titleLogo" />
           </router-link>
           <button
             class="navbar-toggler"
@@ -136,6 +139,11 @@
           </div>
         </div>
       </nav>
+      <form class="d-grid gap-2 d-md-flex justify-content-md-end" role="search">
+        <button class="btn btn-outline-dark btn-custom" type="submit">
+          sign in
+        </button>
+      </form>
     </ul>
   </div>
   <div id="center">
@@ -176,6 +184,7 @@ nav {
   color: black;
   font-size: 17pt;
 }
+
 .black {
   color: black;
 }
@@ -186,10 +195,25 @@ ul a.dropdown-item:active {
   background-color: rgba(128, 128, 128, 0.062);
   transform: translateY(2px);
 }
+.btn-custom {
+  height: 40px; /* 원하는 높이로 변경 */
+  align-items: center;
+  justify-items: center;
+}
+.custom-button-container {
+  position: relative; /* 부모 요소에 대해 상대적 위치 지정 */
+  top: 50px; /* 원하는 위치로 조절 */
+}
 
 #titleLogo {
-  width : 220px;
-  height : 138px;
+  width: 220px;
+  height: 138px;
   margin-right: 110px;
+}
+.nav.justify-content-center {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  height: 100%; /* 부모 요소의 높이를 자식 요소에 맞춤 */
 }
 </style>
