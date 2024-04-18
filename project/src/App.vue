@@ -57,7 +57,7 @@
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/allmenu" class="nav-link"
                           >전체메뉴</router-link
                         ></a
                       >

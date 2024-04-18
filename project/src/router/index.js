@@ -22,6 +22,11 @@ const routes = [
     name: "login",
     component: () => import("../views/login.vue"),
   },
+  {
+    path: "/allmenu",
+    name: "allmenu",
+    component: () => import("../views/Allmenu.vue"),
+  },
 ];
 
 const router = createRouter({
