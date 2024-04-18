@@ -1,14 +1,14 @@
 <template>
-  <div id="header">
+  <div
+    id="header"
+    class="sticky-top"
+    style=" background-color: rgba(255, 255, 255, 0.8)"
+  >
     <ul class="nav justify-content-center">
-      <nav class="navbar navbar-expand-lg bg-body-white">
+      <nav class="navbar navbar-expand-lg bg-body-white" style="padding:0px">
         <div class="container-fluid">
           <router-link to="/" class="nav-link" aria-current="page">
-            <a
-              class="navbar-brand title"
-              style="margin-right: 140px; font-size: 18pt"
-              >🐼 판다 커피
-            </a>
+            <img src='./assets/logo.png' id="titleLogo">
           </router-link>
           <button
             class="navbar-toggler"
@@ -25,8 +25,8 @@
             <div class="navbar-nav">
               <ul class="nav nav-underline">
                 <li class="nav-item">
-                  <router-link to="/" class="nav-link" aria-current="page"
-                    >홈</router-link
+                  <router-link to="/intro" class="nav-link" aria-current="page"
+                    >소개</router-link
                   >
                 </li>
                 <li class="nav-item dropdown">
@@ -96,7 +96,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">오시는 길</a>
+                  <router-link to="/location" class="nav-link" aria-current="page">오시는 길</router-link>
                 </li>
                 <li class="nav-item dropdown">
                   <a
@@ -141,17 +141,20 @@
   <div id="center">
     <router-view />
   </div>
+  <div id="footer">
+    <FooterView />
+  </div>
 </template>
 
+<script>
+import FooterView from "./components/FooterView.vue";
+export default {
+  components: {
+    FooterView,
+  },
+};
+</script>
 <style>
-#app {
-  font-family: "MyFont", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
 nav {
   padding: 30px;
 }
@@ -171,11 +174,22 @@ nav {
 }
 .nav li a {
   color: black;
+  font-size: 17pt;
 }
 .black {
   color: black;
 }
 nav a.router-link-exact-active {
   color: gray;
+}
+ul a.dropdown-item:active {
+  background-color: rgba(128, 128, 128, 0.062);
+  transform: translateY(2px);
+}
+
+#titleLogo {
+  width : 220px;
+  height : 138px;
+  margin-right: 110px;
 }
 </style>
