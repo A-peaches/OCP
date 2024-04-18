@@ -1,17 +1,9 @@
-@font-face {
-  font-family: "MyFont";
-  src: url("MyFont.ttf");
-}
-/*  */
-@font-face {
-  font-family: "MyFont2";
-  src: url("MyFont2.ttf");
-}
 
 nav,
 div,
 body {
   font-family: "MyFont";
+
 }
 
 #header {
@@ -34,7 +26,44 @@ body {
   border: 2px solid black;
 }
 
+
 .home {
   width: 100%;
-  padding: 0px 40px;
+  padding: 20px 200px 50px 200px;
+  background-color: rgba(243, 228, 189, 0.325);
 }
+
+.carousel-item img {
+  border-radius: 20px;  /* 이미지 모서리를 둥글게 처리 */
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);  /* 부드럽고 투명한 그림자 추가 */
+  overflow: hidden;  /* 라운드 코너가 잘리지 않도록 처리 */
+}
+
+.card_section {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;  /* 플렉스박스 레이아웃 적용 */
+  justify-content: space-between;  /* 첫 번째와 마지막 카드가 양 끝에 붙도록 설정 */
+  align-items: center;  /* 카드들을 세로 중앙에 위치 */
+}
+
+ 
+ @import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Jersey+10&display=swap');
+ 
+
+ .concert-one-regular {
+    font-family: "Concert One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+
+  @font-face {
+    font-family: "MyFont";
+    src: url("MyFont.ttf");
+  }
+ 
+  @font-face {
+    font-family: "MyFont2";
+    src: url("MyFont2.ttf");
+  }

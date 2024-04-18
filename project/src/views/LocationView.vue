@@ -1,6 +1,6 @@
 <template>
   <div class="top_img"></div>
-  <div class="location">
+  <div class="content1">
     <p class="title">오시는 길</p>
     <p class="txt_sub">서울특별시 서초구 서초대로74길33 비트빌 3층</p>
     <hr>
@@ -17,14 +17,19 @@
     </p>
   </div>
 </template>
+
+
+
 <style>
 .top_img {
-  background-image: url('../assets/top_img.png');
+  background-image: url('../assets/top_img2.png');
   width: 100%;
-  height: 300px;
+  height: 250px;
 }
-.location {
-    margin-left: 20px;
+.content1 {
+    margin-left: 400px;
+    margin-right: 400px;
+    margin-bottom: 100px;
 }
 .title {
     font-size: 40px;
@@ -43,7 +48,7 @@
   display: block;
   margin-top: 20px;
   margin-left: 20px;
-  width: 60%;
+  width: 96%;
   height: auto;
 }
 </style>

@@ -2,13 +2,15 @@
   <div
     id="header"
     class="sticky-top"
-    style=" background-color: rgba(255, 255, 255, 0.8)"
+    style=" background-color: rgba(255, 255, 255, 0.8); "
   >
     <ul class="nav justify-content-center">
       <nav class="navbar navbar-expand-lg bg-body-white" style="padding:0px">
         <div class="container-fluid">
           <router-link to="/" class="nav-link" aria-current="page">
-            <img src='./assets/logo.png' id="titleLogo">
+            <p id="title">
+            <img src='./assets/panda.png' id="titleLogo">
+            Panda Coffee</p>
           </router-link>
           <button
             class="navbar-toggler"
@@ -110,7 +112,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/notice" class="nav-link"
                           >공지사항</router-link
                         ></a
                       >
@@ -188,8 +190,15 @@ ul a.dropdown-item:active {
 }
 
 #titleLogo {
-  width : 220px;
-  height : 138px;
-  margin-right: 110px;
+  margin-bottom : 8px;
+  width : 130px;
+  height : 65px;
+}
+
+#title {
+  margin-top: 30px;
+  font-size: 37px;
+  font-family: "Concert One";
+  margin-right: 140px;
 }
 </style>
