@@ -76,7 +76,7 @@ export default {
 <style>
 .container {
   text-align: center;
-  padding: 0 50px;
+  padding: 0 80px;
 }
 
 .intro {
