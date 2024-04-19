@@ -8,7 +8,7 @@
 
       <div class="content">
         <div class="item">
-          <img src="@/assets/it.png" class="image float-end" />
+          <img src="@/assets/card_notebook.png" class="image float-end" />
           <div class="text">
             <h2>IT & EAT</h2>
             <br />

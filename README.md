@@ -1,4 +1,0 @@
-# 🐼 OCP ☕
-Only Coffee Panda
-
-
