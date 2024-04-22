@@ -43,6 +43,7 @@
               src="@/assets/decafein.png"
               alt="..."
             />
+
             <span style="margin: 10px 20px 10px; font-size: 15pt"
               >에스프레소</span
             >
@@ -54,11 +55,18 @@
           <br />
           <div class="image-container">
             <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
+              <router-link
+                to="/detailmenu"
+                class="nav-link"
+                aria-current="page"
+                style="h"
+              >
+                <img
+                  src="@/assets/coffeeEX.jpg"
+                  class="figure-img img-fluid rounded"
+                  alt="..."
+                />
+              </router-link>
               <figcaption class="figure-caption text-center">
                 판다리카노<br />
                 <div>
@@ -172,6 +180,7 @@
       </div>
     </div>
   </div>
+  <router-view />
 </template>
 
 <script>
