@@ -76,7 +76,13 @@ const routes = [
     path: "/stock",
     name: "stock",
     component: () => import("../views/admin/StockView.vue"),
+  },
+  {
+    path: "/noticewrite",
+    name: "noticewrite",
+    component: () => import("../views/admin/WriteNotice.vue"),
   }
+  
 ];
 //
 const router = createRouter({
