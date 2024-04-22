@@ -62,6 +62,16 @@ const routes = [
     name: "detailmenu",
     component: () => import("../views/detailMenu.vue"),
   },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../views/CartView.vue"),
+  },
+  {
+    path: "/adminmenu",
+    name: "adminmenu",
+    component: () => import("../views/adminMenu.vue"),
+  },
 ];
 //
 const router = createRouter({

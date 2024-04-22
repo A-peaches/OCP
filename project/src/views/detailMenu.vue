@@ -2,11 +2,12 @@
   <div id="center">
     <div class="container" style="display: flex; justify-content: center">
       <div class="intro" style="margin: 100px 0 100px">
-        <div style="display: flex; justify-content: center">
+        <div class="d-flex justify-content-center">
           <img
             src="@/assets/coffeeEX.jpg"
             alt="..."
-            style="margin-right: 100px; width: 450px; height: 450px"
+            style="margin-right: 100px; width: 450px; height: 480px"
+            class="img-fluid"
           />
           <div style="display: flex">
             <div style="padding-left: 30px; width: 500px; height: auto">
@@ -70,20 +71,54 @@
               </div>
               <br /><br />
               <div style="display: flex; justify-content: flex-end">
-                <h5>{{ 2500 + sizePriceAdd + shotpriceadd }}원</h5>
+                <h5>
+                  {{ (coffeePrice + sizePriceAdd + shotpriceadd) * cups }}원
+                </h5>
               </div>
               <br />
-              <div style="display: flex; justify-content: flex-end">
-                <button
-                  type="button"
-                  class="btn btn-light"
-                  style="margin-right: 20px"
-                  id="btn_menu"
-                >
-                  담기</button
-                ><button id="btn_menu" type="button" class="btn btn-light">
-                  바로 결제
-                </button>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div style="display: flex; align-items: center">
+                  <span style="font-size: 20pt">수량 </span>&nbsp;&nbsp;&nbsp;
+                  <button
+                    @click="cupMinus"
+                    style="
+                      border: none;
+                      background-color: transparent;
+                      font-size: 20pt;
+                      margin-right: 10px; /* 샷 추가 버튼과의 간격 조절 */
+                    "
+                  >
+                    -
+                  </button>
+                  <span style="font-size: 20pt">{{ cups }}</span>
+                  <button
+                    @click="cupPlus"
+                    style="
+                      border: none;
+                      background-color: transparent;
+                      font-size: 20pt;
+                      margin-left: 10px; /* 샷 추가 버튼과의 간격 조절 */
+                    "
+                  >
+                    +
+                  </button>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    style="margin-right: 20px"
+                  >
+                    담기
+                  </button>
+                  <button type="button" class="btn btn-light">바로 결제</button>
+                </div>
               </div>
             </div>
           </div>
@@ -102,6 +137,8 @@ export default {
       shotpriceadd: 0,
       selectedSize: 0,
       sizePriceAdd: 0,
+      coffeePrice: 2500,
+      cups: 1,
     };
   },
   methods: {
@@ -114,6 +151,14 @@ export default {
     shotPlus() {
       this.shotadd++;
       this.shotpriceadd = this.shotpriceadd + 500;
+    },
+    cupMinus() {
+      if (this.cups > 1) {
+        this.cups--;
+      }
+    },
+    cupPlus() {
+      this.cups++;
     },
     sizeUp() {
       if (this.selectedSize === "Grande") {

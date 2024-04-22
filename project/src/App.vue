@@ -92,7 +92,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/cart" class="nav-link"
                           >장바구니</router-link
                         ></a
                       >
@@ -127,7 +127,10 @@
                   >
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/about" class="nav-link" aria-current="page"
+                  <router-link
+                    to="/adminmenu"
+                    class="nav-link"
+                    aria-current="page"
                     >메뉴 관리</router-link
                   >
                 </li>
