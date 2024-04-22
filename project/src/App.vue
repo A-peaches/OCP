@@ -15,8 +15,7 @@
         <div class="container-fluid">
           <router-link to="/" class="nav-link" aria-current="page" style="h">
             <p id="title">
-              <img src="./assets/panda.png" id="titleLogo" />
-              Panda Coffee
+              <img src="./assets/logo (2).png" id="titleLogo" class="my-3" />
             </p>
           </router-link>
           <button
@@ -234,9 +233,8 @@ ul a.dropdown-item:active {
 }
 
 #titleLogo {
-  margin-bottom: 8px;
-  width: 130px;
-  height: 65px;
+  width: 260px;
+  height: 50px;
 }
 
 #title {
