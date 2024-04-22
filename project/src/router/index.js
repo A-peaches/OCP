@@ -42,6 +42,11 @@ const routes = [
     name: "allmenu",
     component: () => import("../views/Allmenu.vue"),
   },
+  {
+    path: "/bestmenu",
+    name: "bestmenu",
+    component: () => import("../views/bestMenu.vue"),
+  },
 ];
 
 const router = createRouter({
