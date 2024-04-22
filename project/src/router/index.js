@@ -51,7 +51,7 @@ const routes = [
     path: "/noticepage",
     name: "noticepage",
     component: () => import("../views/NoticePage.vue"),
-  }
+  },
 ];
 
 const router = createRouter({

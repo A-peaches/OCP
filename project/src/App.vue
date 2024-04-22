@@ -49,7 +49,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item">
-                        <router-link to="/about" class="nav-link"
+                        <router-link to="/bestmenu" class="nav-link"
                           >Best메뉴</router-link
                         ></a
                       >
@@ -104,7 +104,12 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <router-link to="/location" class="nav-link" aria-current="page">오시는 길</router-link>
+                  <router-link
+                    to="/location"
+                    class="nav-link"
+                    aria-current="page"
+                    >오시는 길</router-link
+                  >
                 </li>
                 <li class="nav-item dropdown">
                   <a
@@ -113,7 +118,7 @@
                     href="#"
                     role="button"
                     aria-expanded="false"
-                    >소식/문의</a
+                    >새소식&공지</a
                   >
                   <ul class="dropdown-menu">
                     <li>
@@ -127,13 +132,6 @@
                       <a class="dropdown-item"
                         ><router-link to="/event" class="nav-link"
                           >이벤트</router-link
-                        ></a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
-                          >문의</router-link
                         ></a
                       >
                     </li>
