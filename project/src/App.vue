@@ -39,8 +39,7 @@
                 </li>
                 <li v-if="!user" class="nav-item">
                   <router-link to="/about"  class="nav-link" aria-current="page"
-                 >매출 현황</router-link
-                  >
+                 >매출 현황</router-link>
                 </li>
                 <li v-if="user" class="nav-item dropdown">
                   <a
