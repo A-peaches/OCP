@@ -42,6 +42,16 @@ const routes = [
     name: "allmenu",
     component: () => import("../views/Allmenu.vue"),
   },
+  {
+    path: "/event",
+    name: "event",
+    component: () => import("../views/EventView.vue"),
+  },
+  {
+    path: "/noticepage",
+    name: "noticepage",
+    component: () => import("../views/NoticePage.vue"),
+  }
 ];
 
 const router = createRouter({
