@@ -32,12 +32,17 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <ul class="nav nav-underline">
-                <li class="nav-item">
+                <li v-if="user" class="nav-item">
                   <router-link to="/intro" class="nav-link" aria-current="page"
                     >소개</router-link
                   >
                 </li>
-                <li class="nav-item dropdown">
+                <li v-if="!user" class="nav-item">
+                  <router-link to="/about" class="nav-link" aria-current="page"
+                    >매출 현황</router-link
+                  >
+                </li>
+                <li v-if="user" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -70,7 +75,12 @@
                     </li>
                   </ul>
                 </li>
-                <li class="nav-item dropdown">
+                <li v-if="!user" class="nav-item">
+                  <router-link to="/about" class="nav-link" aria-current="page"
+                    >재고 현황</router-link
+                  >
+                </li>
+                <li v-if="user" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -103,7 +113,12 @@
                     </li>
                   </ul>
                 </li>
-                <li class="nav-item">
+                <li v-if="!user" class="nav-item">
+                  <router-link to="/about" class="nav-link" aria-current="page"
+                    >회원 관리</router-link
+                  >
+                </li>
+                <li v-if="user" class="nav-item">
                   <router-link
                     to="/location"
                     class="nav-link"
@@ -111,7 +126,12 @@
                     >오시는 길</router-link
                   >
                 </li>
-                <li class="nav-item dropdown">
+                <li v-if="!user" class="nav-item">
+                  <router-link to="/about" class="nav-link" aria-current="page"
+                    >메뉴 관리</router-link
+                  >
+                </li>
+                <li v-if="user" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -137,7 +157,35 @@
                     </li>
                   </ul>
                 </li>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li v-if="!user" class="nav-item dropdown">
+                  <a
+                    class="nav-link"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    role="button"
+                    aria-expanded="false"
+                    >새소식&공지</a
+                  >
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item"
+                        ><router-link to="/notice" class="nav-link"
+                          >공지사항</router-link
+                        ></a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item"
+                        ><router-link to="/event" class="nav-link"
+                          >이벤트</router-link
+                        ></a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <div v-if="user">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
                 <form
                   class="d-grid gap-2 d-md-flex justify-content-md-end"
                   role="search"
@@ -151,6 +199,10 @@
                       <img src="@/assets/Login.png" alt="login"
                     /></router-link>
                   </button>
+                  <input
+                    type="checkbox"
+                    v-model="isAdmin"
+                  />관리자여부(테스트용)
                 </form>
               </ul>
             </div>
@@ -170,8 +222,25 @@
 <script>
 import FooterView from "./components/FooterView.vue";
 export default {
+  data() {
+    return {
+      isAdmin: false,
+    };
+  },
+  methods: {
+    createUser() {},
+  },
+  created() {},
+  mounted() {
+    console.log("Component is mounted with user:", this.user);
+  },
   components: {
-    FooterView,
+    FooterView, // 컴포넌트 등록
+  },
+  computed: {
+    user() {
+      return !this.isAdmin;
+    },
   },
 };
 </script>
