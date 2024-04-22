@@ -57,6 +57,11 @@ const routes = [
     name: "noticepage",
     component: () => import("../views/NoticePage.vue"),
   },
+  {
+    path: "/detailmenu",
+    name: "detailmenu",
+    component: () => import("../views/detailMenu.vue"),
+  },
 ];
 //
 const router = createRouter({
