@@ -91,7 +91,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/cart" class="nav-link"
                           >장바구니</router-link
                         ></a
                       >

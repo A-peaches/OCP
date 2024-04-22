@@ -62,6 +62,11 @@ const routes = [
     name: "join",
     component: () => import("../views/joinView.vue"),
   },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../views/CartView.vue"),
+  }
 ];
 //
 const router = createRouter({
