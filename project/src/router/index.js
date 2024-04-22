@@ -43,9 +43,14 @@ const routes = [
     component: () => import("../views/Allmenu.vue"),
   },
   {
-    path: "/bestmenu",
-    name: "bestmenu",
-    component: () => import("../views/bestMenu.vue"),
+    path: "/event",
+    name: "event",
+    component: () => import("../views/EventView.vue"),
+  },
+  {
+    path: "/noticepage",
+    name: "noticepage",
+    component: () => import("../views/NoticePage.vue"),
   },
 ];
 
