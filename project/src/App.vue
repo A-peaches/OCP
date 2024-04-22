@@ -38,7 +38,7 @@
                   >
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/about" class="nav-link" aria-current="page"
+                  <router-link to="/sales" class="nav-link" aria-current="page"
                     >매출 현황</router-link
                   >
                 </li>
@@ -76,7 +76,7 @@
                   </ul>
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/about" class="nav-link" aria-current="page"
+                  <router-link to="/stock" class="nav-link" aria-current="page"
                     >재고 현황</router-link
                   >
                 </li>
@@ -247,6 +247,7 @@ export default {
   },
 };
 </script>
+
 <style>
 nav {
   padding: 30px;

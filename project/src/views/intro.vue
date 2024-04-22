@@ -67,7 +67,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "loginView",
   data() {
     return {};
   },

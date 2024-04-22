@@ -93,14 +93,278 @@
             </nav>
           </div>
           <div style="display: flex; justify-content: end">
-            <button>메뉴추가</button><button>수정</button> <button>삭제</button>
+            <div>
+              <!-- 모달 버튼 -->
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                data-bs-whatever="@fat"
+              >
+                메뉴추가
+              </button>
+
+              <!-- 모달 -->
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        메뉴추가
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- 텍스트 5개 -->
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >상품이미지:</label
+                        ><br />
+                        <input type="file" />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >상품명:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >상품설명:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >판매가:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >카테고리:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >필요재고량:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        닫기
+                      </button>
+                      <button type="button" class="btn btn-primary">
+                        저장
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                data-bs-whatever="@fat"
+              >
+                수정
+              </button>
+
+              <!-- 모달 -->
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        메뉴수정
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- 텍스트 5개 -->
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >상품이미지:</label
+                        ><br />
+                        <input type="file" />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >상품명:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >상품설명:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >판매가:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >카테고리:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"
+                          >필요재고량:</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="recipient-name"
+                        />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        닫기
+                      </button>
+                      <button type="button" class="btn btn-primary">
+                        저장
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+              >
+                삭제
+              </button>
+
+              <!-- Modal -->
+              <div
+                class="modal fade"
+                id="staticBackdrop"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Delete
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">정말로 삭제하시겠습니까?</div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        되돌아가기
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        style="background-color: red"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!--end #content-->
 </template>
 <script>
 export default {

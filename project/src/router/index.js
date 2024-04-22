@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/login.vue"),
+    component: () => import("../views/loginView.vue"),
   },
   {
     path: "/allmenu",
@@ -63,6 +63,11 @@ const routes = [
     component: () => import("../views/detailMenu.vue"),
   },
   {
+    path: "/join",
+    name: "join",
+    component: () => import("../views/joinView.vue"),
+  },
+  {
     path: "/cart",
     name: "cart",
     component: () => import("../views/CartView.vue"),
@@ -71,6 +76,16 @@ const routes = [
     path: "/adminmenu",
     name: "adminmenu",
     component: () => import("../views/adminMenu.vue"),
+  },
+  {
+    path: "/sales",
+    name: "sales",
+    component: () => import("../views/admin/salesView.vue"),
+  },
+  {
+    path: "/stock",
+    name: "stock",
+    component: () => import("../views/admin/StockView.vue"),
   },
 ];
 //
