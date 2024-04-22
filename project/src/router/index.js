@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/login.vue"),
+    component: () => import("../views/loginView.vue"),
   },
   {
     path: "/allmenu",
@@ -56,6 +56,11 @@ const routes = [
     path: "/noticepage",
     name: "noticepage",
     component: () => import("../views/NoticePage.vue"),
+  },
+  {
+    path: "/join",
+    name: "join",
+    component: () => import("../views/joinView.vue"),
   },
   {
     path: "/cart",
