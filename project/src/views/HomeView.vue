@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-<<<<<<< HEAD
     <!-- 슬라이드 -->
     <div id="carouselExampleDark" class="carousel carousel-dark slide">
       <div class="carousel-indicators">
@@ -147,9 +146,7 @@
         </div>
       </div>
     </div>
-=======
 
->>>>>>> 0c2eff3d2c4911c82e8a04e89a74c7053dec65da
   </div>
 </template>
 
