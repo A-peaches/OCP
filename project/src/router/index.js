@@ -87,6 +87,11 @@ const routes = [
     name: "stock",
     component: () => import("../views/admin/StockView.vue"),
   },
+  {
+    path: "/useradmin",
+    name: "useradmin",
+    component: () => import("../views/userAdmin.vue"),
+  },
 ];
 //
 const router = createRouter({

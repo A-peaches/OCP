@@ -114,7 +114,10 @@
                   </ul>
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/about" class="nav-link" aria-current="page"
+                  <router-link
+                    to="/useradmin"
+                    class="nav-link"
+                    aria-current="page"
                     >회원 관리</router-link
                   >
                 </li>

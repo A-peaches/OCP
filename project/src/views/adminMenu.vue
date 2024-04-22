@@ -17,12 +17,7 @@
                 <th scope="col">상품설명</th>
                 <th scope="col">판매가</th>
                 <th scope="col">카테고리</th>
-                <th scope="col">
-                  필요재고량
-                  <select>
-                    <option v-for="i in li" :key="i">{{ i }}</option>
-                  </select>
-                </th>
+                <th scope="col">필요재고량</th>
               </tr>
             </thead>
             <tbody>
@@ -39,7 +34,7 @@
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>Otto</td>
-                <td>@mdo</td>
+                <td>원두 10g<br />물 350ml<br />우유<br /></td>
               </tr>
               <tr>
                 <th scope="row"><input type="checkbox" /></th>
