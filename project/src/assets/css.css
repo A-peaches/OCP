@@ -22,11 +22,6 @@ body {
   border: 2px solid black;
 }
 
-.home {
-  width: 100%;
-  padding: 20px 200px 50px 200px;
-  background-color: rgba(255, 251, 240, 0.325);
-}
 
 .carousel-item img {
   border-radius: 20px; /* 이미지 모서리를 둥글게 처리 */
