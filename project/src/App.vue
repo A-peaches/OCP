@@ -99,14 +99,14 @@
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/orderState" class="nav-link"
                           >주문현황</router-link
                         ></a
                       >
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/orderList" class="nav-link"
                           >주문내역</router-link
                         ></a
                       >
@@ -232,6 +232,7 @@ export default {
   },
   mounted() {
     console.log("Component is mounted with user:", this.user);
+    Kakao.init('0ccb41721465f9078432fdbdc0be2541');
   },
   components: {
     FooterView,  // 컴포넌트 등록

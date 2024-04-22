@@ -31,6 +31,9 @@
             </div>
             <div class="text-center">
               <button class="btn btn-secondary w-100">로그인</button>
+              <button @click="loginWithKakao"  class="btn btn-secondary w-100 mt-2">
+                카카오로 로그인하기</button>
+
             </div>
           </form>
           <div class="my-3">
@@ -72,6 +75,30 @@
   components: {
     FindID,FindPW
   },
+  methods: {
+  loginWithKakao() {
+    Kakao.Auth.login({
+      success: (authObj) => {
+        console.log(authObj);
+
+        // 토큰을 이용해 사용자 정보 요청
+        Kakao.API.request({
+          url: '/v2/user/me',
+          success: (res) => {
+            console.log(res);
+            // 여기에서 사용자 정보를 받아와서 필요한 로직 수행
+          },
+          fail: (error) => {
+            console.error(error);
+          }
+        });
+      },
+      fail: (err) => {
+        console.error(err);
+      }
+    });
+  }
+}
 };
 </script>
 
