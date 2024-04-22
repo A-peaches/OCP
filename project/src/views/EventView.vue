@@ -3,7 +3,7 @@
     <p class="title">이벤트</p>
     <p class="txt_sub">판다커피의 신나는 이벤트</p>
     <hr>
-        <!-- 슬라이드 -->
+    <!-- 슬라이드 -->
     <div id="carouselExampleDark" class="carousel carousel-dark slide">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -83,6 +83,7 @@
 .event_title {
     color: white; /* 글자 색상 설정 */
     font-size: 50px; /* 글자 크기 설정 */
+    font-weight: bold;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; /* 텍스트 그림자 설정 */
 }
 
