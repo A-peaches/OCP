@@ -1,6 +1,7 @@
 nav,
 div,
-body {
+body,
+pre {
   font-family: "MyFont";
 }
 
@@ -60,6 +61,9 @@ body {
   height: auto; /* 이미지의 높이를 자동으로 조정하여 비율 유지 */
 }
 
+* {
+  font-family: "MyFont";
+}
 h1 {
-    font-family: "Myfont2";
+  font-family: "Myfont2";
 }

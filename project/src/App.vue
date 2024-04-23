@@ -33,13 +33,13 @@
             <div class="navbar-nav">
               <ul class="nav nav-underline">
                 <li v-if="user" class="nav-item">
-                  <router-link to="/intro"  class="nav-link" aria-current="page"
-                 >소개</router-link
+                  <router-link to="/intro" class="nav-link" aria-current="page"
+                    >소개</router-link
                   >
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/sales"  class="nav-link" aria-current="page"
-                 >매출 현황</router-link
+                  <router-link to="/sales" class="nav-link" aria-current="page"
+                    >매출 현황</router-link
                   >
                 </li>
                 <li v-if="user" class="nav-item dropdown">
@@ -76,11 +76,11 @@
                   </ul>
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/stock"  class="nav-link" aria-current="page"
-                 >재고 현황</router-link
+                  <router-link to="/stock" class="nav-link" aria-current="page"
+                    >재고 현황</router-link
                   >
                 </li>
-                <li  v-if="user"  class="nav-item dropdown">
+                <li v-if="user" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -114,11 +114,14 @@
                   </ul>
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/about"  class="nav-link" aria-current="page"
-                 >회원 관리</router-link
+                  <router-link
+                    to="/useradmin"
+                    class="nav-link"
+                    aria-current="page"
+                    >회원 관리</router-link
                   >
                 </li>
-                <li  v-if="user"  class="nav-item">
+                <li v-if="user" class="nav-item">
                   <router-link
                     to="/location"
                     class="nav-link"
@@ -127,11 +130,14 @@
                   >
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link to="/about"  class="nav-link" aria-current="page"
-                 >메뉴 관리</router-link
+                  <router-link
+                    to="/adminmenu"
+                    class="nav-link"
+                    aria-current="page"
+                    >메뉴 관리</router-link
                   >
                 </li>
-                <li  v-if="user"  class="nav-item dropdown">
+                <li v-if="user" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -157,7 +163,7 @@
                     </li>
                   </ul>
                 </li>
-                <li  v-if="!user"  class="nav-item dropdown">
+                <li v-if="!user" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -183,9 +189,10 @@
                     </li>
                   </ul>
                 </li>
-                <div v-if="user">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div v-if="user">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
-                  <form
+                <form
                   class="d-grid gap-2 d-md-flex justify-content-md-end"
                   role="search"
                 >
@@ -198,7 +205,10 @@
                       <img src="@/assets/Login.png" alt="login"
                     /></router-link>
                   </button>
-                  <input type=checkbox v-model="isAdmin">관리자여부(테스트용) 
+                  <input
+                    type="checkbox"
+                    v-model="isAdmin"
+                  />관리자여부(테스트용)
                 </form>
               </ul>
             </div>
@@ -221,28 +231,25 @@ import FooterView from "./components/FooterView.vue";
 export default {
   data() {
     return {
-      isAdmin : false
+      isAdmin: false,
     };
   },
   methods: {
-    createUser() {
-
-    }
+    createUser() {},
   },
-  created() {
-  },
+  created() {},
   mounted() {
     console.log("Component is mounted with user:", this.user);
-    Kakao.init('0ccb41721465f9078432fdbdc0be2541');
+    Kakao.init("0ccb41721465f9078432fdbdc0be2541");
   },
   components: {
-    FooterView,  // 컴포넌트 등록
+    FooterView, // 컴포넌트 등록
   },
   computed: {
-    user(){
+    user() {
       return !this.isAdmin;
-    }
-  }
+    },
+  },
 };
 </script>
 

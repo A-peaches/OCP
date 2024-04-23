@@ -20,7 +20,7 @@ const routes = [
   {
     path: "/intro",
     name: "intro",
-    component: () => import("../views/Intro.vue"),
+    component: () => import("../views/intro.vue"),
   },
   {
     path: "/notice",
@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/LoginView.vue"),
+    component: () => import("../views/loginView.vue"),
   },
   {
     path: "/allmenu",
@@ -58,14 +58,24 @@ const routes = [
     component: () => import("../views/NoticePage.vue"),
   },
   {
+    path: "/detailmenu",
+    name: "detailmenu",
+    component: () => import("../views/detailMenu.vue"),
+  },
+  {
     path: "/join",
     name: "join",
-    component: () => import("../views/JoinView.vue"),
+    component: () => import("../views/joinView.vue"),
   },
   {
     path: "/cart",
     name: "cart",
     component: () => import("../views/CartView.vue"),
+  },
+  {
+    path: "/adminmenu",
+    name: "adminmenu",
+    component: () => import("../views/adminMenu.vue"),
   },
   {
     path: "/sales",
@@ -78,11 +88,15 @@ const routes = [
     component: () => import("../views/admin/StockView.vue"),
   },
   {
+    path: "/useradmin",
+    name: "useradmin",
+    component: () => import("../views/userAdmin.vue"),
+  },
+  {
     path: "/noticewrite",
     name: "noticewrite",
     component: () => import("../views/admin/WriteNotice.vue"),
-  }
-  ,
+  },
   {
     path: "/orderState",
     name: "orderState",
