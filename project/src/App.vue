@@ -99,14 +99,14 @@
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/orderState" class="nav-link"
                           >주문현황</router-link
                         ></a
                       >
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/about" class="nav-link"
+                        ><router-link to="/orderList" class="nav-link"
                           >주문내역</router-link
                         ></a
                       >
@@ -114,10 +114,7 @@
                   </ul>
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link
-                    to="/useradmin"
-                    class="nav-link"
-                    aria-current="page"
+                  <router-link to="/about" class="nav-link" aria-current="page"
                     >회원 관리</router-link
                   >
                 </li>
@@ -130,10 +127,7 @@
                   >
                 </li>
                 <li v-if="!user" class="nav-item">
-                  <router-link
-                    to="/adminmenu"
-                    class="nav-link"
-                    aria-current="page"
+                  <router-link to="/about" class="nav-link" aria-current="page"
                     >메뉴 관리</router-link
                   >
                 </li>
@@ -239,6 +233,7 @@ export default {
   created() {},
   mounted() {
     console.log("Component is mounted with user:", this.user);
+    Kakao.init("0ccb41721465f9078432fdbdc0be2541");
   },
   components: {
     FooterView, // 컴포넌트 등록

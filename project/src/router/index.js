@@ -92,6 +92,16 @@ const routes = [
     name: "useradmin",
     component: () => import("../views/userAdmin.vue"),
   },
+  {
+    path: "/orderState",
+    name: "orderState",
+    component: () => import("../views/OrderState.vue"),
+  },
+  {
+    path: "/orderList",
+    name: "orderList",
+    component: () => import("../views/OrderList.vue"),
+  },
 ];
 //
 const router = createRouter({
