@@ -175,7 +175,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/notice" class="nav-link"
+                        ><router-link to="/noticewrite" class="nav-link"
                           >공지사항</router-link
                         ></a
                       >
