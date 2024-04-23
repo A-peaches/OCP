@@ -212,7 +212,7 @@
                     type="submit"
                   >
                     <router-link to="/login" class="nav-link">
-                      <img src="@/assets/logout.png" alt="login"
+                      <img src="@/assets/logout.png" alt="logout"
                     /></router-link>
                   </button>
 
@@ -221,8 +221,8 @@
                     id="btn_border"
                     type="submit"
                   >
-                    <router-link to="/login" class="nav-link">
-                      <img src="@/assets/user2.png" alt="login"
+                    <router-link to="/mypage" class="nav-link">
+                      <img src="@/assets/user2.png" alt="mypage"
                     /></router-link>
                   </button>
 

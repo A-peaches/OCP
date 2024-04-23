@@ -1,6 +1,6 @@
 <template>
   <div id="center">
-    <div class="container" style="display: flex; justify-content: center">
+    <div class="container">
       <div class="intro" style="width: 100%">
         <h1>고객상세</h1>
         <hr />
@@ -8,7 +8,7 @@
           <div id="divadmin-user">
             <h4 style="text-align: left">회원정보</h4>
             <hr />
-            <i class="bi bi-person-circle" style="font-size: 80pt"></i>
+            <img src="@/assets/userpanda.png" style="width: 200px" />
 
             <br /><br />
             <div style="display: flex; justify-content: center">

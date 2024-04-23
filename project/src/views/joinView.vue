@@ -92,7 +92,7 @@
                 name="phone"
                 class="form-control"
                 pattern="^\d{3}-\d{3,4}-\d{4}$"
-                placeholder = "번호를 입력해주세요. 예: 010-1234-5678"
+                placeholder="번호를 입력해주세요. 예: 010-1234-5678"
                 required
               />
             </div>
@@ -115,15 +115,19 @@
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 export default {
   name: "joinView",
+  data() {
+    return {};
+  },
   components: {},
+  methods: {},
 };
 </script>
-  
-  <style>
+
+<style>
 .loginBtnArea {
   width: 100%;
 }
