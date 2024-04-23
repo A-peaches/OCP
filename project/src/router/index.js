@@ -20,7 +20,7 @@ const routes = [
   {
     path: "/intro",
     name: "intro",
-    component: () => import("../views/intro.vue"),
+    component: () => import("../views/Intro.vue"),
   },
   {
     path: "/notice",
@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/loginView.vue"),
+    component: () => import("../views/LoginView.vue"),
   },
   {
     path: "/allmenu",
@@ -45,7 +45,7 @@ const routes = [
   {
     path: "/bestmenu",
     name: "bestmenu",
-    component: () => import("../views/bestMenu.vue"),
+    component: () => import("../views/BestMenu.vue"),
   },
   {
     path: "/event",
@@ -60,7 +60,7 @@ const routes = [
   {
     path: "/detailmenu",
     name: "detailmenu",
-    component: () => import("../views/detailMenu.vue"),
+    component: () => import("../views/DetailMenu.vue"),
   },
   {
     path: "/join",
@@ -75,7 +75,7 @@ const routes = [
   {
     path: "/adminmenu",
     name: "adminmenu",
-    component: () => import("../views/adminMenu.vue"),
+    component: () => import("../views/AdminMenu.vue"),
   },
   {
     path: "/sales",
@@ -90,7 +90,7 @@ const routes = [
   {
     path: "/useradmin",
     name: "useradmin",
-    component: () => import("../views/userAdmin.vue"),
+    component: () => import("../views/UserAdmin.vue"),
   },
   {
     path: "/noticewrite",
@@ -106,6 +106,11 @@ const routes = [
     path: "/orderList",
     name: "orderList",
     component: () => import("../views/OrderList.vue"),
+  },
+  {
+    path: "/userdetail",
+    name: "userdetail",
+    component: () => import("@/views/Userdetail.vue"),
   },
 ];
 //
