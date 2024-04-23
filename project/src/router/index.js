@@ -20,7 +20,7 @@ const routes = [
   {
     path: "/intro",
     name: "intro",
-    component: () => import("../views/intro.vue"),
+    component: () => import("../views/Intro.vue"),
   },
   {
     path: "/notice",
@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/loginView.vue"),
+    component: () => import("../views/LoginView.vue"),
   },
   {
     path: "/allmenu",
@@ -65,7 +65,7 @@ const routes = [
   {
     path: "/join",
     name: "join",
-    component: () => import("../views/joinView.vue"),
+    component: () => import("../views/JoinView.vue"),
   },
   {
     path: "/cart",
@@ -96,6 +96,11 @@ const routes = [
     path: "/noticewrite",
     name: "noticewrite",
     component: () => import("../views/admin/WriteNotice.vue"),
+  },
+  {
+    path: "/eventwrite",
+    name: "eventwrite",
+    component: () => import("../views/admin/WriteEvent.vue"),
   },
   {
     path: "/orderState",

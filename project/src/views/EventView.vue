@@ -1,85 +1,135 @@
 <template>
-<div class="event-container">
-    <h2 class="event-title">이벤트</h2>
-    <p class="event-description">판다커피의 신나는 이벤트</p>
-    <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#eventCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#eventCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#eventCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="../assets/banner_grandopen.png" class="d-block w-100" alt="Grand Opening">
-                <div class="carousel-caption">
-                    <h3>판다커피 신규 오픈 기념 이벤트</h3>
-                    <p>이벤트 기간 : 2024.04.01 ~ 04.30</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="../assets/banner_newproduct.png" class="d-block w-100" alt="New Product">
-                <div class="carousel-caption">
-                    <h3>신메뉴 퍼랭아이스티 시음 행사</h3>
-                    <p>5월 첫째주 퍼랭 아이스티 한잔씩 무료로 드려요</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="../assets/banner_event.png" class="d-block w-100" alt="Membership Event">
-                <div class="carousel-caption">
-                    <h3>회원등록하고 귀여운 텀블러 받아가요</h3>
-                    <p>매주 100명에게 판다 텀블러 쏩니당~!</p>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
+<div class="content2">
+    <p class="title">판다와 함께하는 이벤트</p>
+    <hr>
+    <div class="image-container">
+        <img v-for="(image, index) in images" :src="image.src" :alt="image.alt" :key="index" class="rounded-image" @click="openModal(image)">
     </div>
+
+    <!-- 모달 팝업 -->
+  <div v-if="showModal" class="modal" @click="closeModal">
+      <div class="modal-content" @click.stop> <!-- 이벤트 전파 방지 -->
+          <span class="close" @click="closeModal">&times;</span>
+          <img :src="selectedImage.src" alt="Selected Image" class="modal-image">
+      </div>
+  </div>
 </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      images: [
+        { src: require("../assets/event/event1.png"), alt: "Image 1" },
+        { src: require("../assets/event/event2.png"), alt: "Image 2" },
+        { src: require("../assets/event/event3.png"), alt: "Image 3" }
+      ],
+      showModal: false,
+      selectedImage: null
+    };
+  },
+  methods: {
+    openModal(image) {
+      console.log("Opening modal with image:", image);
+      this.selectedImage = image;
+      this.showModal = true;
+    },
+    closeModal() {
+      console.log("Closing modal");
+      this.showModal = false;
+    }
+  }
+}
+</script>
+
 <style>
-.event-container {
-    width: 80%;
-    margin: 0 auto;
-    padding-top: 20px;
-    padding-bottom: 50px;
+.content2 {
+    margin-left: 400px;
+    margin-right: 400px;
+    margin-bottom: 50px;
+    overflow-x: hidden; /* 상위 컨테이너에서 수평 스크롤바 숨김 */
 }
 
-.event-title {
-    font-size: 32px;
-    text-align: center;
+.title {
+    font-size: 40px;
+    text-align: left;
+    margin-top: 10px;
+    margin-left: 20px;
     margin-bottom: 10px;
 }
 
-.event-description {
-    font-size: 18px;
-    text-align: center;
-    margin-bottom: 20px;
+.image-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; /* 이미지 간격 균등 배분 */
+  gap: 30px;
+  overflow-x: auto; /* 수평 스크롤바 활성화 */
+  white-space: nowrap; /* 줄바꿈 방지 */
+  padding: 20px;  /* 컨테이너 패딩 추가 */
 }
 
-.carousel-caption h3 {
-    font-size: 24px;
+.rounded-image {
+  border-radius: 10px;
+  width: auto; /* 이미지의 원본 비율 유지 */
+  max-width: 300px;
+  border: 2px solid #fff; /* 테두리 색상 변경 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 더 크고 부드러운 그림자 */
+  height: auto; /* 이미지 높이 자동 조정 */
+}
+
+.rounded-image:hover {
+  transform: scale(1.05); /* 이미지를 5% 확대 */
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer; /* 마우스 오버 시 포인터 모양 변경 */
+}
+
+@media (max-width: 768px) {
+  .content2 {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+/* 팝업관련스타일 */
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
     font-weight: bold;
-    color: white;
 }
 
-.carousel-caption p {
-    font-size: 16px;
-    color: white;
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.carousel-control-prev-icon, .carousel-control-next-icon {
-    background-color: black; /* More visible */
+.modal-image {
+    width: 100%;
+    height: auto;
 }
 
-.carousel-indicators button {
-    background-color: black; /* More visible */
-}
-
-.carousel-item {
-    text-align: center;
-}
 </style>
+
