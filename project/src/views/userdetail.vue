@@ -9,7 +9,6 @@
             <h4 style="text-align: left">회원정보</h4>
             <hr />
             <i class="bi bi-person-circle" style="font-size: 80pt"></i>
-            <button>+</button>
 
             <br /><br />
             <div style="display: flex; justify-content: center">
@@ -38,6 +37,10 @@
                   <td scope="col">고객등급</td>
                   <td scope="col" colspan="3">고객등급</td>
                 </tr>
+                <tr>
+                  <td scope="col">주문 수</td>
+                  <td scope="col" colspan="3">주문 수</td>
+                </tr>
               </table>
             </div>
           </div>
@@ -59,6 +62,13 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  name: "adminenuView",
+  components: {},
+};
+</script>
+
 <style>
 #divadmin-user {
   border: 1px black solid;
@@ -67,6 +77,6 @@
   width: 100%;
   margin-right: 50px;
   text-align: center;
-  padding: 20px 20px 20px 20px;
+  padding: 30px 40px 30px 40px;
 }
 </style>
