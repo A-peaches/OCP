@@ -211,19 +211,20 @@
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
                     v-if="isLogin"
-                    @click ="logout"
+                    @click="logout"
                   >
-                    <router-link to="/" class="nav-link">
-                      <img src="@/assets/logout.png" alt=""
-                    /></router-link>
+                    <img src="@/assets/logout.png" alt="" />
                   </button>
 
                   <button
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
                     v-if="isLogin"
-                  >     <img src="@/assets/user2.png" alt="mypage"/>
-                    </button>
+                  >
+                    <router-link to="/mypage" class="nav-link"
+                      ><img src="@/assets/user2.png" alt="mypage"
+                    /></router-link>
+                  </button>
                 </form>
               </ul>
             </div>
@@ -236,7 +237,7 @@
     <router-view />
   </div>
   <div id="footer">
-  <hr style="margin: 0px;">
+    <hr style="margin: 0px" />
     <FooterView />
   </div>
 </template>
@@ -245,21 +246,17 @@
 import FooterView from "./components/FooterView.vue";
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
-    createUser() {
-
+    createUser() {},
+    logout() {
+      alert("로그아웃 되었습니다!");
+      this.$store.commit("logoutUser");
+      this.$router.push("/");
     },
-    logout(){
-      this.$store.commit('logoutUser');
-      this.$router.push('/');
-    }
   },
-  created() {
-
-  },
+  created() {},
   mounted() {
     console.log("Component is mounted with user:", this.user);
     Kakao.init("0ccb41721465f9078432fdbdc0be2541");
@@ -268,13 +265,13 @@ export default {
     FooterView, // 컴포넌트 등록
   },
   computed: {
-    isAdmin(){
-     return this.$store.getters.isAdmin
+    isAdmin() {
+      return this.$store.getters.isAdmin;
     },
 
     isLogin() {
-      return this.$store.getters.isLogin
-    }
+      return this.$store.getters.isLogin;
+    },
   },
 };
 </script>
