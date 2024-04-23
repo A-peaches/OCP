@@ -1,8 +1,8 @@
 <template>
-  <div class="cart-container">
+  <div class="cart-container my-4">
     <h1>장바구니</h1>
     <hr>
-    <div v-if="cartItems.length > 0" class="cart-items">
+    <div v-if="cartItems.length > 0" class="cart-items my-5">
       <div v-for="(item, index) in cartItems" :key="index" class="cart-item">
         <img :src="item.image" alt="Coffee" class="coffee-image">
         <div class="item-details">
@@ -17,7 +17,7 @@
           {{ item.num }}
           <button @click="increaseQuantity(item)">+</button>
         </div>
-        <button @click="removeItem(index)">삭제</button>
+        <button class ="btn btn-sm btn-danger" @click="removeItem(index)">삭제</button>
       </div>
     </div>
     <div v-else class="empty-cart">
@@ -26,8 +26,8 @@
     <hr>
     <p style="text-align:right; font-size:20px">합계 : <span>{{getPriceSum}} 원</span></p>
     <div class="cart-buttons">
-      <button @click="removeSelectedItems">선택 삭제</button>
-      <button @click="placeOrder">주문하기</button>
+      <button class ="btn btn-danger" @click="removeSelectedItems">선택 삭제</button>
+      <button class ="btn btn-secondary" @click="placeOrder">주문하기</button>
     </div>
   </div>
 </template>

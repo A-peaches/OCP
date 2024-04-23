@@ -20,7 +20,7 @@ const routes = [
   {
     path: "/intro",
     name: "intro",
-    component: () => import("../views/intro.vue"),
+    component: () => import("../views/Intro.vue"),
   },
   {
     path: "/notice",
@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/loginView.vue"),
+    component: () => import("../views/LoginView.vue"),
   },
   {
     path: "/allmenu",
@@ -60,7 +60,7 @@ const routes = [
   {
     path: "/join",
     name: "join",
-    component: () => import("../views/joinView.vue"),
+    component: () => import("../views/JoinView.vue"),
   },
   {
     path: "/cart",
@@ -82,7 +82,17 @@ const routes = [
     name: "noticewrite",
     component: () => import("../views/admin/WriteNotice.vue"),
   }
-  
+  ,
+  {
+    path: "/orderState",
+    name: "orderState",
+    component: () => import("../views/OrderState.vue"),
+  },
+  {
+    path: "/orderList",
+    name: "orderList",
+    component: () => import("../views/OrderList.vue"),
+  },
 ];
 //
 const router = createRouter({
