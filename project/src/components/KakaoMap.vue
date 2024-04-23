@@ -3,8 +3,8 @@
     <div id="map"></div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 export default {
   name: "KakaoMap",
   data() {},
@@ -43,9 +43,9 @@ export default {
   },
 };
 </script>
-  
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
-  <style scoped>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
 #map {
   width: 100%;
   height: 400px;
@@ -59,4 +59,3 @@ button {
   margin: 0 3px;
 }
 </style>
-  

@@ -1,19 +1,18 @@
 <template>
-<div class="content2">
+  <div class="content2">
     <p class="title">판다와 함께하는 이벤트</p>
     <hr>
     <div class="image-container">
-        <img v-for="(image, index) in images" :src="image.src" :alt="image.alt" :key="index" class="rounded-image" @click="openModal(image)">
+      <img v-for="(image, index) in images" :src="image.src" :alt="image.alt" :key="index" class="rounded-image" @click="openModal(image)">
     </div>
-
     <!-- 모달 팝업 -->
-  <div v-if="showModal" class="modal" @click="closeModal">
-      <div class="modal-content" @click.stop> <!-- 이벤트 전파 방지 -->
-          <span class="close" @click="closeModal">&times;</span>
-          <img :src="selectedImage.src" alt="Selected Image" class="modal-image">
+    <div v-show="showModal" class="modal" @click.self="closeModal">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <img v-if="selectedImage" :src="selectedImage.src" alt="Selected Image" class="modal-image">
       </div>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -26,7 +25,7 @@ export default {
         { src: require("../assets/event/event3.png"), alt: "Image 3" }
       ],
       showModal: false,
-      selectedImage: null
+      selectedImage: {}, // 빈 객체로 초기화
     };
   },
   methods: {
@@ -93,23 +92,23 @@ export default {
 
 /* 팝업관련스타일 */
 .modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
+  position: fixed; /* 모달 팝업이 viewport에 고정되도록 설정 */
+  z-index: 1; /* 다른 요소들보다 앞에 위치하도록 z-index 설정 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 700px;
+  background-color: #fefefe;
+  margin: 15% auto; /* 위아래 15%, 가로 중앙 정렬 */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 700px; /* 최대 너비 700px로 제한 */
 }
 
 .close {

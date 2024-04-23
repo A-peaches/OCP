@@ -202,13 +202,31 @@
                     type="submit"
                   >
                     <router-link to="/login" class="nav-link">
-                      <img src="@/assets/Login.png" alt="login"
+                      <img src="@/assets/login2.png" alt="login"
                     /></router-link>
                   </button>
-                  <input
-                    type="checkbox"
-                    v-model="isAdmin"
-                  />관리자여부(테스트용)
+
+                  <button
+                    class="btn btn-outline-dark btn-custom"
+                    id="btn_border"
+                    type="submit"
+                  >
+                    <router-link to="/login" class="nav-link">
+                      <img src="@/assets/logout.png" alt="login"
+                    /></router-link>
+                  </button>
+
+                  <button
+                    class="btn btn-outline-dark btn-custom"
+                    id="btn_border"
+                    type="submit"
+                  >
+                    <router-link to="/login" class="nav-link">
+                      <img src="@/assets/user2.png" alt="login"
+                    /></router-link>
+                  </button>
+
+                  <input type="checkbox" v-model="isAdmin" />
                 </form>
               </ul>
             </div>
@@ -299,6 +317,11 @@ ul a.dropdown-item:active {
   padding: 0;
 }
 .btn-custom img {
+  max-width: 45px; /* 이미지의 최대 너비를 100%로 설정하여 버튼 너비에 맞춤 */
+  height: 33px; /* 이미지의 높이를 자동으로 조정하여 가로세로 비율 유지 */
+  margin-right: 5px; /* 이미지와 텍스트 사이 여백 조절 */
+}
+.btn-custom i {
   max-width: 45px; /* 이미지의 최대 너비를 100%로 설정하여 버튼 너비에 맞춤 */
   height: 33px; /* 이미지의 높이를 자동으로 조정하여 가로세로 비율 유지 */
   margin-right: 5px; /* 이미지와 텍스트 사이 여백 조절 */
