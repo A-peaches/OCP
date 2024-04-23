@@ -8,7 +8,7 @@
 
       <div class="content">
         <div class="item">
-          <img src="@/assets/card_notebook.png" class="image float-end" />
+          <img src="@/assets/it.png" class="image float-end" />
           <div class="text">
             <h2>IT & EAT</h2>
             <br />
@@ -31,7 +31,7 @@
           <img src="@/assets/cafe.png" class="image" />
         </div>
         <div class="item">
-          <img src="@/assets/partner.jpg" class="image" />
+          <img src="@/assets/partner.png" class="image" />
           <div class="text">
             <h2>평생커피파트너</h2>
             <br />

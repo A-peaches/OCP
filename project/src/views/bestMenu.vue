@@ -8,68 +8,19 @@
           <br /><br />
 
           <div class="card_section">
-            <div class="card" style="width: 18rem; margin-right: 15px">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="card-img-bottom"
-                alt="..."
-              />
+            <div v-for="menu in menus" :key="menu.id" class="card" style="width: 18rem; margin-right: 15px">
+              <img :src="menu.image" class="card-img-bottom" alt="Menu Image">
               <div class="card-body">
-                <h5 class="card-title">👑판다리카노</h5>
-                <p class="card-text">PRICE : 2.5</p>
-                <p class="card-text">커피설명</p>
-                <button id="btn_border_best">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="card" style="width: 18rem; margin-right: 15px">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="card-img-bottom"
-                alt="..."
-              />
-              <div class="card-body">
-                <h5 class="card-title">👑판다라떼</h5>
-                <p class="card-text">PRICE : 3.0</p>
-                <p class="card-text">커피설명</p>
-                <button id="btn_border_best" class="cartBtn">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card" style="width: 18rem; margin-right: 15px">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="card-img-bottom"
-                alt="..."
-              />
-              <div class="card-body">
-                <h5 class="card-title">👑판다프레소</h5>
-                <p class="card-text">PRICE : 2.0</p>
-                <p class="card-text">커피설명</p>
-                <button id="btn_border_best" class="cartBtn">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card" style="width: 18rem">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="card-img-bottom"
-                alt="..."
-              />
-              <div class="card-body">
-                <h5 class="card-title">👑커피판다</h5>
-                <p class="card-text">PRICE : 3.0</p>
-                <p class="card-text">커피설명</p>
-                <button id="btn_border_best" class="cartBtn">
+                <h5 class="card-title">{{ menu.name }}</h5>
+                <p class="card-text">PRICE : {{ menu.price }}</p>
+                <p class="card-text">{{ menu.description }}</p>
+                <button class="cartBtn">
                   <i class="bi bi-cart-check"></i>
                 </button>
               </div>
             </div>
           </div>
+
           <div
             class="category"
             style="margin-top: 160px; background-color: rgb(red, green, blue)"
@@ -141,13 +92,61 @@
 </template>
 
 <script>
+
+import axios from 'axios';
+
 export default {
   name: "bestmenuView",
   components: {},
   data() {
-    return {};
+    return {
+      topMenu: [],
+       menus: [
+        {
+          id: 1,
+          name: '👑판다리카노',
+          price: 2.5,
+          description: '커피설명',
+          image: require("../assets/coffeeEX.jpg")
+        },
+        {
+          id: 2,
+          name: '👑판다라떼',
+          price: 3.0,
+          description: '커피설명',
+          image: require("../assets/coffeeEX.jpg")
+        },
+        {
+          id: 3,
+          name: '👑판다프레소',
+          price: 2.0,
+          description: '커피설명',
+          image: require("../assets/coffeeEX.jpg")
+        },
+        {
+          id: 4,
+          name: '👑커피판다',
+          price: 3.0,
+          description: '커피설명',
+          image: require("../assets/coffeeEX.jpg")
+        }
+      ]
+      
+    };
   },
-  methods: {},
+  created() {
+    this.fetchMenus();
+  },
+  methods: {
+    async fetchMenus() {
+      try {
+        const response = await axios.get('http://localhost:3000/bestmenu/best');
+        this.topMenu = response.data;
+      } catch (error) {
+        console.error('Error fetching menus:', error);
+      }
+    }
+  }
 };
 </script>
 <style>

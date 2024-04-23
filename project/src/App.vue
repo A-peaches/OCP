@@ -182,7 +182,7 @@
                     </li>
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/event" class="nav-link"
+                        ><router-link to="/eventwrite" class="nav-link"
                           >이벤트</router-link
                         ></a
                       >
