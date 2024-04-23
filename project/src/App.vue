@@ -32,17 +32,17 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <ul class="nav nav-underline">
-                <li v-if="user" class="nav-item">
+                <li v-if="!isAdmin" class="nav-item">
                   <router-link to="/intro" class="nav-link" aria-current="page"
                     >소개</router-link
                   >
                 </li>
-                <li v-if="!user" class="nav-item">
+                <li v-if="isAdmin" class="nav-item">
                   <router-link to="/sales" class="nav-link" aria-current="page"
                     >매출 현황</router-link
                   >
                 </li>
-                <li v-if="user" class="nav-item dropdown">
+                <li v-if="!isAdmin" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -75,12 +75,12 @@
                     </li>
                   </ul>
                 </li>
-                <li v-if="!user" class="nav-item">
+                <li v-if="isAdmin" class="nav-item">
                   <router-link to="/stock" class="nav-link" aria-current="page"
                     >재고 현황</router-link
                   >
                 </li>
-                <li v-if="user" class="nav-item dropdown">
+                <li v-if="!isAdmin" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -113,7 +113,7 @@
                     </li>
                   </ul>
                 </li>
-                <li v-if="!user" class="nav-item">
+                <li v-if="isAdmin" class="nav-item">
                   <router-link
                     to="/useradmin"
                     class="nav-link"
@@ -121,7 +121,7 @@
                     >회원 관리</router-link
                   >
                 </li>
-                <li v-if="user" class="nav-item">
+                <li v-if="!isAdmin" class="nav-item">
                   <router-link
                     to="/location"
                     class="nav-link"
@@ -129,7 +129,7 @@
                     >오시는 길</router-link
                   >
                 </li>
-                <li v-if="!user" class="nav-item">
+                <li v-if="isAdmin" class="nav-item">
                   <router-link
                     to="/adminmenu"
                     class="nav-link"
@@ -137,7 +137,7 @@
                     >메뉴 관리</router-link
                   >
                 </li>
-                <li v-if="user" class="nav-item dropdown">
+                <li v-if="!isAdmin" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -163,7 +163,7 @@
                     </li>
                   </ul>
                 </li>
-                <li v-if="!user" class="nav-item dropdown">
+                <li v-if="isAdmin" class="nav-item dropdown">
                   <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -200,6 +200,7 @@
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
                     type="submit"
+                    v-if="!isLogin"
                   >
                     <router-link to="/login" class="nav-link">
                       <img src="@/assets/login2.png" alt="login"
@@ -209,24 +210,21 @@
                   <button
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
-                    type="submit"
+                    v-if="isLogin"
+                    @click="logout"
                   >
-                    <router-link to="/login" class="nav-link">
-                      <img src="@/assets/logout.png" alt="logout"
-                    /></router-link>
+                    <img src="@/assets/logout.png" alt="" />
                   </button>
 
                   <button
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
-                    type="submit"
+                    v-if="isLogin"
                   >
-                    <router-link to="/mypage" class="nav-link">
-                      <img src="@/assets/user2.png" alt="mypage"
+                    <router-link to="/mypage" class="nav-link"
+                      ><img src="@/assets/user2.png" alt="mypage"
                     /></router-link>
                   </button>
-
-                  <input type="checkbox" v-model="isAdmin" />
                 </form>
               </ul>
             </div>
@@ -239,7 +237,7 @@
     <router-view />
   </div>
   <div id="footer">
-    <hr />
+    <hr style="margin: 0px" />
     <FooterView />
   </div>
 </template>
@@ -248,12 +246,15 @@
 import FooterView from "./components/FooterView.vue";
 export default {
   data() {
-    return {
-      isAdmin: false,
-    };
+    return {};
   },
   methods: {
     createUser() {},
+    logout() {
+      alert("로그아웃 되었습니다!");
+      this.$store.commit("logoutUser");
+      this.$router.push("/");
+    },
   },
   created() {},
   mounted() {
@@ -264,8 +265,12 @@ export default {
     FooterView, // 컴포넌트 등록
   },
   computed: {
-    user() {
-      return !this.isAdmin;
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    },
+
+    isLogin() {
+      return this.$store.getters.isLogin;
     },
   },
 };

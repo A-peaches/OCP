@@ -65,7 +65,7 @@ const routes = [
   {
     path: "/join",
     name: "join",
-    component: () => import("../views/joinView.vue"),
+    component: () => import("../views/JoinView.vue"),
   },
   {
     path: "/cart",
