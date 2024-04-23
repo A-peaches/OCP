@@ -1,41 +1,35 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
 
 const store = createStore({
   state: {
-    user: {}
+    user: {},
   },
   mutations: {
     loginUser(state, obj) {
-
       state.user = obj.data; // 사용자 객체를 state.user에 저장
-      console.log("Updated user state in Vuex:", state.user);
-
     },
     logoutUser(state) {
       // user 객체를 빈 객체로 설정하거나, 초기화
       state.user = {};
-    }
+    },
   },
   actions: {
     loginUser({ commit }, userData) {
-      commit('loginUser', userData);
-    }
-    
+      commit("loginUser", userData);
+    },
   },
-  getters: { 
+  getters: {
     getUser(state) {
       return state.user; // 현재 저장된 사용자 정보를 반환
     },
     isAdmin(state) {
-      console.log(state.user.data);
       return state.user && state.user.is_admin == 1;
     },
     isLogin(state) {
-        // user 객체가 존재하고, 객체 내부에 속성이 하나라도 있는 경우 true 반환
-        return !!state.user && Object.keys(state.user).length > 0;
-    }
-
-  }
+      // user 객체가 존재하고, 객체 내부에 속성이 하나라도 있는 경우 true 반환
+      return !!state.user && Object.keys(state.user).length > 0;
+    },
+  },
 });
 
 export default store;

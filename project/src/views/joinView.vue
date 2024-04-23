@@ -93,7 +93,7 @@
                 v-model="phone"
                 class="form-control"
                 pattern="^\d{3}-\d{3,4}-\d{4}$"
-                placeholder = "번호를 입력해주세요. 예: 010-1234-5678"
+                placeholder="번호를 입력해주세요. 예: 010-1234-5678"
                 required
               />
             </div>
@@ -196,7 +196,9 @@ export default {
       .then(res => {
         console.log(res.data);
       }); 
+      alert('회원가입이 완료되었습니다!');
 
+      this.$router.push("/login");
       //회원가입로직진행
 
 
