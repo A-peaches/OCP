@@ -1,7 +1,6 @@
 <template>
   <footer>
     <div id="footerDiv">
-        
         <p style="font-size: 18px;">🐼 판다 커피</p>
      
         <div class="mt-4 mb-4">

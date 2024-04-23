@@ -221,7 +221,7 @@
     <router-view />
   </div>
   <div id="footer">
-    <hr>
+  <hr style="margin: 0px;">
     <FooterView />
   </div>
 </template>
