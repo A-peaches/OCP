@@ -211,6 +211,7 @@
     <router-view />
   </div>
   <div id="footer">
+    <hr>
     <FooterView />
   </div>
 </template>
