@@ -1,6 +1,7 @@
 require("dotenv").config(); // 환경 변수 로드
 
 const express = require("express");
+const bcrypt = require('bcryptjs');
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -29,7 +30,6 @@ app.use(express.json()); // JSON 데이터 파싱을 위해 필요
 
 
 /////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
-
 // 아이디 중복확인
 app.get('/join/:userId', (req, res) => {
   const userId = req.params.userId;
@@ -47,10 +47,8 @@ app.get('/join/:userId', (req, res) => {
     }
   });
 });
-
 // 회원정보 DB insert
 app.post('/join/signin', (req, res) => {
-
   let data = req.body;
   let userId = data.userId;
   let userPw = data.userPw;
@@ -58,7 +56,6 @@ app.post('/join/signin', (req, res) => {
   let userNickName = data.userNickName;
   let email = data.email;
   let phone = data.phone;
-
   console.log(userId, userPw, userName, userNickName, email, phone);
 
   let query = 'insert into userinfo (userId, userName, userPw, nickName, phone, email) values (?,?,?,?,?,?)';
@@ -67,5 +64,57 @@ app.post('/join/signin', (req, res) => {
       console.log(result);
   })
 })
-
 /////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
+
+
+
+/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
+app.get('/bestmenu/best', async (req, res) => {
+  try {
+      const results = await connection.query('SELECT * FROM menus ORDER BY sales DESC LIMIT 4');
+      res.json(results.rows);
+  } catch (err) {
+      console.error('Error executing query', err.stack);
+      res.status(500).send('Error fetching menus');
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
+
+app.post('/login', async (req,res)=> {
+  const {inputId, inputPw } = req.body;
+  connection.query('SELECT * FROM userinfo where userid = ?',
+   [inputId],  async (error, results, fields) => {
+      if(error){
+          console.error('database error :', error);
+          res.status(500).send('Internal Server Error');
+      } else {
+          if(results.length > 0) {
+              const userInfo = results[0];
+              const isMatch = inputPw == userInfo.userPw ? 1 : 0;
+              if(isMatch) {
+                  //비밀번호가 일치하는 경우 사용자 정보 제공
+                  res.json({
+                      success:true,
+                      message:'Login successful',
+                      data : userInfo
+                  });
+              } else {
+                  //비밀번호가 일치하지 않는 경우
+                  res.status(401).json({
+                      success:false,
+                      message: 'Invalid credentials'
+                  });
+              }
+          } else {
+              //결과가 없는 경우. 회원가입 할 것
+              res.status(404).json({
+                  isAvailable : true,
+                  message : 'User not found'
+              });
+          }
+      }
+  })
