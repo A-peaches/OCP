@@ -6,7 +6,7 @@
           <h1>전체메뉴</h1>
           <hr />
           <br /><br />
-          <!-- <div class="category">
+          <div class="category">
             <h4>카테고리</h4>
             <hr />
             <div id="checkb">
@@ -15,6 +15,7 @@
                 name="menu"
                 value="all"
                 style="margin-right: 10px"
+                checked
               />전체&nbsp;&nbsp;
               <input
                 type="checkbox"
@@ -35,7 +36,7 @@
                 style="margin-right: 10px"
               />라떼
             </div>
-          </div> -->
+          </div>
 
           <br />
           <div class="detailcate">

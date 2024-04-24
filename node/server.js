@@ -27,23 +27,20 @@ app.listen(3000, () => {
 app.get("/", (req, res) => {
   res.send("Hello");
 });
-
 //메뉴 테이블 불러오기
 app.get("/menu", (req, res) => {
-  console.log("menu check");
   connection.query("SELECT * FROM menu", (error, results, fields) => {
     if (error) {
       console.error("Error fetching menu:", error);
       res.status(500).json({ error: "Error fetching menu" });
+    } else {
+      const responseData = results.map((row) => ({
+        ...row,
+        menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+      }));
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(responseData);
     }
-
-    const responseData = results.map((row) => ({
-      ...row,
-      menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
-    }));
-    console.log(responseData);
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(responseData);
   });
 });
 //메뉴삭제
@@ -64,7 +61,7 @@ app.post("/menudelete", (req, res) => {
 });
 
 // 메뉴추가
-app.post("/menuinput", upload.single("menuimg"), (req, res) => {
+app.post("/menuinput", upload.single("menuImg"), (req, res) => {
   console.log;
   const {
     menuName,
@@ -76,10 +73,10 @@ app.post("/menuinput", upload.single("menuimg"), (req, res) => {
     milk,
     sugar,
   } = req.body;
-  const menuimg = req.file.buffer;
+  const menuImg = req.file.buffer;
 
   const query =
-    "INSERT INTO menu (menuName, menuPrice, menuintro, category, beans, water, milk, sugar, menuimg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO menu (menuName, menuPrice, menuintro, category, beans, water, milk, sugar, menuImg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   connection.query(
     query,
@@ -92,7 +89,7 @@ app.post("/menuinput", upload.single("menuimg"), (req, res) => {
       water,
       milk,
       sugar,
-      menuimg,
+      menuImg,
     ],
     (error, results) => {
       if (error) {
@@ -405,14 +402,17 @@ app.post("/cartCnt", async (req, res) => {
   
     console.log(userId);
     const query =
-      "select menuImg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?"
+      "select menuimg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?"
     connection.query(query, [userId], async (error, results, fields) => {
       if (error) {
         console.error("database error :", error);
         res.status(500).send("Internal Server Error");
       } else {
         if (results.length > 0) {
-          const cartList = results;
+          const cartList = results.map((row) => ({
+            ...row,
+            menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+          }));
           //결과가 있는경우
           res.json({
             success: true,

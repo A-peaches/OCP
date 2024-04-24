@@ -64,10 +64,11 @@ export default {
   mounted() {
     this.loadCartList();
     // this.setImageUrls();
-    
   },
   methods: {
-  
+    getImageSrc(base64Data) {
+      return `data:image/jpeg;base64,${base64Data}`;
+    },
     async loadCartList() {
       const userId = this.userId;
       try {
@@ -75,9 +76,13 @@ export default {
           userId,
         });
         if (response.data.success) {
-          const cartList = response.data.data; 
+          const cartList = response.data.data;
           this.cartItems = cartList;
-        console.log(this.cartItems[0].menuImg)
+          console.log(this.cartItems);
+          this.cartItems = cartList.map((item) => ({
+            ...item,
+            menuimg: this.getImageSrc(item.menuimg),
+          }));
         } else {
           console.error("No cart data returned", response.data.message);
         }
