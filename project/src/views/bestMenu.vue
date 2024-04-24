@@ -13,7 +13,7 @@
               style="width: 18rem; margin-right: 15px"
             >
               <img
-                src="../assets/coffeeEX.jpg"
+                :src="menu.menuimg"
                 class="card-img-bottom"
                 alt="Menu Image"
               />
@@ -28,41 +28,67 @@
             </div>
           </div>
           <h1>Coming Soon</h1>
-          <hr/><br/>
+          <hr />
+          <br />
           <div class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col">
               <div class="card h-100">
-                <img src="../assets/comingsoon/dessert1.png" class="card-img-top" alt="...">
+                <img
+                  src="../assets/comingsoon/dessert1.png"
+                  class="card-img-top"
+                  alt="..."
+                />
                 <div class="card-body">
-                  <h5 class="card-title">판다가 좋아하는<br/>불고기 치즈 샌드위치</h5>
+                  <h5 class="card-title">
+                    판다가 좋아하는<br />불고기 치즈 샌드위치
+                  </h5>
                   <p class="card-text">치즈 듬뿍 불고기 듬뿍 !</p>
                 </div>
               </div>
             </div>
             <div class="col">
               <div class="card h-100">
-                <img src="../assets/comingsoon/dessert2.png" class="card-img-top" alt="...">
+                <img
+                  src="../assets/comingsoon/dessert2.png"
+                  class="card-img-top"
+                  alt="..."
+                />
                 <div class="card-body">
                   <h5 class="card-title">에고 머핀</h5>
-                  <p class="card-text">에구구 머핀 에고고 머핀 계란 햄! 에구구 머핀 에고고 머핀 계란 햄! 에구구 머핀 에고고 머핀 계란 햄!</p>
+                  <p class="card-text">
+                    에구구 머핀 에고고 머핀 계란 햄! 에구구 머핀 에고고 머핀
+                    계란 햄! 에구구 머핀 에고고 머핀 계란 햄!
+                  </p>
                 </div>
               </div>
             </div>
             <div class="col">
               <div class="card h-100">
-                <img src="../assets/comingsoon/dessert3.png" class="card-img-top" alt="...">
+                <img
+                  src="../assets/comingsoon/dessert3.png"
+                  class="card-img-top"
+                  alt="..."
+                />
                 <div class="card-body">
                   <h5 class="card-title">튀르키예</h5>
-                  <p class="card-text">케밥 케밥 케밥 케밥 케밥 케밥 케밥 케밥 케밥</p>
+                  <p class="card-text">
+                    케밥 케밥 케밥 케밥 케밥 케밥 케밥 케밥 케밥
+                  </p>
                 </div>
               </div>
             </div>
             <div class="col">
               <div class="card h-100">
-                <img src="../assets/comingsoon/dessert4.png" class="card-img-top" alt="...">
+                <img
+                  src="../assets/comingsoon/dessert4.png"
+                  class="card-img-top"
+                  alt="..."
+                />
                 <div class="card-body">
                   <h5 class="card-title">나뭇가지 아닙니다.</h5>
-                  <p class="card-text">프레젤 프레젤 프레젤 프레젤 프레젤 프레젤 프레젤 프레젤</p>
+                  <p class="card-text">
+                    프레젤 프레젤 프레젤 프레젤 프레젤 프레젤 프레젤 프레젤
+                  </p>
                 </div>
               </div>
             </div>
@@ -81,9 +107,9 @@ export default {
   components: {},
   data() {
     return {
-       topMenu: [],
-       userId: '',
-       ischeck: ''
+      topMenu: [],
+      userId: "",
+      ischeck: "",
     };
   },
   created() {
@@ -91,16 +117,21 @@ export default {
     this.userIdLoad();
   },
   methods: {
+    getImageSrc(base64Data) {
+      return `data:image/jpeg;base64,${base64Data}`;
+    },
     async fetchMenus() {
-      axios
-        .get("http://localhost:3000/bestmenu/best")
-        .then((res) => {
-          this.topMenu = res.data;
-        })
-        .catch((error) => {
-          console.error("Error during menu", error);
-        });
-      
+      try {
+        const response = await axios.get("http://localhost:3000/bestmenu/best");
+        this.topMenu = response.data.map((menu) => ({
+          ...menu,
+          menuimg: this.getImageSrc(menu.menuimg),
+        }));
+        console.log(this.topMenu);
+        console.log("Menu fetched successfully");
+      } catch (error) {
+        console.error("Error fetching menu:", error);
+      }
     },
     userIdLoad() {
       this.userId = this.$store.getters.getUserId;
@@ -108,7 +139,7 @@ export default {
     async isSameMenu(menuId) {
       let obj = {
         userId: this.userId,
-        menuId: menuId
+        menuId: menuId,
       };
 
       try {
@@ -116,51 +147,47 @@ export default {
         this.ischeck = res.data.exists;
         return this.ischeck; // 함수에서 결과값을 반환합니다.
       } catch (error) {
-        console.error('에러발생', error);
+        console.error("에러발생", error);
         return false; // 에러가 발생했을 때 false를 반환합니다.
       }
     },
     cartNew(menuId) {
-      let obj = {userId: this.userId, menuId: menuId };
+      let obj = { userId: this.userId, menuId: menuId };
 
-      axios.post("http://localhost:3000/cartnew", obj)
-      .then(res => {
+      axios.post("http://localhost:3000/cartnew", obj).then((res) => {
         console.log(res.data);
       });
     },
     cartAdd(menuId) {
-      let obj = {userId: this.userId, menuId: menuId };
+      let obj = { userId: this.userId, menuId: menuId };
 
-      axios.post("http://localhost:3000/cartadd", obj)
-      .then(res => {
+      axios.post("http://localhost:3000/cartadd", obj).then((res) => {
         console.log(res.data);
       });
     },
     async ordering(menuId) {
-
       if (!this.userId) {
-        alert('비회원은 주문할 수 없습니다!')
-        this.$router.push('/login'); // 로그인 페이지로 리다이렉트
+        alert("비회원은 주문할 수 없습니다!");
+        this.$router.push("/login"); // 로그인 페이지로 리다이렉트
         return;
       }
 
       const isMenuSame = await this.isSameMenu(menuId);
-      
-      console.log(isMenuSame, '입니다.');
+
+      console.log(isMenuSame, "입니다.");
 
       if (!isMenuSame) {
         //처음 추가할때
         this.cartNew(menuId);
-        this.$store.dispatch('addNewItemToCart');
+        this.$store.dispatch("addNewItemToCart");
       } else {
         //이미 있는 메뉴일때
         this.cartAdd(menuId);
       }
 
       alert("장바구니에 추가되었습니다.");
-
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
@@ -198,7 +225,6 @@ export default {
   flex-direction: column;
   justify-content: space-between; /* 내용을 상하로 균등 분포 */
 }
-
 
 .intro {
   padding: 30px; /* 내용의 패딩 조정 */
