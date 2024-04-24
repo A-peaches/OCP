@@ -92,6 +92,7 @@ export default {
 
   created() {
     this.fetchMenus();
+    this.userIdLoad();
   },
 
   methods: {
@@ -103,6 +104,9 @@ export default {
       } catch (error) {
           console.error("일시적인 오류가 발생했습니다.", error);
       }
+    },
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
     }
   },
 };

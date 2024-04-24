@@ -168,8 +168,8 @@ app.get("/bestmenu/best", (req, res) => {
     connection.query(
       "SELECT m.menuId, m.menuName, m.menuPrice, m.menuintro ,SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4",
       (error, results, fields) => {
-        console.log("여기는 서버당 !! ");
-        console.log(results);
+        // console.log("여기는 서버당 !! ");
+        // console.log(results);
         res.json(results);
       }
     );
@@ -226,12 +226,12 @@ app.post("/noticewrite", (req, res) => {
   let title = data.title;
   let content = data.content;
 
-  console.log(title, content);
+  // console.log(title, content);
 
   let query = "insert into notice (title, content, is_event) value (?,?,?)";
   connection.query(query, [title, content, 0], (err, result, fields) => {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
   });
 });
 
@@ -241,7 +241,7 @@ app.get("/noticelist", (req, res) => {
     connection.query(
       "select * from notice order by noticeId desc",
       (error, results, fields) => {
-        console.log(results);
+        // console.log(results);
         res.json(results);
       }
     );
@@ -255,12 +255,12 @@ app.get("/noticelist", (req, res) => {
 
 app.post("/noticedetail", (req, res) => {
   let data = req.body.noticeId;
-  console.log(data);
+  // console.log(data);
 
   let query = "select title, content from notice where noticeId = ?";
   connection.query(query, [data], (err, result, fields) => {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
     res.json(result);
   });
 });
@@ -269,7 +269,7 @@ app.post("/noticedetail", (req, res) => {
 app.get("/allmenu", (req, res) => {
   try {
     connection.query("select * from menu", (error, results, fields) => {
-      console.log(results);
+      // console.log(results);
       res.json(results);
     });
   } catch (err) {
@@ -343,7 +343,7 @@ app.post("/findid", async (req, res) => {
 app.post("/orderState", async (req, res) => {
   const userId = req.body.userId;
 
-  console.log(userId);
+  // console.log(userId);
   const query =
     "SELECT c.orderNo, c.orderDate, m.menuName, c.orderCnt, m.menuPrice FROM ( SELECT A.orderNo, A.orderDate, menuId, B.orderCnt, A.userId FROM userorder AS A LEFT OUTER JOIN orderdetail AS B ON A.orderNo =B.orderNo WHERE A.userId = ? AND A.orderDate = ( SELECT MAX(orderDate) FROM userorder WHERE userId = ? AND orderNo = A.orderNo ) ) AS c LEFT OUTER JOIN menu AS m ON c.menuId = m.menuId";
 
@@ -354,7 +354,7 @@ app.post("/orderState", async (req, res) => {
     } else {
       if (results.length > 0) {
         const userInfo = results;
-        console.log(userInfo);
+        // console.log(userInfo);
         //결과가 있는경우
         res.json({
           success: true,
@@ -374,7 +374,7 @@ app.post("/orderState", async (req, res) => {
 app.post("/orderList", async (req, res) => {
   const userId = req.body.userId;
 
-  console.log(userId);
+  // console.log(userId);
   const query =
     "select orderNo,orderDate,menuName,orderCnt,menuPrice from (SELECT A.orderNo , orderDate, menuId, orderCnt,userId from userorder AS A left outer join orderdetail AS B on A.orderNo=B.orderNo) as c left outer join menu on c.menuId = menu.menuId where userId = ?";
 
@@ -385,7 +385,7 @@ app.post("/orderList", async (req, res) => {
     } else {
       if (results.length > 0) {
         const userInfo = results;
-        console.log(userInfo);
+        // console.log(userInfo);
         //결과가 있는경우
         res.json({
           success: true,
@@ -399,5 +399,60 @@ app.post("/orderList", async (req, res) => {
         });
       }
     }
+  });
+});
+
+
+/////////////////////장바구니 추가시 기존 데이터 존재 여부 확인//////////////////
+app.post("/samecheck", (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let menuId = data.menuId;
+
+  let query = "select count(menuid) as count from cart where userid = ? and menuid = ?";
+
+  connection.query(query, [userId, menuId], (err, result, fields) => {
+    if (err) throw err;
+
+
+    console.log(result[0].count);
+    if (result[0].count > 0) {
+      res.json({ exists: 1 }); // 결과가 있을 경우
+    } else {
+      res.json({ exists: 0 }); // 결과가 없을 경우
+    }
+
+  });
+});
+
+/////////////////////장바구니 추가시 첫추가 메뉴인경우//////////////////
+app.post("/cartnew", (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let menuId = data.menuId;
+
+  let query = "insert into cart values (?, ?, 1)";
+
+  connection.query(query, [userId, menuId], (err, result, fields) => {
+    if (err) throw err;
+
+    console.log(result);
+
+  });
+});
+
+/////////////////////장바구니 추가시 중복 메뉴인경우//////////////////
+app.post("/cartadd", (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let menuId = data.menuId;
+
+  let query = "update cart set cartCnt = (select cartCnt from (select * from cart where userid= ? and menuId= ? ) as cnt) + 1 where userid= ? and menuId= ?";
+
+  connection.query(query, [userId, menuId, userId, menuId], (err, result, fields) => {
+    if (err) throw err;
+
+    console.log(result);
+
   });
 });
