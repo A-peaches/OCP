@@ -498,7 +498,7 @@ app.post("/cartList", async (req, res) => {
 
   console.log(userId);
   const query =
-    "select menuimg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?";
+    "select cart.menuId,menuimg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?";
   connection.query(query, [userId], async (error, results, fields) => {
     if (error) {
       console.error("database error :", error);
@@ -521,6 +521,104 @@ app.post("/cartList", async (req, res) => {
           data: "None",
         });
       }
+    }
+  });
+});
+
+//개수감소
+app.post("/decreaseCartCnt", async (req, res) => {
+  const { userId, menuId, cartCnt } = req.body;
+  const query = "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?";
+  connection.query(
+    query,
+    [cartCnt, userId, menuId],
+    async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results.affectedRows > 0) {
+          console.log(results);
+          res.json({
+            success: true,
+          });
+        } else {
+          //없는경우
+          res.json({
+            success: false,
+            data: "None",
+          });
+        }
+      }
+    }
+  );
+});
+
+//개수증가
+app.post("/increaseCartCnt", async (req, res) => {
+  const { userId, menuId, cartCnt } = req.body;
+  const query = "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?";
+  connection.query(
+    query,
+    [cartCnt, userId, menuId],
+    async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results.affectedRows > 0) {
+          console.log(results);
+          res.json({
+            success: true,
+          });
+        } else {
+          //없는경우
+          res.json({
+            success: false,
+            data: "None",
+          });
+        }
+      }
+    }
+  );
+});
+
+//장바구니 삭제
+app.post("/removeCartItem", async (req, res) => {
+  const { userId, menuId } = req.body;
+  console.log(userId, menuId);
+  const query = "delete from cart WHERE userId = ? AND menuId = ?";
+  connection.query(query, [userId, menuId], async (error, results, fields) => {
+    if (error) {
+      console.error("Database error during cart item deletion:", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.affectedRows > 0) {
+        res.json({ success: true, message: "Cart item deleted successfully." });
+      } else {
+        res.json({ success: false, message: "No cart item found to delete." });
+      }
+    }
+  });
+});
+
+//마이페이지 유저정보 불러오기
+app.post("/userInfoList", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log(userId);
+  const query =
+    "select userName, userId, nickName, phone, email from userinfo where userID = ?";
+  connection.query(query, [userId], async (error, results, fields) => {
+    if (error) {
+      console.error("database error :", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      const userInfo = results[0];
+      res.json({
+        success: true,
+        data: userInfo,
+      });
     }
   });
 });
