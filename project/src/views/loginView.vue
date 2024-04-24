@@ -100,6 +100,20 @@ export default {
     FindPW,
   },
   methods: {
+    async loadCartCount(userid) {
+    const userId = userid;
+    try {
+      const response = await axios.post("http://localhost:3000/cartCnt", { userId });
+      if (response.data.success) {
+        const cartCnt = response.data.data.cartCnt;
+
+        this.$store.commit("AddCartCnt", cartCnt);
+      }
+    } catch (error) {
+      console.error("Error during cartCnt", error);
+      alert("장바구니 정보를 불러오는 중 오류가 발생했습니다.");
+    }
+  },
     //로그인 버튼 클릭 시 DB서버에 접근하여
     //ID와 PW접근 후 로그인 성공 여부 반환
     login(event) {
@@ -113,8 +127,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             alert("로그인이 완료되었습니다!");
-
             this.$store.dispatch("loginUser", res.data);
+            this.loadCartCount(res.data.data.userId);
             this.$router.push("/");
           } else {
             console.error("Login failed", res.data.message);
@@ -123,6 +137,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error during login", error);
+          alert("로그인 처리 중 오류가 발생했습니다.");
         });
     },
     loginWithKakao() {

@@ -149,12 +149,15 @@ export default {
       console.log(isMenuSame, '입니다.');
 
       if (!isMenuSame) {
-        alert("처음추가하는 메뉴야");
+        //처음 추가할때
         this.cartNew(menuId);
+        this.$store.dispatch('addNewItemToCart');
       } else {
-        alert("이미 있는 메뉴야");
+        //이미 있는 메뉴일때
         this.cartAdd(menuId);
       }
+
+      alert("장바구니에 추가되었습니다.");
 
     }
   }
