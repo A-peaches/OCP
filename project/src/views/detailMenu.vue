@@ -4,20 +4,18 @@
       <div class="intro" style="margin: 100px 0 100px">
         <div class="d-flex justify-content-center">
           <img
-            src="@/assets/coffeeEX.jpg"
+            :src="detailmenu.menuimg"
             alt="..."
             style="margin-right: 100px; width: 450px; height: 480px"
             class="img-fluid"
           />
           <div style="display: flex">
             <div style="padding-left: 30px; width: 500px; height: auto">
-              <h3>판다리카노</h3>
+              <h3>{{ detailmenu.menuName }}</h3>
               <p>Pandaricano</p>
               <hr style="border-top: 3px black solid" />
-              <pre>
-판다커피의 고소한 풍미 가득한 원두가
-밸런스 좋게 어우러지고,
-부드러움이 특징인 판다커피만의 아메리카노
+              <pre
+                >{{ detailmenu.menuintro }}
           </pre
               >
               <h5>Option</h5>
@@ -128,6 +126,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "detailmenuView",
   components: {},
@@ -139,7 +138,21 @@ export default {
       sizePriceAdd: 0,
       coffeePrice: 2500,
       cups: 1,
+      menuName: "",
+      menuId: 0,
+      menuPrice: 0,
+      menuintro: "",
+      category: "",
+      beans: 0,
+      milk: 0,
+      water: 0,
+      sugar: 0,
+      menuimg: null,
+      detailmenu: [],
     };
+  },
+  created() {
+    this.fetchMenuDetail();
   },
   methods: {
     shotMinus() {
@@ -165,6 +178,25 @@ export default {
         this.sizePriceAdd = 500;
       } else {
         this.sizePriceAdd = 0;
+      }
+    },
+    getImageSrc(base64Data) {
+      return `data:image/jpeg;base64,${base64Data}`;
+    },
+    async fetchMenuDetail() {
+      try {
+        let menuId = this.$route.params.id;
+        console.log(menuId);
+        const response = await axios.post("http://localhost:3000/menu", {
+          menuId: menuId,
+        });
+        this.detailmenu = response.data.map((detailmenu) => ({
+          ...detailmenu,
+          menuimg: this.getImageSrc(detailmenu.menuimg),
+        }));
+        console.log("Menu fetched successfully");
+      } catch (error) {
+        console.error("Error fetching menu:", error);
       }
     },
   },
