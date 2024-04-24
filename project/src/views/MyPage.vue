@@ -15,23 +15,23 @@
               <table class="table">
                 <tr>
                   <td scope="col">회원이름</td>
-                  <td scope="col" colspan="3">회원이름</td>
+                  <td scope="col" colspan="3">{{ userInfo.userName }}</td>
                 </tr>
                 <tr>
                   <td scope="col">ID</td>
-                  <td scope="col" colspan="3">ID</td>
+                  <td scope="col" colspan="3">{{ userInfo.userId }}</td>
                 </tr>
                 <tr>
                   <td scope="col">닉네임</td>
-                  <td scope="col" colspan="3">닉네임</td>
+                  <td scope="col" colspan="3">{{ userInfo.nickName }}</td>
                 </tr>
                 <tr>
                   <td scope="col">연락처</td>
-                  <td scope="col" colspan="3">연락처</td>
+                  <td scope="col" colspan="3">{{ userInfo.phone }}</td>
                 </tr>
                 <tr>
                   <td scope="col">이메일</td>
-                  <td scope="col" colspan="3">aaa@naver.com</td>
+                  <td scope="col" colspan="3">{{ userInfo.email }}</td>
                 </tr>
                 <tr>
                   <td scope="col">나의 등급</td>
@@ -80,8 +80,48 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: "adminenuView",
+  data() {
+    return {
+      userId: "",
+      userInfo: []
+    };
+  },
+
+  created() {
+    this.userIdLoad();
+  },
+
+  mounted() {
+    this.userInfoLoad();
+  },
+
+  methods: {
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
+    },
+    async userInfoLoad() {
+      const userId = this.userId;
+      try {
+        const response = await axios.post("http://localhost:3000/userInfoList", {
+          userId,
+        });
+        if (response.data.success) {
+          const userInfo = response.data.data;
+          this.userInfo = userInfo;
+          console.log(userInfo);
+        } else {
+          console.error("정보오류", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error during cartList", error);
+        alert("시스템오류");
+      }
+    },
+  },
   components: {},
 };
 </script>

@@ -482,3 +482,26 @@ app.post("/cartCnt", async (req, res) => {
       }
     });
   });
+
+
+
+
+  //마이페이지 유저정보 불러오기
+  app.post("/userInfoList", async (req, res) => {
+    const userId = req.body.userId;
+  
+    console.log(userId);
+    const query = "select userName, userId, nickName, phone, email from userinfo where userID = ?"
+    connection.query(query, [userId], async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        const userInfo = results[0];
+        res.json({
+          success: true,
+          data: userInfo
+        });
+      }
+    });
+  });
