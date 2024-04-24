@@ -92,13 +92,6 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item"
-                        ><router-link to="/cart" class="nav-link"
-                          >장바구니</router-link
-                        ></a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-item"
                         ><router-link to="/orderState" class="nav-link"
                           >주문현황</router-link
                         ></a
@@ -209,21 +202,36 @@
 
                   <button
                     class="btn btn-outline-dark btn-custom"
-                    id="btn_border"
-                    v-if="isLogin"
-                    @click="logout"
+                    id="btn_border" v-if="isLogin && !isAdmin"
                   >
-                    <img src="@/assets/logout.png" alt="" />
+                    <router-link to="/cart" class="nav-link">
+                      <div
+                        class="icon-badge-container position-relative d-inline-block"
+                      >
+                        <i class="bi bi-cart4" style="font-size: 18pt"></i>
+                        <span class="badge position-absolute badge-number"
+                          >3</span
+                        >
+                      </div>
+                    </router-link>
+                  </button>
+                  <button
+                    class="btn btn-outline-dark btn-custom"
+                    id="btn_border"
+                    v-if="isLogin && !isAdmin"
+                  >
+                    <router-link to="/mypage" class="nav-link myPage"
+                      ><img src="@/assets/user2.png" alt="mypage"
+                    /></router-link>
                   </button>
 
                   <button
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
-                    v-if="isLogin&&!isAdmin"
+                    v-if="isLogin"
+                    @click="logout"
                   >
-                    <router-link to="/mypage" class="nav-link"
-                      ><img src="@/assets/user2.png" alt="mypage"
-                    /></router-link>
+                    <img src="@/assets/logout.png" alt="" />
                   </button>
                 </form>
               </ul>
@@ -353,5 +361,14 @@ ul a.dropdown-item:active {
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
   height: 100%; /* 부모 요소의 높이를 자식 요소에 맞춤 */
+}
+.badge-number {
+  top: -10px;  /* 위쪽으로 조금 이동 */
+  right: -5px; /* 오른쪽으로 조금 이동 */
+  transform: translate(50%, -50%); /* 뱃지 위치 세밀 조정 */
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.25em 0.6em; /* 뱃지 크기 조정 */
 }
 </style>

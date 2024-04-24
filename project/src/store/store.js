@@ -29,6 +29,9 @@ const store = createStore({
       // user 객체가 존재하고, 객체 내부에 속성이 하나라도 있는 경우 true 반환
       return !!state.user && Object.keys(state.user).length > 0;
     },
+    getUserId(state) {
+      return state.user.userId;
+    },
   },
 });
 
