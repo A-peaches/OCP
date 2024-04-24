@@ -404,3 +404,27 @@ app.post("/orderList", async (req, res) => {
     }
   });
 });
+
+// 상세메뉴
+app.post("/detailmenu", (req, res) => {
+  const menuId = req.body.menuId; // Extract menuId from the request body
+  connection.query(
+    "SELECT * FROM menu WHERE menuid = ?",
+    [menuId],
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error fetching menu:", error);
+        res.status(500).json({ error: "Error fetching menu" });
+      }
+
+      const responseData = results.map((row) => ({
+        ...row,
+        menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+      }));
+      console.log(responseData);
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(responseData);
+    }
+  );
+});
+//////
