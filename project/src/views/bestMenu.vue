@@ -8,8 +8,17 @@
           <br /><br />
 
           <div class="card_section">
-            <div v-for="menu in topMenu" :key="menu.menuId" class="card" style="width: 18rem; margin-right: 15px">
-              <img src="../assets/coffeeEX.jpg" class="card-img-bottom" alt="Menu Image">
+            <div
+              v-for="menu in topMenu"
+              :key="menu.menuId"
+              class="card"
+              style="width: 18rem; margin-right: 15px"
+            >
+              <img
+                src="../assets/coffeeEX.jpg"
+                class="card-img-bottom"
+                alt="Menu Image"
+              />
               <div class="card-body">
                 <h5 class="card-title">{{ menu.menuName }}</h5>
                 <p class="card-text">PRICE : {{ menu.menuPrice }}</p>
@@ -92,46 +101,44 @@
 </template>
 
 <script>
-
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "bestmenuView",
   components: {},
   data() {
     return {
-       topMenu: [],
-       menus: [
+      topMenu: [],
+      menus: [
         {
           id: 1,
-          name: '👑판다리카노',
+          name: "👑판다리카노",
           price: 2.5,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
+          description: "커피설명",
+          image: require("../assets/coffeeEX.jpg"),
         },
         {
           id: 2,
-          name: '👑판다라떼',
+          name: "👑판다라떼",
           price: 3.0,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
+          description: "커피설명",
+          image: require("../assets/coffeeEX.jpg"),
         },
         {
           id: 3,
-          name: '👑판다프레소',
+          name: "👑판다프레소",
           price: 2.0,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
+          description: "커피설명",
+          image: require("../assets/coffeeEX.jpg"),
         },
         {
           id: 4,
-          name: '👑커피판다',
+          name: "👑커피판다",
           price: 3.0,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
-        }
-      ]
-      
+          description: "커피설명",
+          image: require("../assets/coffeeEX.jpg"),
+        },
+      ],
     };
   },
   created() {
@@ -139,20 +146,19 @@ export default {
   },
   methods: {
     async fetchMenus() {
-        console.log('불러오기시작');
-        axios
+      console.log("불러오기시작");
+      axios
         .get("http://localhost:3000/bestmenu/best")
         .then((res) => {
           console.log(res);
           this.topMenu = res.data;
-          console.log('탑메뉴 호출해보기', this.topMenu);
+          console.log("탑메뉴 호출해보기", this.topMenu);
         })
         .catch((error) => {
           console.error("Error during menu", error);
         });
-      
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
@@ -188,7 +194,6 @@ export default {
   display: block; /* 블록 요소로 설정 */
   margin: 20px auto; /* 상하 20px, 좌우 자동 (중앙 정렬) */
   cursor: pointer; /* 클릭 가능한 항목임을 표시 */
-
 }
 .cartBtn i {
   color: #000; /* 아이콘 색상을 검정색으로 변경 */
