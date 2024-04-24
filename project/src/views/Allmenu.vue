@@ -6,7 +6,7 @@
           <h1>전체메뉴</h1>
           <hr />
           <br /><br />
-          <div class="category">
+          <!-- <div class="category">
             <h4>카테고리</h4>
             <hr />
             <div id="checkb">
@@ -35,144 +35,28 @@
                 style="margin-right: 10px"
               />라떼
             </div>
-          </div>
-          <br />
+          </div> -->
+
+          <br/>
           <div class="detailcate">
-            <img
-              style="margin-left: 20px"
-              src="@/assets/decafein.png"
-              alt="..."
-            />
-
-            <span style="margin: 10px 20px 10px; font-size: 15pt"
-              >에스프레소</span
-            >
-
-            <span style="margin: 10px 20px 10px; font-size: 12pt"
-              >디카페인가능(일부음료제외)</span
-            >
+            <img style="margin-left: 20px" src="@/assets/decafein.png" alt="..."/>
+            <span style="margin: 10px 20px 10px; font-size: 15pt">판다커피는 엄선된 최고급 원두만 사용합니다.</span>
+            <span style="margin: 10px 20px 10px; font-size: 12pt;">※ 디카페인가능(일부음료제외)</span>
           </div>
-          <br />
+          <br/>
           <div class="image-container">
-            <figure class="figure">
-              <router-link
-                to="/detailmenu"
-                class="nav-link"
-                aria-current="page"
-                style="h"
-              >
-                <img
-                  src="@/assets/coffeeEX.jpg"
-                  class="figure-img img-fluid rounded"
-                  alt="..."
-                />
+            <figure class="figure" v-for="item in allMenus" :key="item.id">
+              <router-link to="/detailmenu" class="nav-link" aria-current="page">
+                <img src="../assets/coffeeEX.jpg" class="figure-img img-fluid rounded" alt="..." />
               </router-link>
               <figcaption class="figure-caption text-center">
-                판다리카노<br />
+                {{item.menuName}}<br/>
+                가격 : {{item.menuPrice}}
                 <div>
-                  <button id="btn_border">
-                    <i class="bi bi-cart-check"></i>
-                  </button>
-                  <button id="btn_border" @click="changeHeartIconClass">
-                    <i :class="heartIconClass"></i>
-                  </button>
+                  <button class="cartBtn">
+                  <i class="bi bi-cart-check"></i>
+                </button>
                 </div>
-              </figcaption>
-            </figure>
-            <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
-              <figcaption class="figure-caption text-center">
-                판다라떼<br />
-                <button id="btn_border">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-                <button id="btn_border" @click="changeHeartIconClass">
-                  <i :class="heartIconClass"></i>
-                </button>
-              </figcaption>
-            </figure>
-            <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
-              <figcaption class="figure-caption text-center">
-                판다프레소<br />
-                <button id="btn_border">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-                <button id="btn_border" @click="changeHeartIconClass">
-                  <i :class="heartIconClass"></i>
-                </button>
-              </figcaption>
-            </figure>
-            <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
-              <figcaption class="figure-caption text-center">
-                커피판다<br />
-                <button id="btn_border">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-                <button id="btn_border" @click="changeHeartIconClass">
-                  <i :class="heartIconClass"></i>
-                </button>
-              </figcaption>
-            </figure>
-            <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
-              <figcaption class="figure-caption text-center">
-                아인슈페너<br />
-                <button id="btn_border">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-                <button id="btn_border" @click="changeHeartIconClass">
-                  <i :class="heartIconClass"></i>
-                </button>
-              </figcaption>
-            </figure>
-            <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
-              <figcaption class="figure-caption text-center">
-                바닐라라떼<br />
-                <button id="btn_border">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-                <button id="btn_border" @click="changeHeartIconClass">
-                  <i :class="heartIconClass"></i>
-                </button>
-              </figcaption>
-            </figure>
-            <figure class="figure">
-              <img
-                src="@/assets/coffeeEX.jpg"
-                class="figure-img img-fluid rounded"
-                alt="..."
-              />
-              <figcaption class="figure-caption text-center">
-                A caption for the above image.<br />
-                <button id="btn_border">
-                  <i class="bi bi-cart-check"></i>
-                </button>
-                <button id="btn_border" @click="changeHeartIconClass">
-                  <i :class="heartIconClass"></i>
-                </button>
               </figcaption>
             </figure>
           </div>
@@ -184,22 +68,42 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "allmenuView",
   components: {},
   data() {
     return {
       heartIconClass: "bi bi-heart",
+
+      //테스트용 메뉴 배열
+      // menuItems: [
+      // { id: 1, name: "판다리카노", image: require("../assets/coffeeEX.jpg") },
+      // { id: 2, name: "판다라떼", image: require("../assets/coffeeEX.jpg") },
+      // { id: 3, name: "판다프레소", image: require("../assets/coffeeEX.jpg") },
+      // { id: 4, name: "커피판다", image: require("../assets/coffeeEX.jpg") },
+      // { id: 5, name: "아인슈페너", image: require("../assets/coffeeEX.jpg") },
+      // { id: 6, name: "바닐라라떼", image: require("../assets/coffeeEX.jpg") }
+      // ],
+
+      allMenus: []
     };
   },
+
+  created() {
+    this.fetchMenus();
+  },
+
   methods: {
-    changeHeartIconClass() {
-      if (this.heartIconClass == "bi bi-heart") {
-        this.heartIconClass = "bi bi-heart-fill";
-      } else {
-        this.heartIconClass = "bi bi-heart";
+    async fetchMenus() {
+      try {
+          const res = await axios.get("http://localhost:3000/allmenu");
+          this.allMenus = res.data; //응답데이터를 allMenus에 저장
+          console.log(this.allMenus);
+      } catch (error) {
+          console.error("일시적인 오류가 발생했습니다.", error);
       }
-    },
+    }
   },
 };
 </script>
@@ -213,7 +117,10 @@ export default {
 .image-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around; /* 이미지를 중앙에 정렬합니다. */
+  justify-content: center; /* 기본적으로 중앙 정렬 */
+}
+.image-container.align-start {
+  justify-content: flex-start; /* 왼쪽 정렬 */
 }
 .figure {
   padding: 20px 20px 20px 20px;

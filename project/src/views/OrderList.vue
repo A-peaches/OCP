@@ -22,10 +22,10 @@
           <dt>날짜입력</dt>
           <dd>
             <label for="startDate">시작 일자 : </label>
-            <input type="date" id="startDate" name="startDate" />
+            <input type="date" id="startDate" name="startDate" v-model="startDate" />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <label for="endDate">종료 일자 : </label>
-            <input type="date" id="endDate" name="endDate" />
+            <input type="date" id="endDate" name="endDate" v-model="endDate"/>
           </dd>
         </dl>
         <div class="d-flex  align-items-center" style="gap: 20px">
@@ -73,47 +73,91 @@
       </div>
 
       <div class="text-center" style="margin-top: 30px">
-        <table class="table table-striped">
+        <table class="table table-striped" >
+        <thead>
           <tr>
-            <td>주문번호</td>
-            <td>주문일</td>
-            <td>메뉴</td>
-            <td>개수</td>
-            <td>가격</td>
+            <th>주문번호</th>
+            <th>주문일</th>
+            <th>메뉴</th>
+            <th>개수</th>
+            <th>가격</th>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>2024-04-22 PM 07:31</td>
-            <td>판다리카노</td>
-            <td>1 oz</td>
-            <td>2,500원</td>
+        </thead>
+        <tbody>
+          <tr v-for="order in filteredOrders" :key="order.orderNo">
+            <td>{{ order.orderNo }}</td>
+            <td>{{ formatDate(order.orderDate) }}</td>
+            <td>{{ order.menuName }}</td>
+            <td>{{ order.orderCnt }}</td>
+            <td>{{ formatPrice(order.menuPrice) }}</td>
           </tr>
-          <tr>
-            <td>2</td>
-            <td>2024-04-21 AM 10 :12</td>
-            <td>판다라떼</td>
-            <td>1 oz</td>
-            <td>3,000원</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>2024-04-22 PM 07:31</td>
-            <td>판다프레소</td>
-            <td>1 oz</td>
-            <td>2,000원</td>
-          </tr>
-        </table>
+        </tbody>
+      </table>
       </div>
     </div>
   </div>
 </template>
   
-  <script>
+<script>
+import axios from "axios";
 export default {
   data() {
-    return {};
+    return {
+      startDate: '',
+      endDate: '',
+      orderList: [],
+      userId: "",
+    };
   },
-};
+  created() {
+    this.userIdLoad();
+  },
+  mounted() {
+    this.orderLoad();
+
+    this.checkLogin();
+  },
+  computed: {
+    filteredOrders() {
+    return this.orderList.filter(order => {
+      const orderDate = new Date(order.orderDate).toISOString().substring(0, 10);
+      return (!this.startDate || orderDate >= this.startDate) && (!this.endDate || orderDate <= this.endDate);
+    });
+  }
+},
+  methods: {
+    checkLogin() {
+      // 로그인 상태 확인
+      if (!this.userId) {
+        alert('비회원은 주문할 수 없습니다!')
+        this.$router.push('/login'); // 로그인 페이지로 리다이렉트
+      }
+    },
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
+    },
+    orderLoad() {
+      const userId = this.userId;
+      axios
+        .post("http://localhost:3000/orderList", { userId: userId })
+        .then((res) => {
+          if (res.data.success) {
+            this.orderList = res.data.data;
+            console.log(this.orderList);
+          }
+        })
+        .catch((error) => {
+          console.error("Error during load", error);
+        });
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleString("ko-KR", { hour12: true });
+    },
+    formatPrice(price) {
+      return `${price.toLocaleString("ko-KR")}원`;
+    },
+  },
+}
 </script>
 <style>
 .orderState-container {

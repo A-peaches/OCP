@@ -55,12 +55,12 @@
                 justify-content: center;
               "
             >
-              <span style="padding: 0 30px; text-decoration: underline">
+              <!-- <span style="padding: 0 30px; text-decoration: underline">
                 <router-link to="/orderState" class="nav-link"
                   >비밀번호 변경</router-link
                 >
               </span>
-              <span>|</span>
+              <span>|</span> -->
               <span style="padding: 0 30px; text-decoration: underline">
                 <router-link to="/orderState" class="nav-link"
                   >주문현황</router-link
