@@ -4,7 +4,7 @@
       <div class="col-8 col-md-6 col-lg-5">
         <h1 class="text-center my-3 mb-4">로그인</h1>
         <div class="card p-3 mb-5">
-          <form name="frm">
+          <form name="frm" @submit.prevent="login">
             <p class="text-center mt-2 mb-4">
               🎉 Welcome! 판다 커피에 오신 것을 환영합니다.
             </p>
@@ -118,7 +118,7 @@ export default {
             this.$router.push("/");
           } else {
             console.error("Login failed", res.data.message);
-            //로그인 실패 후 처리
+            alert("아이디 또는 비밀번호를 확인해주세요!");
           }
         })
         .catch((error) => {

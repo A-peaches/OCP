@@ -180,3 +180,35 @@ app.post('/login', async (req,res)=> {
       }
     })
   });
+
+
+  app.post('/findid', async (req,res)=> {
+    const {inputPhone, inputEmail} = req.body;
+    connection.query('SELECT * FROM userinfo where phone=? and email=?',
+     [inputPhone,inputEmail],  async (error, results, fields) => {
+        if(error){
+            console.error('database error :', error);
+            res.status(500).send('Internal Server Error');
+        } else {
+            if(results.length > 0) {
+                const userInfo = results[0];
+                    //결과가 있는경우 
+                    res.json({
+                        success:true,
+                        message:'search successful',
+                        data : userInfo.userId
+                    });
+                } else {
+                    //없는경우
+                    res.json({
+                        success:false,
+                        message: 'User not Found',
+                        data : 'None'
+                    });
+                }
+                
+            }
+        }
+    )
+    });
+  
