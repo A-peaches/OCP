@@ -20,13 +20,21 @@ const store = createStore({
     },
     AddnewMenu(state) {
       state.cart.cartCnt++; // 장바구니 항목 수 증가
+    },
+    decreaseMenu(state) {
+      state.cart.cartCnt--; // 장바구니 항목 수 감소
     }
   },
   actions: {
     loginUser({ commit }, userData) {
       commit("loginUser", userData);
     },
-
+    addNewItemToCart({ commit }) {
+      commit("AddnewMenu"); // 항목 추가 동작을 커밋
+    },
+    decreaseItemToCart({ commit }) {
+      commit("decreaseMenu"); // 항목 추가 동작을 커밋
+    }
   },
   getters: {
     getUser(state) {
