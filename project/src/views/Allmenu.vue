@@ -6,7 +6,7 @@
           <h1>전체메뉴</h1>
           <hr />
           <br /><br />
-          <!-- <div class="category">
+          <div class="category">
             <h4>카테고리</h4>
             <hr />
             <div id="checkb">
@@ -15,6 +15,7 @@
                 name="menu"
                 value="all"
                 style="margin-right: 10px"
+                checked
               />전체&nbsp;&nbsp;
               <input
                 type="checkbox"
@@ -35,7 +36,7 @@
                 style="margin-right: 10px"
               />라떼
             </div>
-          </div> -->
+          </div>
 
           <br />
           <div class="detailcate">
@@ -66,7 +67,7 @@
                 {{ item.menuName }}<br />
                 가격 : {{ item.menuPrice }}
                 <div>
-                  <button class="cartBtn" id="btn_border">
+                  <button class="cartBtn" id="btn_border" @click="ordering(item.menuId)">
                     <i class="bi bi-cart-check"></i>
                   </button>
                 </div>
@@ -88,23 +89,15 @@ export default {
   data() {
     return {
       heartIconClass: "bi bi-heart",
-
-      //테스트용 메뉴 배열
-      // menuItems: [
-      // { id: 1, name: "판다리카노", image: require("../assets/coffeeEX.jpg") },
-      // { id: 2, name: "판다라떼", image: require("../assets/coffeeEX.jpg") },
-      // { id: 3, name: "판다프레소", image: require("../assets/coffeeEX.jpg") },
-      // { id: 4, name: "커피판다", image: require("../assets/coffeeEX.jpg") },
-      // { id: 5, name: "아인슈페너", image: require("../assets/coffeeEX.jpg") },
-      // { id: 6, name: "바닐라라떼", image: require("../assets/coffeeEX.jpg") }
-      // ],
-
       allMenus: [],
+      userId: '',
+      ischeck: ''
     };
   },
 
   created() {
     this.fetchMenus();
+    this.userIdLoad();
   },
 
   methods: {
@@ -125,6 +118,64 @@ export default {
         console.error("Error fetching menu:", error);
       }
     },
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
+    },
+    async isSameMenu(menuId) {
+      let obj = {
+        userId: this.userId,
+        menuId: menuId
+      };
+
+      try {
+        const res = await axios.post("http://localhost:3000/samecheck", obj);
+        this.ischeck = res.data.exists;
+        return this.ischeck; // 함수에서 결과값을 반환합니다.
+      } catch (error) {
+        console.error('에러발생', error);
+        return false; // 에러가 발생했을 때 false를 반환합니다.
+      }
+    },
+    cartNew(menuId) {
+      let obj = {userId: this.userId, menuId: menuId };
+
+      axios.post("http://localhost:3000/cartnew", obj)
+      .then(res => {
+        console.log(res.data);
+      });
+    },
+    cartAdd(menuId) {
+      let obj = {userId: this.userId, menuId: menuId };
+
+      axios.post("http://localhost:3000/cartadd", obj)
+      .then(res => {
+        console.log(res.data);
+      });
+    },
+    async ordering(menuId) {
+
+      if (!this.userId) {
+        alert('비회원은 주문할 수 없습니다!')
+        this.$router.push('/login'); // 로그인 페이지로 리다이렉트
+        return;
+      }
+
+      const isMenuSame = await this.isSameMenu(menuId);
+      
+      console.log(isMenuSame, '입니다.');
+
+      if (!isMenuSame) {
+        //처음 추가할때
+        this.cartNew(menuId);
+        this.$store.dispatch('addNewItemToCart');
+      } else {
+        //이미 있는 메뉴일때
+        this.cartAdd(menuId);
+      }
+
+      alert("장바구니에 추가되었습니다.");
+
+    }
   },
 };
 </script>
@@ -165,9 +216,17 @@ export default {
   text-align: center;
   width: auto;
 }
-.bi-cart-check {
-  padding: 0 10px 0 0;
-  font-size: 15pt;
+.cartBtn {
+  background-color: transparent; /* 배경색 투명으로 설정 */
+  border: none;
+  padding: 10px;
+  display: block; /* 블록 요소로 설정 */
+  margin: 5px auto; /* 상하 20px, 좌우 자동 (중앙 정렬) */
+  cursor: pointer; /* 클릭 가능한 항목임을 표시 */
+
+}
+.cartBtn i {
+  color: #000; /* 아이콘 색상을 검정색으로 변경 */
 }
 .bi-heart {
   color: red;

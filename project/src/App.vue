@@ -210,7 +210,7 @@
                       >
                         <i class="bi bi-cart4" style="font-size: 18pt"></i>
                         <span class="badge position-absolute badge-number"
-                          >3</span
+                          >{{cartCnt}}</span
                         >
                       </div>
                     </router-link>
@@ -252,19 +252,26 @@
 
 <script>
 import FooterView from "./components/FooterView.vue";
+
 export default {
   data() {
-    return {};
+    return {
+    };
+  },
+  watch: {
+
   },
   methods: {
     createUser() {},
     logout() {
       alert("로그아웃 되었습니다!");
+      this.cartCnt = 0; // 로그아웃 시 장바구니 카운트 초기화
       this.$store.commit("logoutUser");
       this.$router.push("/");
     },
   },
-  created() {},
+  created() {
+  },
   mounted() {
     console.log("Component is mounted with user:", this.user);
     Kakao.init("0ccb41721465f9078432fdbdc0be2541");
@@ -280,6 +287,10 @@ export default {
     isLogin() {
       return this.$store.getters.isLogin;
     },
+
+    cartCnt(){
+      return this.$store.getters.getCartCnt;
+    }
   },
 };
 </script>
