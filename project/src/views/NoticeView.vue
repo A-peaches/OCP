@@ -6,59 +6,26 @@
     <hr>
     <table class="table" style="margin-top: 50px;">
         <colgroup>
-            <col style="width:15%">
-            <col style="width:15%">
-            <col style="width:50%">
+            <col style="width:20%">
+            <col style="width:60%">
             <col style="width:20%">
         </colgroup>
         <thead>
             <tr>
-            <th scope="col">등록일</th>
-            <th scope="col">종류</th>
+            <th scope="col">순번</th>
             <th scope="col">제목</th>
             <th scope="col">등록자</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            <tr>
-                <th scope="row">2024.04.20</th>
-                <td>공지</td>
-                <td>Otto</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.17</th>
-                <td>이벤트</td>
-                <td>Thornton</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
+            <tr v-for="notice in notices" :key="notice.id">
+                <th scope="row">{{ notice.noticeId }}</th>
+                <td>{{ notice.title }}</td>
                 <td>관리자</td>
             </tr>
         </tbody>
         </table>
-        <div class="notice_pagenav">
+        <!-- <div class="notice_pagenav">
             <nav aria-label="Page navigation example">
                 <ul class="pagination" style="color:black;">
                     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -68,9 +35,36 @@
                     <li class="page-item"><a class="page-link" href="#">Next</a></li>
                 </ul>
             </nav>
-        </div>
+        </div> -->
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+    data() {
+        return {
+            notices: []
+        };
+    },
+    created() {
+        this.fetchNotices();
+    },
+    methods: {
+        async fetchNotices() {
+        axios
+        .get("http://localhost:3000/noticelist")
+        .then((res) => {
+            this.notices = res.data;
+        })
+        .catch((error) => {
+          console.error("Error during menu", error);
+        });
+        }
+    }
+};
+</script>
+
 <style>
 .top_img2 {
   background-image: url('../assets/noitce_top.png');

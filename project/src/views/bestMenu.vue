@@ -100,7 +100,7 @@ export default {
   components: {},
   data() {
     return {
-      topMenu: [],
+       topMenu: [],
        menus: [
         {
           id: 1,
@@ -139,12 +139,18 @@ export default {
   },
   methods: {
     async fetchMenus() {
-      try {
-        const response = await axios.get('http://localhost:3000/bestmenu/best');
-        this.topMenu = response.data;
-      } catch (error) {
-        console.error('Error fetching menus:', error);
-      }
+        console.log('불러오기시작');
+        axios
+        .get("http://localhost:3000/bestmenu/best")
+        .then((res) => {
+          console.log(res);
+          this.topMenu = res.data;
+          console.log('탑메뉴 호출해보기', this.topMenu);
+        })
+        .catch((error) => {
+          console.error("Error during menu", error);
+        });
+      
     }
   }
 };

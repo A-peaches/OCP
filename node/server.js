@@ -93,8 +93,7 @@ app.use(express.json()); // JSON 데이터 파싱을 위해 필요
 // 아이디 중복확인
 app.get('/join/:userId', (req, res) => {
   const userId = req.params.userId;
-  console.log('바보');
-  connection.query('SELECT COUNT(*) AS count FROM userinfo WHERE userId = ?', [userId], (error, results, fields) => {
+    connection.query('SELECT COUNT(*) AS count FROM userinfo WHERE userId = ?', [userId], (error, results, fields) => {
     if (error) {
       console.error('Database error:', error);
       res.status(500).send('Internal Server Error');
@@ -129,19 +128,22 @@ app.post('/join/signin', (req, res) => {
 
 
 /////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
-app.get('/bestmenu/best', async (req, res) => {
+app.get('/bestmenu/best', (req, res) => {
   try {
-      const results = await connection.query('SELECT * FROM menus ORDER BY sales DESC LIMIT 4');
-      res.json(results.rows);
+      connection.query('SELECT m.menuId, m.menuName, m.menuPrice, SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4'
+      ,(error,results,fields)=>{
+        console.log("여기는 서버당 !! ")
+        console.log(results);
+        res.json(results);
+      });
+
+    
   } catch (err) {
       console.error('Error executing query', err.stack);
       res.status(500).send('Error fetching menus');
   }
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
 /////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
 
 app.post('/login', async (req,res)=> {
@@ -180,3 +182,38 @@ app.post('/login', async (req,res)=> {
       }
     })
   });
+
+
+
+
+//////////////////////공지사항작성///////////////////
+app.post('/noticewrite', (req, res) => {
+
+  let data = req.body;
+  let title = data.title;
+  let content = data.content;
+
+  console.log(title, content);
+
+  let query = 'insert into notice (title, content, is_event) value (?,?,?)';
+  connection.query(query, [title, content, 0], (err, result, fields) => {
+      if(err) throw err;
+      console.log(result);
+  })
+})
+
+/////////////////////공지사항리스트생성//////////////////
+app.get('/noticelist', (req, res) => {
+  try {
+      connection.query('select * from notice'
+      ,(error,results,fields)=>{
+        console.log(results);
+        res.json(results);
+      });
+
+    
+  } catch (err) {
+      console.error('Error executing query', err.stack);
+      res.status(500).send('Error fetching menus');
+  }
+});
