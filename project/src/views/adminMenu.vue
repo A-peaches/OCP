@@ -32,8 +32,8 @@
                 <th scope="row">{{ menu.menuId }}</th>
                 <td colspan="2">
                   <img
-                    v-if="menu.menuImg"
-                    :src="menu.menuImg"
+                    v-if="menu.menuimg"
+                    :src="menu.menuimg"
                     alt="Coffee"
                     id="admin-image"
                   />{{ menu.menuName }}
@@ -324,7 +324,7 @@ export default {
       milk: 0,
       water: 0,
       sugar: 0,
-      menuImg: null,
+      menuimg: null,
       deleteMsg: "",
 
       li: ["원두", "시럽", "물", "우유"],
@@ -336,24 +336,25 @@ export default {
   },
   methods: {
     getImageSrc(base64Data) {
-      return `data:image/png;base64,${base64Data}`;
+      return `data:image/jpeg;base64,${base64Data}`;
     },
     async fetchMenu() {
       try {
+        console.log("fetchMenu");
         const response = await axios.get("http://localhost:3000/menu");
         console.log(response.data);
-        for (let i = 0; i < response.data.length; i++) {
-          this.menus[i] = response.data[i];
-          this.menus[i].menuImg = this.getImageSrc(response.data[i].menuImg);
-        }
+        this.menus = response.data.map((menu) => ({
+          ...menu,
+          menuimg: this.getImageSrc(menu.menuimg),
+        }));
         console.log("Menu fetched successfully");
       } catch (error) {
         console.error("Error fetching menu:", error);
       }
     },
     handleFileChange(event) {
-      this.menuImg = event.target.files[0];
-      return this.menuImg;
+      this.menuimg = event.target.files[0];
+      return this.menuimg;
     },
     async addMenu() {
       if (
@@ -361,7 +362,7 @@ export default {
         !this.menuPrice ||
         !this.menuintro ||
         !this.category ||
-        !this.menuImg
+        !this.menuimg
       ) {
         alert("모든 값을 입력해주세요.");
         return;
@@ -369,7 +370,7 @@ export default {
 
       try {
         const formData = new FormData();
-        formData.append("menuImg", this.menuImg);
+        formData.append("menuimg", this.menuimg);
         formData.append("menuName", this.menuName);
         formData.append("menuPrice", this.menuPrice);
         formData.append("menuintro", this.menuintro);
@@ -407,7 +408,7 @@ export default {
       this.water = 0;
       this.milk = 0;
       this.sugar = 0;
-      this.menuImg = "";
+      this.menuimg = "";
     },
   },
   // async deleteCheckedItems() {

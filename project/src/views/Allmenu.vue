@@ -37,25 +37,38 @@
             </div>
           </div> -->
 
-          <br/>
+          <br />
           <div class="detailcate">
-            <img style="margin-left: 20px" src="@/assets/decafein.png" alt="..."/>
-            <span style="margin: 10px 20px 10px; font-size: 15pt">판다커피는 엄선된 최고급 원두만 사용합니다.</span>
-            <span style="margin: 10px 20px 10px; font-size: 12pt;">※ 디카페인가능(일부음료제외)</span>
+            <img
+              style="margin-left: 20px"
+              src="@/assets/decafein.png"
+              alt="..."
+            />
+            <span style="margin: 10px 20px 10px; font-size: 15pt"
+              >판다커피는 엄선된 최고급 원두만 사용합니다.</span
+            >
+            <span style="margin: 10px 20px 10px; font-size: 12pt"
+              >※ 디카페인가능(일부음료제외)</span
+            >
           </div>
-          <br/>
+          <br />
           <div class="image-container">
             <figure class="figure" v-for="item in allMenus" :key="item.id">
-              <router-link to="/detailmenu" class="nav-link" aria-current="page">
-                <img src="../assets/coffeeEX.jpg" class="figure-img img-fluid rounded" alt="..." />
-              </router-link>
+              <img
+                id="imgAllMEnu"
+                v-if="item.menuimg"
+                :src="item.menuimg"
+                class="figure-img img-fluid rounded"
+                alt="..."
+                @click="() => $router.push(`/detailmenu/${item.menuId}`)"
+              />
               <figcaption class="figure-caption text-center">
-                {{item.menuName}}<br/>
-                가격 : {{item.menuPrice}}
+                {{ item.menuName }}<br />
+                가격 : {{ item.menuPrice }}
                 <div>
-                  <button class="cartBtn">
-                  <i class="bi bi-cart-check"></i>
-                </button>
+                  <button class="cartBtn" id="btn_border">
+                    <i class="bi bi-cart-check"></i>
+                  </button>
                 </div>
               </figcaption>
             </figure>
@@ -68,7 +81,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "allmenuView",
   components: {},
@@ -86,7 +99,7 @@ export default {
       // { id: 6, name: "바닐라라떼", image: require("../assets/coffeeEX.jpg") }
       // ],
 
-      allMenus: []
+      allMenus: [],
     };
   },
 
@@ -96,13 +109,21 @@ export default {
   },
 
   methods: {
+    getImageSrc(base64Data) {
+      return `data:image/jpeg;base64,${base64Data}`;
+    },
     async fetchMenus() {
       try {
-          const res = await axios.get("http://localhost:3000/allmenu");
-          this.allMenus = res.data; //응답데이터를 allMenus에 저장
-          console.log(this.allMenus);
+        console.log("fetchMenu");
+        const response = await axios.get("http://localhost:3000/menu");
+        console.log(response.data);
+        this.allMenus = response.data.map((item) => ({
+          ...item,
+          menuimg: this.getImageSrc(item.menuimg),
+        }));
+        console.log("Menu fetched successfully");
       } catch (error) {
-          console.error("일시적인 오류가 발생했습니다.", error);
+        console.error("Error fetching menu:", error);
       }
     },
     userIdLoad() {
@@ -169,5 +190,9 @@ export default {
 .intro {
   padding: 30px; /* 내용의 패딩 조정 */
   text-align: left;
+}
+#imgAllMEnu {
+  width: 300px;
+  height: 300px;
 }
 </style>
