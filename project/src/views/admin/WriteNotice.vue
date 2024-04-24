@@ -3,24 +3,24 @@
         <h1>공지사항 작성</h1>
         <hr>
         <form @submit.prevent="submitNotice">
-            <div>
+            <!-- <div>
                 <label for="type">종류:</label>
                 <select id="type" v-model="notice.type">
                     <option value="notice">공지</option>
                     <option value="event">이벤트</option>
                     <option value="discount">할인안내</option>
                 </select>
-            </div>
+            </div> -->
             <div>
                 <label for="title">제목:</label>
-                <input type="text" id="title" v-model="notice.title">
+                <input type="text" id="title" v-model="title">
             </div>
             <div>
                 <label for="content">내용:</label>
-                <textarea id="content" v-model="notice.content"></textarea>
+                <textarea id="content" v-model="content"></textarea>
             </div>
             <div class="btn_area">
-                <button type="button" @click="cancelNotice">취소</button>
+                <!-- <button type="button" @click="cancelNotice">취소</button> -->
                 <button type="submit">작성</button>
             </div>
         </form>
@@ -28,32 +28,35 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data() {
         return {
-            notice: {
-                title: '',
-                content: '',
-                type: 'notice'  // 기본값을 '공지'로 설정
-            }
+            title: '',
+            content: ''
         };
     },
     methods: {
         submitNotice() {
-            // 여기에 공지사항을 서버로 전송하는 로직을 추가
-            console.log('공지사항 제출:', this.notice);
+
+            if (this.title == '' || this.content == '') {
+                alert("제목과 내용은 반드시 입력되어야합니다.");
+                return;
+            }
+
+            let obj = {};
+            obj.title = this.title;
+            obj.content = this.content;
+
+            axios.post("http://localhost:3000/noticewrite", obj)
+            .then(res => {
+                console.log(res.data);
+            })
+
             alert('공지사항이 작성되었습니다.');
-            // 필요한 경우 폼 초기화
-            this.resetForm();
-        },
-        cancelNotice() {
-            // 폼 내용을 초기화
-            this.resetForm();
-        },
-        resetForm() {
-            this.notice.title = '';
-            this.notice.content = '';
-            this.notice.type = 'notice';
+
+            this.title = '';
+            this.content = '';
         }
     }
 };

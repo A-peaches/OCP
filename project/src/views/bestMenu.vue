@@ -8,12 +8,12 @@
           <br /><br />
 
           <div class="card_section">
-            <div v-for="menu in menus" :key="menu.id" class="card" style="width: 18rem; margin-right: 15px">
-              <img :src="menu.image" class="card-img-bottom" alt="Menu Image">
+            <div v-for="menu in topMenu" :key="menu.menuId" class="card" style="width: 18rem; margin-right: 15px">
+              <img src="../assets/coffeeEX.jpg" class="card-img-bottom" alt="Menu Image">
               <div class="card-body">
-                <h5 class="card-title">{{ menu.name }}</h5>
-                <p class="card-text">PRICE : {{ menu.price }}</p>
-                <p class="card-text">{{ menu.description }}</p>
+                <h5 class="card-title">{{ menu.menuName }}</h5>
+                <p class="card-text">PRICE : {{ menu.menuPrice }}</p>
+                <p class="card-text">{{ menu.menuintro }}</p>
                 <button class="cartBtn">
                   <i class="bi bi-cart-check"></i>
                 </button>
@@ -100,7 +100,7 @@ export default {
   components: {},
   data() {
     return {
-      topMenu: [],
+       topMenu: [],
        menus: [
         {
           id: 1,
@@ -139,12 +139,18 @@ export default {
   },
   methods: {
     async fetchMenus() {
-      try {
-        const response = await axios.get('http://localhost:3000/bestmenu/best');
-        this.topMenu = response.data;
-      } catch (error) {
-        console.error('Error fetching menus:', error);
-      }
+        console.log('불러오기시작');
+        axios
+        .get("http://localhost:3000/bestmenu/best")
+        .then((res) => {
+          console.log(res);
+          this.topMenu = res.data;
+          console.log('탑메뉴 호출해보기', this.topMenu);
+        })
+        .catch((error) => {
+          console.error("Error during menu", error);
+        });
+      
     }
   }
 };
@@ -167,12 +173,30 @@ export default {
   text-align: center;
   padding: 0 80px;
 }
+.card-img-bottom {
+  border-radius: 5px; /* 상하 모든 모서리에 라운드 처리 */
+}
 
 .intro {
   padding: 30px; /* 내용의 패딩 조정 */
   text-align: left;
 }
+.cartBtn {
+  background-color: transparent; /* 배경색 투명으로 설정 */
+  border: none;
+  padding: 10px;
+  display: block; /* 블록 요소로 설정 */
+  margin: 20px auto; /* 상하 20px, 좌우 자동 (중앙 정렬) */
+  cursor: pointer; /* 클릭 가능한 항목임을 표시 */
 
+}
+.cartBtn i {
+  color: #000; /* 아이콘 색상을 검정색으로 변경 */
+}
+.bi-cart-check {
+  padding: 0 10px 0 0;
+  font-size: 15pt;
+}
 .content {
   display: flex;
   flex-wrap: wrap;

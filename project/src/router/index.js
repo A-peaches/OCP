@@ -122,11 +122,18 @@ const routes = [
     name: "mypage",
     component: () => import("@/views/MyPage.vue"),
   },
+  {
+    path: '/notice/:id',
+    name: 'NoticeDetail',
+    component: () => import("@/views/NoticePage.vue"),
+  }
 ];
 //
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
-
 export default router;
+
+
+

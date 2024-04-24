@@ -6,71 +6,84 @@
     <hr>
     <table class="table" style="margin-top: 50px;">
         <colgroup>
-            <col style="width:15%">
-            <col style="width:15%">
-            <col style="width:50%">
+            <col style="width:20%">
+            <col style="width:60%">
             <col style="width:20%">
         </colgroup>
         <thead>
             <tr>
-            <th scope="col">등록일</th>
-            <th scope="col">종류</th>
+            <th scope="col">순번</th>
             <th scope="col">제목</th>
             <th scope="col">등록자</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            <tr>
-                <th scope="row">2024.04.20</th>
-                <td>공지</td>
-                <td>Otto</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.17</th>
-                <td>이벤트</td>
-                <td>Thornton</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
-                <td>관리자</td>
-            </tr>
-            <tr>
-                <th scope="row">2024.04.16</th>
-                <td>할인안내</td>
-                <td>할인합니다요</td>
+            <tr v-for="notice in notices" :key="notice.id">
+                <th scope="row">{{ notice.noticeId }}</th>
+                <td @click="() => $router.push(`/notice/${notice.noticeId}`)">{{ notice.title }}</td>
                 <td>관리자</td>
             </tr>
         </tbody>
         </table>
+        <!-- 페이지네이션 -->
         <div class="notice_pagenav">
             <nav aria-label="Page navigation example">
                 <ul class="pagination" style="color:black;">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                        <a class="page-link" href="#" @click="setPage(currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" v-for="page in totalPages" :class="{ active: page === currentPage }" :key="page">
+                        <a class="page-link" href="#" @click="setPage(page)">{{ page }}</a>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                        <a class="page-link" href="#" @click="setPage(currentPage + 1)">Next</a>
+                    </li>
                 </ul>
             </nav>
         </div>
+        <!-- 페이지네이션 -->
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+    data() {
+        return {
+            allNotices: [],  // 모든 공지를 저장하는 배열
+            notices: [],     // 현재 페이지에 표시할 공지 배열
+            currentPage: 1,  // 현재 페이지 번호
+            pageSize: 10     // 페이지당 공지 수
+        };
+    },
+    created() {
+        this.fetchNotices();
+    },
+    computed: {
+        totalPages() {
+            return Math.ceil(this.allNotices.length / this.pageSize);
+        }
+    },
+    methods: {
+        async fetchNotices() {
+            try {
+                const res = await axios.get("http://localhost:3000/noticelist");
+                this.allNotices = res.data;
+                this.setPage(this.currentPage);
+            } catch (error) {
+                console.error("일시적인 오류가 발생했습니다.", error);
+            }
+        },
+        setPage(pageNum) {
+            const startIndex = (pageNum - 1) * this.pageSize;
+            const endIndex = pageNum * this.pageSize;
+            this.notices = this.allNotices.slice(startIndex, endIndex);
+            this.currentPage = pageNum;
+        }
+    }
+};
+</script>
+
 <style>
 .top_img2 {
   background-image: url('../assets/noitce_top.png');
