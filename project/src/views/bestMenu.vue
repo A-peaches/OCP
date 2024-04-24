@@ -14,7 +14,7 @@
                 <h5 class="card-title">{{ menu.menuName }}</h5>
                 <p class="card-text">PRICE : {{ menu.menuPrice }}</p>
                 <p class="card-text">{{ menu.menuintro }}</p>
-                <button class="cartBtn">
+                <button class="cartBtn" @click="ordering(menu.menuId)">
                   <i class="bi bi-cart-check"></i>
                 </button>
               </div>
@@ -101,41 +101,12 @@ export default {
   data() {
     return {
        topMenu: [],
-       menus: [
-        {
-          id: 1,
-          name: '👑판다리카노',
-          price: 2.5,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
-        },
-        {
-          id: 2,
-          name: '👑판다라떼',
-          price: 3.0,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
-        },
-        {
-          id: 3,
-          name: '👑판다프레소',
-          price: 2.0,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
-        },
-        {
-          id: 4,
-          name: '👑커피판다',
-          price: 3.0,
-          description: '커피설명',
-          image: require("../assets/coffeeEX.jpg")
-        }
-      ]
-      
+       userId: ""
     };
   },
   created() {
     this.fetchMenus();
+    this.userIdLoad();
   },
   methods: {
     async fetchMenus() {
@@ -151,6 +122,13 @@ export default {
           console.error("Error during menu", error);
         });
       
+    },
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
+    },
+    ordering(menuId) {
+      alert(menuId); //테스트
+      console.log(this.userId); //테스트
     }
   }
 };
@@ -186,7 +164,7 @@ export default {
   border: none;
   padding: 10px;
   display: block; /* 블록 요소로 설정 */
-  margin: 20px auto; /* 상하 20px, 좌우 자동 (중앙 정렬) */
+  margin: 5px auto; /* 상하 20px, 좌우 자동 (중앙 정렬) */
   cursor: pointer; /* 클릭 가능한 항목임을 표시 */
 
 }

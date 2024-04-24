@@ -144,9 +144,17 @@ export default {
   text-align: center;
   width: auto;
 }
-.bi-cart-check {
-  padding: 0 10px 0 0;
-  font-size: 15pt;
+.cartBtn {
+  background-color: transparent; /* 배경색 투명으로 설정 */
+  border: none;
+  padding: 10px;
+  display: block; /* 블록 요소로 설정 */
+  margin: 5px auto; /* 상하 20px, 좌우 자동 (중앙 정렬) */
+  cursor: pointer; /* 클릭 가능한 항목임을 표시 */
+
+}
+.cartBtn i {
+  color: #000; /* 아이콘 색상을 검정색으로 변경 */
 }
 .bi-heart {
   color: red;
