@@ -525,7 +525,7 @@ app.post("/cartList", async (req, res) => {
   });
 });
 
-//개수감소
+//장바구니 개수감소
 app.post("/decreaseCartCnt", async (req, res) => {
   const { userId, menuId, cartCnt } = req.body;
   const query = "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?";
