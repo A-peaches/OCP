@@ -7,14 +7,14 @@
         <!-- 공지사항상세 -->
         <div class="notice_info">
             <div>
-                <p class="notice_title">판다커피 신규회원 대상 이벤트 시행 안내</p>
-                <p class="notice_subtitle">작성일 : <span>2024.04.22</span></p>
+                <p class="notice_title">
+                     {{ noticeTitle }}
+                </p>
             </div>
             <div class="notice_content">
-                <pre>
-항상 판다커피를 이용해주시는 고객님께 깊은 감사를 드립니다.\n판다커피 신규회원 가입 대상 이벤트를 시행합니다.\n기존 고객님께서 친구를 데려오시면 쿠폰도 드리니 많은 참여 부탁드립니다 ^^
-                </pre>
-                <p>항상 판다커피를 이용해주시는 고객님께 깊은 감사를 드립니다.판다커피 신규회원 가입 대상 이벤트를 시행합니다.\n기존 고객님께서 친구를 데려오시면 쿠폰도 드리니 많은 참여 부탁드립니다 ^^</p>
+                <p>
+                    {{ noticeContent }}
+                </p>
             </div>
         </div>
         <!-- 공지사항상세 -->
@@ -28,6 +28,39 @@
         </div>
     </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+    data() {
+        return {
+            noticeId: '',
+            noticeTitle: '',
+            noticeContent: '',
+            notice: {}
+        };
+    },
+    mounted() {
+        this.fetchNoticeDetail();
+    },
+    methods: {
+        fetchNoticeDetail() {
+            let noticeId = this.$route.params.id; // 라우트 파라미터에서 공지 ID를 가져옵니다.
+            axios.post("http://localhost:3000/noticedetail", { noticeId: noticeId })
+            .then(res => {
+                console.log(res.data);
+                this.notice = res.data;
+
+                this.noticeTitle = this.notice[0].title;
+                this.noticeContent = this.notice[0].content;
+                console.log(this.noticeTitle);
+            }); 
+        }
+    }
+};
+</script>
+
 <style>
 .top_img2 {
   background-image: url('../assets/noitce_top.png');

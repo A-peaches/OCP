@@ -130,13 +130,12 @@ app.post('/join/signin', (req, res) => {
 /////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
 app.get('/bestmenu/best', (req, res) => {
   try {
-      connection.query('SELECT m.menuId, m.menuName, m.menuPrice, SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4'
+      connection.query('SELECT m.menuId, m.menuName, m.menuPrice, m.menuintro ,SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4'
       ,(error,results,fields)=>{
         console.log("여기는 서버당 !! ")
         console.log(results);
         res.json(results);
       });
-
     
   } catch (err) {
       console.error('Error executing query', err.stack);
@@ -205,15 +204,74 @@ app.post('/noticewrite', (req, res) => {
 /////////////////////공지사항리스트생성//////////////////
 app.get('/noticelist', (req, res) => {
   try {
-      connection.query('select * from notice'
+      connection.query('select * from notice order by noticeId desc'
       ,(error,results,fields)=>{
         console.log(results);
         res.json(results);
       });
-
-    
   } catch (err) {
       console.error('Error executing query', err.stack);
       res.status(500).send('Error fetching menus');
   }
 });
+
+/////////////////////공지사항 세부사항 생성//////////////////
+
+app.post('/noticedetail', (req, res) => {
+
+  let data = req.body.noticeId;
+  console.log(data);
+
+  let query = 'select title, content from notice where noticeId = ?';
+  connection.query(query, [data], (err, result, fields) => {
+      if(err) throw err;
+      console.log(result);
+      res.json(result);
+  })
+})
+
+/////////////////////전체메뉴 리스트 생성//////////////////
+app.get('/allmenu', (req, res) => {
+  try {
+      connection.query('select * from menu',(error,results,fields)=>{
+        console.log(results);
+        res.json(results);
+      });
+  } catch (err) {
+      console.error('Error executing query', err.stack);
+      res.status(500).send('Error fetching menus');
+  }
+});
+
+
+
+app.post('/findid', async (req,res)=> {
+  const {inputPhone, inputEmail} = req.body;
+  connection.query('SELECT * FROM userinfo where phone=? and email=?',
+  [inputPhone,inputEmail],  async (error, results, fields) => {
+      if(error){
+          console.error('database error :', error);
+          res.status(500).send('Internal Server Error');
+      } else {
+          if(results.length > 0) {
+              const userInfo = results[0];
+                  //결과가 있는경우 
+                  res.json({
+                      success:true,
+                      message:'search successful',
+                      data : userInfo.userId
+                  });
+              } else {
+                  //없는경우
+                  res.json({
+                      success:false,
+                      message: 'User not Found',
+                      data : 'None'
+                  });
+              }
+              
+          }
+      }
+  )
+  });
+  
