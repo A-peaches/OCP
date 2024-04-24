@@ -101,19 +101,21 @@ export default {
   },
   methods: {
     async loadCartCount(userid) {
-    const userId = userid;
-    try {
-      const response = await axios.post("http://localhost:3000/cartCnt", { userId });
-      if (response.data.success) {
-        const cartCnt = response.data.data.cartCnt;
+      const userId = userid;
+      try {
+        const response = await axios.post("http://localhost:3000/cartCnt", {
+          userId,
+        });
+        if (response.data.success) {
+          const cartCnt = response.data.data.cartCnt;
 
-        this.$store.commit("AddCartCnt", cartCnt);
+          this.$store.commit("AddCartCnt", cartCnt);
+        }
+      } catch (error) {
+        console.error("Error during cartCnt", error);
+        alert("장바구니 정보를 불러오는 중 오류가 발생했습니다.");
       }
-    } catch (error) {
-      console.error("Error during cartCnt", error);
-      alert("장바구니 정보를 불러오는 중 오류가 발생했습니다.");
-    }
-  },
+    },
     //로그인 버튼 클릭 시 DB서버에 접근하여
     //ID와 PW접근 후 로그인 성공 여부 반환
     login(event) {

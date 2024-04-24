@@ -163,18 +163,38 @@ app.post("/join/signin", (req, res) => {
 /////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
 
 /////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
+app.get("/menu", (req, res) => {
+  connection.query("SELECT * FROM menu", (error, results, fields) => {
+    if (error) {
+      console.error("Error fetching menu:", error);
+      res.status(500).json({ error: "Error fetching menu" });
+    } else {
+      const responseData = results.map((row) => ({
+        ...row,
+        menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+      }));
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(responseData);
+    }
+  });
+});
 app.get("/bestmenu/best", (req, res) => {
-  try {
-    connection.query(
-      "SELECT m.menuId, m.menuName, m.menuPrice, m.menuintro ,SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4",
-      (error, results, fields) => {
-        res.json(results);
+  connection.query(
+    "SELECT m.menuId, m.menuName, m.menuPrice, m.menuintro ,SUM(o.ordercnt) AS total_orders, menuimg FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4",
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error fetching menu:", error);
+        res.status(500).json({ error: "Error fetching menu" });
+      } else {
+        const responseData = results.map((row) => ({
+          ...row,
+          menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+        }));
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).json(responseData);
       }
-    );
-  } catch (err) {
-    console.error("Error executing query", err.stack);
-    res.status(500).send("Error fetching menus");
-  }
+    }
+  );
 });
 
 /////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
@@ -223,7 +243,6 @@ app.post("/noticewrite", (req, res) => {
   let data = req.body;
   let title = data.title;
   let content = data.content;
-
 
   let query = "insert into notice (title, content, is_event) value (?,?,?)";
   connection.query(query, [title, content, 0], (err, result, fields) => {
@@ -303,8 +322,6 @@ app.post("/findid", async (req, res) => {
   );
 });
 
-
-
 app.post("/orderState", async (req, res) => {
   const userId = req.body.userId;
 
@@ -367,6 +384,29 @@ app.post("/orderList", async (req, res) => {
   });
 });
 
+// 상세메뉴
+app.post("/detailmenu", (req, res) => {
+  const menuId = req.body.menuId; // Extract menuId from the request body
+  connection.query(
+    "SELECT * FROM menu WHERE menuid = ?",
+    [menuId],
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error fetching menu:", error);
+        res.status(500).json({ error: "Error fetching menu" });
+      }
+
+      const responseData = results.map((row) => ({
+        ...row,
+        menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+      }));
+      console.log(responseData);
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(responseData);
+    }
+  );
+});
+//////
 
 /////////////////////장바구니 추가시 기존 데이터 존재 여부 확인//////////////////
 app.post("/samecheck", (req, res) => {
@@ -374,11 +414,11 @@ app.post("/samecheck", (req, res) => {
   let userId = data.userId;
   let menuId = data.menuId;
 
-  let query = "select count(menuid) as count from cart where userid = ? and menuid = ?";
+  let query =
+    "select count(menuid) as count from cart where userid = ? and menuid = ?";
 
   connection.query(query, [userId, menuId], (err, result, fields) => {
     if (err) throw err;
-
 
     console.log(result[0].count);
     if (result[0].count > 0) {
@@ -386,7 +426,6 @@ app.post("/samecheck", (req, res) => {
     } else {
       res.json({ exists: 0 }); // 결과가 없을 경우
     }
-
   });
 });
 
@@ -402,7 +441,6 @@ app.post("/cartnew", (req, res) => {
     if (err) throw err;
 
     console.log(result);
-
   });
 });
 
@@ -412,148 +450,175 @@ app.post("/cartadd", (req, res) => {
   let userId = data.userId;
   let menuId = data.menuId;
 
-  let query = "update cart set cartCnt = (select cartCnt from (select * from cart where userid= ? and menuId= ? ) as cnt) + 1 where userid= ? and menuId= ?";
+  let query =
+    "update cart set cartCnt = (select cartCnt from (select * from cart where userid= ? and menuId= ? ) as cnt) + 1 where userid= ? and menuId= ?";
 
-  connection.query(query, [userId, menuId, userId, menuId], (err, result, fields) => {
-    if (err) throw err;
+  connection.query(
+    query,
+    [userId, menuId, userId, menuId],
+    (err, result, fields) => {
+      if (err) throw err;
 
-    console.log(result);
-
-  });
+      console.log(result);
+    }
+  );
 });
 app.post("/cartCnt", async (req, res) => {
-    const userId = req.body.userId;
-  
-    console.log(userId);
-    const query =
-      "select count(menuName) as cartCnt from cart left outer join menu on cart.menuId = menu.menuId where userId=?"
-    connection.query(query, [userId], async (error, results, fields) => {
-      if (error) {
-        console.error("database error :", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        if (results.length > 0) {
-          const cartCnt = results[0];
-          console.log(cartCnt.data);
-          //결과가 있는경우
-          res.json({
-            success: true,
-            data: cartCnt,
-          });
-        } else {
-          //없는경우
-          res.json({
-            success: false,
-            data: "None",
-          });
-        }
-      }
-    });
-  });
+  const userId = req.body.userId;
 
-  app.post("/cartList", async (req, res) => {
-    const userId = req.body.userId;
-  
-    console.log(userId);
-    const query =
-      "select cart.menuId,menuimg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?"
-    connection.query(query, [userId], async (error, results, fields) => {
-      if (error) {
-        console.error("database error :", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        if (results.length > 0) {
-          const cartList = results.map((row) => ({
-            ...row,
-            menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
-          }));
-          //결과가 있는경우
-          res.json({
-            success: true,
-            data: cartList,
-          });
-        } else {
-          //없는경우
-          res.json({
-            success: false,
-            data: "None",
-          });
-        }
-      }
-    });
-  });
-
-  //개수감소
-  app.post("/decreaseCartCnt", async (req, res) => {
-    const { userId, menuId, cartCnt } = req.body;
-    const query =
-      "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?"
-    connection.query(query, [cartCnt, userId, menuId], async (error, results, fields) => {
-      if (error) {
-        console.error("database error :", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        if (results.affectedRows > 0) {
-            console.log(results);
-          res.json({
-            success: true,
-          });
-        } else {
-          //없는경우
-          res.json({
-            success: false,
-            data: "None",
-          });
-        }
-      }
-    });
-  });
-
-  
-  //개수증가
-  app.post("/increaseCartCnt", async (req, res) => {
-    const { userId, menuId, cartCnt } = req.body;
-    const query =
-      "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?"
-    connection.query(query, [cartCnt, userId, menuId], async (error, results, fields) => {
-      if (error) {
-        console.error("database error :", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        if (results.affectedRows > 0) {
-            console.log(results);
-          res.json({
-            success: true,
-          });
-        } else {
-          //없는경우
-          res.json({
-            success: false,
-            data: "None",
-          });
-        }
-      }
-    });
-  });
-
-  //장바구니 삭제
-    //개수증가
-    app.post("/removeCartItem", async (req, res) => {
-        const { userId, menuId } = req.body;
-        console.log(userId , menuId);
-        const query =
-          "delete from cart WHERE userId = ? AND menuId = ?"
-        connection.query(query, [userId, menuId], async (error, results, fields) => {
-          if (error) {
-            console.error("Database error during cart item deletion:", error);
-            res.status(500).send("Internal Server Error");
-          } else {
-            if (results.affectedRows > 0) {
-                res.json({ success: true, message: "Cart item deleted successfully." });
-            } else {
-                res.json({ success: false, message: "No cart item found to delete." });
-            }
-        }
+  console.log(userId);
+  const query =
+    "select count(menuName) as cartCnt from cart left outer join menu on cart.menuId = menu.menuId where userId=?";
+  connection.query(query, [userId], async (error, results, fields) => {
+    if (error) {
+      console.error("database error :", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.length > 0) {
+        const cartCnt = results[0];
+        console.log(cartCnt.data);
+        //결과가 있는경우
+        res.json({
+          success: true,
+          data: cartCnt,
         });
-      });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
+});
 
+app.post("/cartList", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log(userId);
+  const query =
+    "select cart.menuId,menuimg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?";
+  connection.query(query, [userId], async (error, results, fields) => {
+    if (error) {
+      console.error("database error :", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.length > 0) {
+        const cartList = results.map((row) => ({
+          ...row,
+          menuimg: row.menuimg ? row.menuimg.toString("base64") : null,
+        }));
+        //결과가 있는경우
+        res.json({
+          success: true,
+          data: cartList,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
+});
+
+//개수감소
+app.post("/decreaseCartCnt", async (req, res) => {
+  const { userId, menuId, cartCnt } = req.body;
+  const query = "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?";
+  connection.query(
+    query,
+    [cartCnt, userId, menuId],
+    async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results.affectedRows > 0) {
+          console.log(results);
+          res.json({
+            success: true,
+          });
+        } else {
+          //없는경우
+          res.json({
+            success: false,
+            data: "None",
+          });
+        }
+      }
+    }
+  );
+});
+
+//개수증가
+app.post("/increaseCartCnt", async (req, res) => {
+  const { userId, menuId, cartCnt } = req.body;
+  const query = "UPDATE cart SET cartCnt = ? WHERE userId = ? AND menuId = ?";
+  connection.query(
+    query,
+    [cartCnt, userId, menuId],
+    async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results.affectedRows > 0) {
+          console.log(results);
+          res.json({
+            success: true,
+          });
+        } else {
+          //없는경우
+          res.json({
+            success: false,
+            data: "None",
+          });
+        }
+      }
+    }
+  );
+});
+
+//장바구니 삭제
+app.post("/removeCartItem", async (req, res) => {
+  const { userId, menuId } = req.body;
+  console.log(userId, menuId);
+  const query = "delete from cart WHERE userId = ? AND menuId = ?";
+  connection.query(query, [userId, menuId], async (error, results, fields) => {
+    if (error) {
+      console.error("Database error during cart item deletion:", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.affectedRows > 0) {
+        res.json({ success: true, message: "Cart item deleted successfully." });
+      } else {
+        res.json({ success: false, message: "No cart item found to delete." });
+      }
+    }
+  });
+});
+
+//마이페이지 유저정보 불러오기
+app.post("/userInfoList", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log(userId);
+  const query =
+    "select userName, userId, nickName, phone, email from userinfo where userID = ?";
+  connection.query(query, [userId], async (error, results, fields) => {
+    if (error) {
+      console.error("database error :", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      const userInfo = results[0];
+      res.json({
+        success: true,
+        data: userInfo,
+      });
+    }
+  });
+});
