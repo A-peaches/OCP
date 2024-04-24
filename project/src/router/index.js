@@ -58,7 +58,7 @@ const routes = [
     component: () => import("../views/NoticePage.vue"),
   },
   {
-    path: "/detailmenu",
+    path: "/detailmenu/:id",
     name: "detailmenu",
     component: () => import("../views/DetailMenu.vue"),
   },
@@ -123,10 +123,10 @@ const routes = [
     component: () => import("@/views/MyPage.vue"),
   },
   {
-    path: '/notice/:id',
-    name: 'NoticeDetail',
+    path: "/notice/:id",
+    name: "NoticeDetail",
     component: () => import("@/views/NoticePage.vue"),
-  }
+  },
 ];
 //
 const router = createRouter({
@@ -134,6 +134,3 @@ const router = createRouter({
   routes,
 });
 export default router;
-
-
-
