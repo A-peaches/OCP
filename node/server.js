@@ -35,21 +35,6 @@ app.get("/menu", (req, res) => {
     res.end();
   });
 });
-app.post("/menudelete", (req, res) => {
-  const { menuIds } = req.body; // 클라이언트에서 'menuIds'로 보낸 값을 받아옴
-  console.log(menuIds);
-  const query = "DELETE FROM menu WHERE menuid = (?)"; // IN 연산자를 사용하여 여러 id 값을 받아옴
-
-  connection.query(query, [menuIds], (error, results) => {
-    if (error) {
-      console.error("메뉴 삭제 실패:", error);
-      res.status(500).json({ error: "메뉴 삭제에 실패했습니다." });
-    } else {
-      console.log("메뉴 삭제 성공:", results);
-      res.json({ message: "메뉴가 성공적으로 삭제되었습니다." });
-    }
-  });
-});
 app.post("/menuinput", (req, res) => {
   const {
     menuName,

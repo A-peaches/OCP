@@ -32,7 +32,8 @@
                 <th scope="row">{{ menu.menuId }}</th>
                 <td colspan="2">
                   <img
-                    src="@/assets/coffeeEX.jpg"
+                    v-if="menu.menuImg"
+                    :src="`data:image/png;base64,${menu.menuImg[index]}`"
                     alt="Coffee"
                     id="admin-image"
                   />{{ menu.menuName }}
@@ -108,7 +109,7 @@
                         <label for="recipient-name" class="col-form-label"
                           >상품이미지:</label
                         ><br />
-                        <input type="file" />
+                        <input type="file" @change="handleFileChange" />
                       </div>
                       <div class="mb-3">
                         <label for="recipient-name" class="col-form-label"
@@ -265,7 +266,12 @@
                         aria-label="Close"
                       ></button>
                     </div>
-                    <div class="modal-body">정말로 삭제하시겠습니까?</div>
+                    <div v-if="!deleteMsg" class="modal-body">
+                      정말로 삭제하시겠습니까?
+                    </div>
+                    <div v-if="deleteMsg" class="modal-body">
+                      {{ deleteMsg }}
+                    </div>
                     <div class="modal-footer">
                       <button
                         type="button"
@@ -275,11 +281,16 @@
                         되돌아가기
                       </button>
                       <button
+                        @click="
+                          async () => {
+                            //여기서 삭제버튼 눌렀을떄의 동작을 설정
+                            this.deleteMsg = '삭제가 완료되었습니다!';
+                          }
+                        "
                         type="button"
+                        id="메롱"
                         class="btn btn-primary"
                         style="background-color: red"
-                        @click="sendSelectedMenus()"
-                        data-bs-dismiss="modal"
                       >
                         삭제
                       </button>
@@ -294,6 +305,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 
@@ -312,7 +324,8 @@ export default {
       milk: 0,
       water: 0,
       sugar: 0,
-      menuImg: "",
+      menuImg: null,
+      deleteMsg: "",
 
       li: ["원두", "시럽", "물", "우유"],
       menus: [],
@@ -325,6 +338,7 @@ export default {
     async fetchMenu() {
       try {
         const response = await axios.get("http://localhost:3000/menu");
+        console.log(response.data);
         for (let i = 0; i < response.data.length; i++) {
           this.menus[i] = response.data[i];
         }
@@ -333,29 +347,43 @@ export default {
         console.error("Error fetching menu:", error);
       }
     },
+    handleFileChange(event) {
+      this.menuImg = event.target.files[0];
+      return this.menuImg;
+    },
     async addMenu() {
       if (
         !this.menuName ||
         !this.menuPrice ||
         !this.menuintro ||
-        !this.category
+        !this.category ||
+        !this.menuImg
       ) {
         alert("모든 값을 입력해주세요.");
         return;
       }
 
       try {
-        const response = await axios.post("http://localhost:3000/menuinput", {
-          menuName: this.menuName,
-          menuPrice: this.menuPrice,
-          menuintro: this.menuintro,
-          category: this.category,
-          beans: this.beans,
-          water: this.water,
-          milk: this.milk,
-          sugar: this.sugar,
-          menuImg: this.menuImg,
-        });
+        const formData = new FormData();
+        formData.append("menuImg", this.menuImg);
+        formData.append("menuName", this.menuName);
+        formData.append("menuPrice", this.menuPrice);
+        formData.append("menuintro", this.menuintro);
+        formData.append("category", this.category);
+        formData.append("beans", this.beans);
+        formData.append("water", this.water);
+        formData.append("milk", this.milk);
+        formData.append("sugar", this.sugar);
+
+        const response = await axios.post(
+          "http://localhost:3000/menuinput",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         console.log("메뉴 추가 성공:", response.data);
         alert("메뉴가 추가되었습니다!");
         this.menus.push(response.data);
@@ -407,7 +435,7 @@ export default {
   // },
 
   sendSelectedMenus() {
-    alert("test");
+    this.deleteMsg = "삭제가 완료되었습니다.";
     // const selectedMenuIds = this.menus
     //   .filter((menu) => menu.checked)
     //   .map((menu) => menu.menuId);
@@ -426,6 +454,7 @@ export default {
   },
 };
 </script>
+
 <style>
 .container {
   text-align: center;

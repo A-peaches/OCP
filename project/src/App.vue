@@ -219,7 +219,7 @@
                   <button
                     class="btn btn-outline-dark btn-custom"
                     id="btn_border"
-                    v-if="isLogin"
+                    v-if="isLogin&&!isAdmin"
                   >
                     <router-link to="/mypage" class="nav-link"
                       ><img src="@/assets/user2.png" alt="mypage"
