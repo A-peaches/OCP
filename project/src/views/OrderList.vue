@@ -72,7 +72,7 @@
         </div>
       </div>
 
-      <div class="text-center" style="margin-top: 30px">
+      <div v-if="filteredOrders.length > 0" class="text-center" style="margin-top: 30px">
         <table class="table table-striped" >
         <thead>
           <tr>
@@ -93,6 +93,10 @@
           </tr>
         </tbody>
       </table>
+      </div>
+
+      <div v-else  role="alert">
+        주문한 내역이 없습니다!
       </div>
     </div>
   </div>
