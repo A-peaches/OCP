@@ -17,12 +17,18 @@ const store = createStore({
     },
     AddCartCnt(state, cartCnt) {
       state.cart.cartCnt = cartCnt;
+    },
+    AddnewMenu(state) {
+      state.cart.cartCnt++; // 장바구니 항목 수 증가
     }
   },
   actions: {
     loginUser({ commit }, userData) {
       commit("loginUser", userData);
     },
+    addNewItemToCart({ commit }) {
+      commit("AddnewMenu"); // 항목 추가 동작을 커밋
+    }
   },
   getters: {
     getUser(state) {

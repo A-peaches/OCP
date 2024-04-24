@@ -114,7 +114,6 @@ export default {
   },
   mounted() {
     this.orderLoad();
-
     this.checkLogin();
   },
   computed: {

@@ -6,7 +6,7 @@
     <hr>
     <table class="table" style="margin-top: 50px;">
         <colgroup>
-            <col style="width:20%">
+            <col style="width:20%"> 
             <col style="width:60%">
             <col style="width:20%">
         </colgroup>
@@ -18,9 +18,9 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            <tr v-for="notice in notices" :key="notice.id">
+            <tr v-for="notice in notices" :key="notice.id" @click="() => $router.push(`/notice/${notice.noticeId}`)">
                 <th scope="row">{{ notice.noticeId }}</th>
-                <td @click="() => $router.push(`/notice/${notice.noticeId}`)">{{ notice.title }}</td>
+                <td>{{ notice.title }}</td>
                 <td>관리자</td>
             </tr>
         </tbody>
@@ -116,5 +116,14 @@ export default {
     display: flex;
     justify-content: center;  /* Flexbox를 사용하여 내용을 가로 방향 중앙에 배치 */
     list-style: none;         /* 기본 리스트 스타일 제거 */
+}
+.table tr {
+    cursor: pointer; /* 마우스를 올렸을 때 커서를 포인터로 변경 */
+    transition: background-color 0.3s ease; /* 부드러운 배경색 변화 효과 */
+}
+
+.table tr:hover {
+    background-color: #f5f5f5; /* 마우스 오버 시 배경색 변경 */
+    color: #333; /* 텍스트 색상 변경 (선택적) */
 }
 </style>

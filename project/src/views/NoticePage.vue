@@ -22,9 +22,7 @@
         <hr>
 
         <div class="bottom_button">
-            <button type="button" class="btn btn-outline-dark">&lsaquo;</button>&nbsp;
-            <button type="button" class="btn btn-outline-dark">목록</button>&nbsp;
-            <button type="button" class="btn btn-outline-dark">&rsaquo;</button>
+            <button type="button" class="btn btn-outline-dark" @click="this.$router.push('/notice');">목록</button>
         </div>
     </div>
 </template>
