@@ -24,9 +24,9 @@
               <tr v-for="(menu, index) in menus" :key="index">
                 <th scope="row">
                   <input
-                    id="menuList"
                     type="checkbox"
-                    value="{{ menu.menuId }}"
+                    v-model="menu.checked"
+                    :value="menu.menuId"
                   />
                 </th>
                 <th scope="row">{{ menu.menuId }}</th>
@@ -237,116 +237,6 @@
                 type="button"
                 class="btn btn-primary"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-                data-bs-whatever="@fat"
-              >
-                수정
-              </button>
-
-              <!-- 모달 -->
-              <div
-                class="modal fade"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">
-                        메뉴수정
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      <!-- 텍스트 5개 -->
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"
-                          >상품이미지:</label
-                        ><br />
-                        <input type="file" />
-                      </div>
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"
-                          >상품명:</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="menuName"
-                          id="recipient-name"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"
-                          >상품설명:</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="menuintro"
-                          id="recipient-name"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"
-                          >판매가:</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="menuPrice"
-                          id="recipient-name"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"
-                          >카테고리:</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="category"
-                          id="recipient-name"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label"
-                          >필요재고량:</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="recipient-name"
-                        />
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      >
-                        닫기
-                      </button>
-                      <button type="button" class="btn btn-primary">
-                        저장
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop"
               >
                 삭제
@@ -388,7 +278,8 @@
                         type="button"
                         class="btn btn-primary"
                         style="background-color: red"
-                        @click="deleteCheckedItems()"
+                        @click="sendSelectedMenus()"
+                        data-bs-dismiss="modal"
                       >
                         삭제
                       </button>
@@ -466,9 +357,9 @@ export default {
           menuImg: this.menuImg,
         });
         console.log("메뉴 추가 성공:", response.data);
-        // 추가 작업 수행 (예: 입력 필드 초기화, 메뉴 목록 새로고침 등)
         alert("메뉴가 추가되었습니다!");
         this.menus.push(response.data);
+
         this.resetForm();
         this.fetchMenu();
       } catch (error) {
@@ -487,36 +378,51 @@ export default {
       this.menuImg = "";
     },
   },
-  async deleteCheckedItems() {
-    // 체크된 항목들의 id 값을 모아둘 배열
-    const checkedIds = [];
+  // async deleteCheckedItems() {
+  //   alert("함수가 호출됐어용");
+  //   const checkedIds = [];
 
-    // 체크된 항목들의 id 값을 배열에 추가
-    this.menuList.forEach((menu) => {
-      if (menu.checked) {
-        checkedIds.push(menu.menuId);
-      }
-    });
+  //   //체크된 항목 불러오기
 
-    // 체크된 항목이 없을 경우, 알림 후 종료
-    if (checkedIds.length === 0) {
-      alert("삭제할 항목을 선택해주세요.");
-      return;
-    }
+  //   if (menuList.checked) {
+  //     checkedIds.push(menuList.value);
+  //   }
 
-    // 서버로 삭제 요청을 보냄
-    try {
-      const response = await axios.post("http://localhost:3000/deleteItems", {
-        ids: checkedIds,
-      });
-      console.log("삭제 요청 결과:", response.data);
-      // 삭제가 성공적으로 이루어졌을 때 화면을 갱신하거나 추가 작업을 수행할 수 있음
-      this.fetchMenus(); // 메뉴 목록 새로고침 등
-      alert("선택된 항목이 삭제되었습니다.");
-    } catch (error) {
-      console.error("삭제 요청 실패:", error);
-      alert("선택된 항목을 삭제하는 중에 오류가 발생했습니다.");
-    }
+  //   if (checkedIds.length === 0) {
+  //     alert("삭제할 항목을 선택해주세요.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post("http://localhost:3000/menudelete", {
+  //       menuIds: checkedIds,
+  //     });
+  //     console.log("삭제 요청 결과:", response.data);
+  //     this.fetchMenus();
+  //     alert("선택된 항목이 삭제되었습니다.");
+  //   } catch (error) {
+  //     console.error("삭제 요청 실패:", error);
+  //     alert("선택된 항목을 삭제하는 중에 오류가 발생했습니다.");
+  //   }
+  // },
+
+  sendSelectedMenus() {
+    alert("test");
+    // const selectedMenuIds = this.menus
+    //   .filter((menu) => menu.checked)
+    //   .map((menu) => menu.menuId);
+
+    // axios
+    //   .post("http://localhost:3000/menudelete", { selectedMenuIds })
+    //   .then((response) => {
+    //     console.log(
+    //       "선택된 메뉴 ID가 성공적으로 전송되었습니다:",
+    //       response.data
+    //     );
+    //   })
+    //   .catch((error) => {
+    //     console.error("선택된 메뉴 ID 전송 중 오류 발생:", error);
+    //   });
   },
 };
 </script>

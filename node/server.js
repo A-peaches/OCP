@@ -35,7 +35,21 @@ app.get("/menu", (req, res) => {
     res.end();
   });
 });
+app.post("/menudelete", (req, res) => {
+  const { menuIds } = req.body; // 클라이언트에서 'menuIds'로 보낸 값을 받아옴
+  console.log(menuIds);
+  const query = "DELETE FROM menu WHERE menuid = (?)"; // IN 연산자를 사용하여 여러 id 값을 받아옴
 
+  connection.query(query, [menuIds], (error, results) => {
+    if (error) {
+      console.error("메뉴 삭제 실패:", error);
+      res.status(500).json({ error: "메뉴 삭제에 실패했습니다." });
+    } else {
+      console.log("메뉴 삭제 성공:", results);
+      res.json({ message: "메뉴가 성공적으로 삭제되었습니다." });
+    }
+  });
+});
 app.post("/menuinput", (req, res) => {
   const {
     menuName,
@@ -48,8 +62,10 @@ app.post("/menuinput", (req, res) => {
     sugar,
     menuImg,
   } = req.body;
+
   const query =
     "INSERT INTO menu (menuName, menuPrice, menuintro, category, beans, water, milk, sugar, menuImg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
   connection.query(
     query,
     [
@@ -87,96 +103,42 @@ app.post("/menuinput", (req, res) => {
   );
 });
 
-app.use(express.json()); // JSON 데이터 파싱을 위해 필요
+app.post("/login", async (req, res) => {
+  const { inputId, inputPw } = req.body;
 
-/////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
-// 아이디 중복확인
-app.get('/join/:userId', (req, res) => {
-  const userId = req.params.userId;
-  console.log('바보');
-  connection.query('SELECT COUNT(*) AS count FROM userinfo WHERE userId = ?', [userId], (error, results, fields) => {
-    if (error) {
-      console.error('Database error:', error);
-      res.status(500).send('Internal Server Error');
-    } else {
-      if (results[0].count > 0) {
-        res.json({ isAvailable: false });
+  connection.query(
+    "SELECT * FROM userinfo where userid = ?",
+    [inputId],
+    async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
       } else {
-        res.json({ isAvailable: true });
+        if (results.length > 0) {
+          const userInfo = results[0];
+          const isMatch = inputPw == userInfo.userPw ? 1 : 0;
+          if (isMatch) {
+            //비밀번호가 일치하는 경우 사용자 정보 제공
+            res.json({
+              success: true,
+              message: "Login successful",
+              data: userInfo,
+            });
+          } else {
+            //비밀번호가 일치하지 않는 경우
+            res.status(401).json({
+              success: false,
+              message: "Invalid credentials",
+            });
+          }
+        } else {
+          //결과가 없는 경우. 회원가입 할 것
+          res.status(404).json({
+            isAvailable: true,
+            message: "User not found",
+          });
+        }
       }
     }
-  });
+  );
 });
-// 회원정보 DB insert
-app.post('/join/signin', (req, res) => {
-  let data = req.body;
-  let userId = data.userId;
-  let userPw = data.userPw;
-  let userName = data.userName;
-  let userNickName = data.userNickName;
-  let email = data.email;
-  let phone = data.phone;
-  console.log(userId, userPw, userName, userNickName, email, phone);
-
-  let query = 'insert into userinfo (userId, userName, userPw, nickName, phone, email) values (?,?,?,?,?,?)';
-  connection.query(query, [userId, userName, userPw, userNickName, phone, email], (err, result, fields) => {
-      if(err) throw err;
-      console.log(result);
-  })
-})
-/////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
-
-
-
-/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
-app.get('/bestmenu/best', async (req, res) => {
-  try {
-      const results = await connection.query('SELECT * FROM menus ORDER BY sales DESC LIMIT 4');
-      res.json(results.rows);
-  } catch (err) {
-      console.error('Error executing query', err.stack);
-      res.status(500).send('Error fetching menus');
-  }
-});
-
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
-/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
-
-app.post('/login', async (req,res)=> {
-  const {inputId, inputPw } = req.body;
-  connection.query('SELECT * FROM userinfo where userid = ?',
-   [inputId],  async (error, results, fields) => {
-      if(error){
-          console.error('database error :', error);
-          res.status(500).send('Internal Server Error');
-      } else {
-          if(results.length > 0) {
-              const userInfo = results[0];
-              const isMatch = inputPw == userInfo.userPw ? 1 : 0;
-              if(isMatch) {
-                  //비밀번호가 일치하는 경우 사용자 정보 제공
-                  res.json({
-                      success:true,
-                      message:'Login successful',
-                      data : userInfo
-                  });
-              } else {
-                  //비밀번호가 일치하지 않는 경우
-                  res.status(401).json({
-                      success:false,
-                      message: 'Invalid credentials'
-                  });
-              }
-          } else {
-              //결과가 없는 경우. 회원가입 할 것
-              res.status(404).json({
-                  isAvailable : true,
-                  message : 'User not found'
-              })
-              
-          }
-      }
-    })
-  });
