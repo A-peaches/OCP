@@ -14,7 +14,7 @@
             <label for="pickPeriod1">1개월</label>
             <input id="pickPeriod2" name="pickPeriod" type="radio" value="Y" />
             <label for="pickPeriod2">1년</label>
-            <input id="pickPeriod3" name="pickPeriod" type="radio" value="P" />
+            <input id="pickPeriod3" name="pickPeriod" type="radio" value="P" checked/>
             <label for="pickPeriod3">기간설정</label>
           </dd>
         </dl>
