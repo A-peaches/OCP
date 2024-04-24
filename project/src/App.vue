@@ -210,7 +210,7 @@
                       >
                         <i class="bi bi-cart4" style="font-size: 18pt"></i>
                         <span class="badge position-absolute badge-number"
-                          >3</span
+                          >{{cartCnt}}</span
                         >
                       </div>
                     </router-link>
@@ -252,11 +252,33 @@
 
 <script>
 import FooterView from "./components/FooterView.vue";
+import axios from 'axios';
+
 export default {
   data() {
-    return {};
+    return {
+      cartCnt:0,
+      userId:''
+    };
   },
   methods: {
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
+    },
+    cartCntLoad(){
+      const userId = this.userId;
+      axios
+        .post("http://localhost:3000/cart", { userId: userId })
+        .then((res) => {
+          if (res.data.success) {
+            this.orderList = res.data.data;
+            console.log(this.orderList);
+          }
+        })
+        .catch((error) => {
+          console.error("Error during login", error);
+        });
+    },
     createUser() {},
     logout() {
       alert("로그아웃 되었습니다!");
@@ -264,7 +286,10 @@ export default {
       this.$router.push("/");
     },
   },
-  created() {},
+  created() {
+    this.userIdLoad();
+    this.cartCntLoad();
+  },
   mounted() {
     console.log("Component is mounted with user:", this.user);
     Kakao.init("0ccb41721465f9078432fdbdc0be2541");

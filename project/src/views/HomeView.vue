@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img src="@/assets/home_bg2.png" alt="Coffee Shop" class="main-image">
-    <div class="welcome-message">Take a coffee with panda</div>
+    <div class="welcome-message">Take a coffee with panda</div>  
     <img src="@/assets/home_bg_panda.png" alt="Additional Image" class="additional-image">
   </div>
 </template>
@@ -33,6 +33,7 @@
   color: black;  /* 글자 색상 */
   opacity: 0;
   animation: slideIn 1.5s ease-out forwards;  /* 애니메이션 효과 적용 */
+  font-family: "Noto Serif KR";
 }
 
 @keyframes slideInFromRight {
