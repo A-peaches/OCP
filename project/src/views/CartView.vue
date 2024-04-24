@@ -59,7 +59,6 @@ export default {
   },
   created() {
     this.userIdLoad();
-    console.log(this.userId);
   },
   mounted() {
     this.loadCartList();
@@ -78,7 +77,6 @@ export default {
         if (response.data.success) {
           const cartList = response.data.data;
           this.cartItems = cartList;
-          console.log(this.cartItems);
           this.cartItems = cartList.map((item) => ({
             ...item,
             menuimg: this.getImageSrc(item.menuimg),
@@ -94,35 +92,98 @@ export default {
     userIdLoad() {
       this.userId = this.$store.getters.getUserId;
     },
-    removeItem(index) {
-      this.cartItems.splice(index, 1);
-    },
-    updateSelectedItems(item) {
-      const index = this.selectedItems.indexOf(item);
-      if (index > -1) {
-        this.selectedItems.splice(index, 1);
-      } else {
-        this.selectedItems.push(item);
+
+    async removeItem(index) {
+      const itemToRemove = this.cartItems[index];
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/removeCartItem",
+          {
+            userId: this.userId,
+            menuId: itemToRemove.menuId,
+          }
+        );
+        if (response.data.success) {
+          console.log("Item removed successfully:", response);
+          this.cartItems.splice(index, 1); // 서버에서 삭제 성공 후 클라이언트에서 삭제
+          this.$store.dispatch('decreaseItemToCart');
+        } else {
+          console.error("Failed to remove item", response.data.message);
+          alert("장바구니 항목 삭제에 실패했습니다: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error removing cart item", error);
+        alert("장바구니 항목 삭제 중 오류가 발생했습니다.");
       }
     },
-    removeSelectedItems() {
-      this.cartItems = this.cartItems.filter(
-        (item) => !this.selectedItems.includes(item)
-      );
-      this.selectedItems = []; // 선택된 항목 배열 초기화
-    },
+    // updateSelectedItems(item) {
+    //   const index = this.selectedItems.indexOf(item);
+    //   if (index > -1) {
+    //     this.selectedItems.splice(index, 1);
+    //   } else {
+    //     this.selectedItems.push(item);
+    //   }
+    // },
+
     placeOrder() {
       // 예: 주문 정보를 서버에 전송하는 로직
       alert("주문이 완료되었습니다!");
     },
 
-    increaseQuantity(item) {
-      item.num += 1;
+    async increaseQuantity(item) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/increaseCartCnt",
+          {
+            userId: this.userId,
+            menuId: item.menuId,
+            cartCnt: item.cartCnt + 1, // 감소된 수량을 전송
+          }
+        );
+        if (response.data.success) {
+          // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
+          item.cartCnt += 1;
+          console.log("Increase quantity success:", response);
+        } else {
+          // 서버에서 수량 증가 실패 메시지 반환
+          console.error("Increase quantity failed", response.data.message);
+          alert("수량을 증가시키는데 실패하였습니다: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error updating cart quantity", error);
+        alert("수량 업데이트 중 오류가 발생했습니다.");
+      }
     },
-    decreaseQuantity(item) {
-      if (item.num > 1) {
-        // 수량이 1보다 클 때만 감소
-        item.num -= 1;
+
+    async decreaseQuantity(item) {
+      if (item.cartCnt > 1) {
+        try {
+          const response = await axios.post(
+            "http://localhost:3000/decreaseCartCnt",
+            {
+              userId: this.userId,
+              menuId: item.menuId,
+              cartCnt: item.cartCnt - 1, // 감소된 수량을 전송
+            }
+          );
+
+          if (response.data.success) {
+            // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
+            item.cartCnt -= 1;
+            console.log("Decrease quantity success:", response);
+          } else {
+            // 서버에서 수량 감소 실패 메시지 반환
+            console.error("Decrease quantity failed", response.data.message);
+            alert(
+              "수량을 감소시키는데 실패하였습니다: " + response.data.message
+            );
+          }
+        } catch (error) {
+          console.error("Error during decreaseCartCnt", error);
+          alert("수량 감소 중 오류가 발생했습니다: " + error.message);
+        }
+      } else {
+        alert("수량은 1 이상이어야 합니다.");
       }
     },
   },
