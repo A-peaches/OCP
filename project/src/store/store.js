@@ -3,6 +3,9 @@ import { createStore } from "vuex";
 const store = createStore({
   state: {
     user: {},
+    cart: {
+      cartCnt: 0
+    }
   },
   mutations: {
     loginUser(state, obj) {
@@ -12,6 +15,9 @@ const store = createStore({
       // user 객체를 빈 객체로 설정하거나, 초기화
       state.user = {};
     },
+    AddCartCnt(state, cartCnt) {
+      state.cart.cartCnt = cartCnt;
+    }
   },
   actions: {
     loginUser({ commit }, userData) {
@@ -32,6 +38,9 @@ const store = createStore({
     getUserId(state) {
       return state.user.userId;
     },
+    getCartCnt(state) {
+      return state.cart.cartCnt;
+    }
   },
 });
 

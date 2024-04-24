@@ -252,43 +252,25 @@
 
 <script>
 import FooterView from "./components/FooterView.vue";
-import axios from 'axios';
 
 export default {
   data() {
     return {
-      cartCnt:0,
-      userId:''
     };
   },
+  watch: {
+
+  },
   methods: {
-    userIdLoad() {
-      this.userId = this.$store.getters.getUserId;
-    },
-    cartCntLoad(){
-      const userId = this.userId;
-      axios
-        .post("http://localhost:3000/cart", { userId: userId })
-        .then((res) => {
-          if (res.data.success) {
-            this.orderList = res.data.data;
-            console.log(this.orderList);
-          }
-        })
-        .catch((error) => {
-          console.error("Error during login", error);
-        });
-    },
     createUser() {},
     logout() {
       alert("로그아웃 되었습니다!");
+      this.cartCnt = 0; // 로그아웃 시 장바구니 카운트 초기화
       this.$store.commit("logoutUser");
       this.$router.push("/");
     },
   },
   created() {
-    this.userIdLoad();
-    this.cartCntLoad();
   },
   mounted() {
     console.log("Component is mounted with user:", this.user);
@@ -305,6 +287,10 @@ export default {
     isLogin() {
       return this.$store.getters.isLogin;
     },
+
+    cartCnt(){
+      return this.$store.getters.getCartCnt;
+    }
   },
 };
 </script>

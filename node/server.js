@@ -168,8 +168,6 @@ app.get("/bestmenu/best", (req, res) => {
     connection.query(
       "SELECT m.menuId, m.menuName, m.menuPrice, m.menuintro ,SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4",
       (error, results, fields) => {
-        console.log("여기는 서버당 !! ");
-        console.log(results);
         res.json(results);
       }
     );
@@ -226,7 +224,6 @@ app.post("/noticewrite", (req, res) => {
   let title = data.title;
   let content = data.content;
 
-  console.log(title, content);
 
   let query = "insert into notice (title, content, is_event) value (?,?,?)";
   connection.query(query, [title, content, 0], (err, result, fields) => {
@@ -241,7 +238,6 @@ app.get("/noticelist", (req, res) => {
     connection.query(
       "select * from notice order by noticeId desc",
       (error, results, fields) => {
-        console.log(results);
         res.json(results);
       }
     );
@@ -255,8 +251,6 @@ app.get("/noticelist", (req, res) => {
 
 app.post("/noticedetail", (req, res) => {
   let data = req.body.noticeId;
-  console.log(data);
-
   let query = "select title, content from notice where noticeId = ?";
   connection.query(query, [data], (err, result, fields) => {
     if (err) throw err;
@@ -309,36 +303,7 @@ app.post("/findid", async (req, res) => {
   );
 });
 
-app.post("/findid", async (req, res) => {
-  const { inputPhone, inputEmail } = req.body;
-  connection.query(
-    "SELECT * FROM userinfo where phone=? and email=?",
-    [inputPhone, inputEmail],
-    async (error, results, fields) => {
-      if (error) {
-        console.error("database error :", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        if (results.length > 0) {
-          const userInfo = results[0];
-          //결과가 있는경우
-          res.json({
-            success: true,
-            message: "search successful",
-            data: userInfo.userId,
-          });
-        } else {
-          //없는경우
-          res.json({
-            success: false,
-            message: "User not Found",
-            data: "None",
-          });
-        }
-      }
-    }
-  );
-});
+
 
 app.post("/orderState", async (req, res) => {
   const userId = req.body.userId;
@@ -401,3 +366,62 @@ app.post("/orderList", async (req, res) => {
     }
   });
 });
+
+app.post("/cartCnt", async (req, res) => {
+    const userId = req.body.userId;
+  
+    console.log(userId);
+    const query =
+      "select count(menuName) as cartCnt from cart left outer join menu on cart.menuId = menu.menuId where userId=?"
+    connection.query(query, [userId], async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results.length > 0) {
+          const cartCnt = results[0];
+          console.log(cartCnt.data);
+          //결과가 있는경우
+          res.json({
+            success: true,
+            data: cartCnt,
+          });
+        } else {
+          //없는경우
+          res.json({
+            success: false,
+            data: "None",
+          });
+        }
+      }
+    });
+  });
+
+  app.post("/cartList", async (req, res) => {
+    const userId = req.body.userId;
+  
+    console.log(userId);
+    const query =
+      "select menuImg,menuName,cartCnt, menuPrice from cart left outer join menu on cart.menuId = menu.menuId where userId = ?"
+    connection.query(query, [userId], async (error, results, fields) => {
+      if (error) {
+        console.error("database error :", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results.length > 0) {
+          const cartList = results;
+          //결과가 있는경우
+          res.json({
+            success: true,
+            data: cartList,
+          });
+        } else {
+          //없는경우
+          res.json({
+            success: false,
+            data: "None",
+          });
+        }
+      }
+    });
+  });
