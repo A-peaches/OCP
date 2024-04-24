@@ -33,7 +33,7 @@
                 <td colspan="2">
                   <img
                     v-if="menu.menuImg"
-                    :src="`data:image/png;base64,${menu.menuImg[index]}`"
+                    :src="menu.menuImg"
                     alt="Coffee"
                     id="admin-image"
                   />{{ menu.menuName }}
@@ -335,12 +335,16 @@ export default {
     this.fetchMenu();
   },
   methods: {
+    getImageSrc(base64Data) {
+      return `data:image/png;base64,${base64Data}`;
+    },
     async fetchMenu() {
       try {
         const response = await axios.get("http://localhost:3000/menu");
         console.log(response.data);
         for (let i = 0; i < response.data.length; i++) {
           this.menus[i] = response.data[i];
+          this.menus[i].menuImg = this.getImageSrc(response.data[i].menuImg);
         }
         console.log("Menu fetched successfully");
       } catch (error) {

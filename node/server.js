@@ -115,9 +115,74 @@ app.post("/menuinput", upload.single("menuImg"), (req, res) => {
   );
 });
 
+app.use(express.json()); // JSON 데이터 파싱을 위해 필요
+
+/////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
+// 아이디 중복확인
+app.get("/join/:userId", (req, res) => {
+  const userId = req.params.userId;
+  connection.query(
+    "SELECT COUNT(*) AS count FROM userinfo WHERE userId = ?",
+    [userId],
+    (error, results, fields) => {
+      if (error) {
+        console.error("Database error:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        if (results[0].count > 0) {
+          res.json({ isAvailable: false });
+        } else {
+          res.json({ isAvailable: true });
+        }
+      }
+    }
+  );
+});
+// 회원정보 DB insert
+app.post("/join/signin", (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let userPw = data.userPw;
+  let userName = data.userName;
+  let userNickName = data.userNickName;
+  let email = data.email;
+  let phone = data.phone;
+  console.log(userId, userPw, userName, userNickName, email, phone);
+
+  let query =
+    "insert into userinfo (userId, userName, userPw, nickName, phone, email) values (?,?,?,?,?,?)";
+  connection.query(
+    query,
+    [userId, userName, userPw, userNickName, phone, email],
+    (err, result, fields) => {
+      if (err) throw err;
+      console.log(result);
+    }
+  );
+});
+/////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
+
+/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
+app.get("/bestmenu/best", (req, res) => {
+  try {
+    connection.query(
+      "SELECT m.menuId, m.menuName, m.menuPrice, m.menuintro ,SUM(o.ordercnt) AS total_orders FROM menu m JOIN orderdetail o ON m.menuId = o.menuId GROUP BY m.menuId ORDER BY SUM(o.ordercnt) DESC LIMIT 4",
+      (error, results, fields) => {
+        console.log("여기는 서버당 !! ");
+        console.log(results);
+        res.json(results);
+      }
+    );
+  } catch (err) {
+    console.error("Error executing query", err.stack);
+    res.status(500).send("Error fetching menus");
+  }
+});
+
+/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
+
 app.post("/login", async (req, res) => {
   const { inputId, inputPw } = req.body;
-
   connection.query(
     "SELECT * FROM userinfo where userid = ?",
     [inputId],
@@ -154,53 +219,70 @@ app.post("/login", async (req, res) => {
     }
   );
 });
-// 회원정보 DB insert
-app.post("/join/signin", (req, res) => {
+
+//////////////////////공지사항작성///////////////////
+app.post("/noticewrite", (req, res) => {
   let data = req.body;
-  let userId = data.userId;
-  let userPw = data.userPw;
-  let userName = data.userName;
-  let userNickName = data.userNickName;
-  let email = data.email;
-  let phone = data.phone;
-  console.log(userId, userPw, userName, userNickName, email, phone);
+  let title = data.title;
+  let content = data.content;
 
-  let query =
-    "insert into userinfo (userId, userName, userPw, nickName, phone, email) values (?,?,?,?,?,?)";
-  connection.query(
-    query,
-    [userId, userName, userPw, userNickName, phone, email],
-    (err, result, fields) => {
-      if (err) throw err;
-      console.log(result);
-    }
-  );
+  console.log(title, content);
+
+  let query = "insert into notice (title, content, is_event) value (?,?,?)";
+  connection.query(query, [title, content, 0], (err, result, fields) => {
+    if (err) throw err;
+    console.log(result);
+  });
 });
-/////////////////////////////////////////회원가입 프로세스/////////////////////////////////////////
 
-/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
-app.get("/bestmenu/best", async (req, res) => {
+/////////////////////공지사항리스트생성//////////////////
+app.get("/noticelist", (req, res) => {
   try {
-    const results = await connection.query(
-      "SELECT * FROM menus ORDER BY sales DESC LIMIT 4"
+    connection.query(
+      "select * from notice order by noticeId desc",
+      (error, results, fields) => {
+        console.log(results);
+        res.json(results);
+      }
     );
-    res.json(results.rows);
   } catch (err) {
     console.error("Error executing query", err.stack);
     res.status(500).send("Error fetching menus");
   }
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
-/////////////////////////////////////////추천메뉴 Select /////////////////////////////////////////
+/////////////////////공지사항 세부사항 생성//////////////////
 
-app.post("/login", async (req, res) => {
-  const { inputId, inputPw } = req.body;
+app.post("/noticedetail", (req, res) => {
+  let data = req.body.noticeId;
+  console.log(data);
+
+  let query = "select title, content from notice where noticeId = ?";
+  connection.query(query, [data], (err, result, fields) => {
+    if (err) throw err;
+    console.log(result);
+    res.json(result);
+  });
+});
+
+/////////////////////전체메뉴 리스트 생성//////////////////
+app.get("/allmenu", (req, res) => {
+  try {
+    connection.query("select * from menu", (error, results, fields) => {
+      console.log(results);
+      res.json(results);
+    });
+  } catch (err) {
+    console.error("Error executing query", err.stack);
+    res.status(500).send("Error fetching menus");
+  }
+});
+
+app.post("/findid", async (req, res) => {
+  const { inputPhone, inputEmail } = req.body;
   connection.query(
-    "SELECT * FROM userinfo where userid = ?",
-    [inputId],
+    "SELECT * FROM userinfo where phone=? and email=?",
+    [inputPhone, inputEmail],
     async (error, results, fields) => {
       if (error) {
         console.error("database error :", error);
@@ -208,26 +290,18 @@ app.post("/login", async (req, res) => {
       } else {
         if (results.length > 0) {
           const userInfo = results[0];
-          const isMatch = inputPw == userInfo.userPw ? 1 : 0;
-          if (isMatch) {
-            //비밀번호가 일치하는 경우 사용자 정보 제공
-            res.json({
-              success: true,
-              message: "Login successful",
-              data: userInfo,
-            });
-          } else {
-            //비밀번호가 일치하지 않는 경우
-            res.status(401).json({
-              success: false,
-              message: "Invalid credentials",
-            });
-          }
+          //결과가 있는경우
+          res.json({
+            success: true,
+            message: "search successful",
+            data: userInfo.userId,
+          });
         } else {
-          //결과가 없는 경우. 회원가입 할 것
-          res.status(404).json({
-            isAvailable: true,
-            message: "User not found",
+          //없는경우
+          res.json({
+            success: false,
+            message: "User not Found",
+            data: "None",
           });
         }
       }
@@ -264,4 +338,66 @@ app.post("/findid", async (req, res) => {
       }
     }
   );
+});
+
+app.post("/orderState", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log(userId);
+  const query =
+    "SELECT c.orderNo, c.orderDate, m.menuName, c.orderCnt, m.menuPrice FROM ( SELECT A.orderNo, A.orderDate, menuId, B.orderCnt, A.userId FROM userorder AS A LEFT OUTER JOIN orderdetail AS B ON A.orderNo =B.orderNo WHERE A.userId = ? AND A.orderDate = ( SELECT MAX(orderDate) FROM userorder WHERE userId = ? AND orderNo = A.orderNo ) ) AS c LEFT OUTER JOIN menu AS m ON c.menuId = m.menuId";
+
+  connection.query(query, [userId, userId], async (error, results, fields) => {
+    if (error) {
+      console.error("database error :", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.length > 0) {
+        const userInfo = results;
+        console.log(userInfo);
+        //결과가 있는경우
+        res.json({
+          success: true,
+          data: userInfo,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
+});
+
+app.post("/orderList", async (req, res) => {
+  const userId = req.body.userId;
+
+  console.log(userId);
+  const query =
+    "select orderNo,orderDate,menuName,orderCnt,menuPrice from (SELECT A.orderNo , orderDate, menuId, orderCnt,userId from userorder AS A left outer join orderdetail AS B on A.orderNo=B.orderNo) as c left outer join menu on c.menuId = menu.menuId where userId = ?";
+
+  connection.query(query, [userId], async (error, results, fields) => {
+    if (error) {
+      console.error("database error :", error);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.length > 0) {
+        const userInfo = results;
+        console.log(userInfo);
+        //결과가 있는경우
+        res.json({
+          success: true,
+          data: userInfo,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
 });
