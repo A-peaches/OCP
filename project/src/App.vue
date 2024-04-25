@@ -202,16 +202,17 @@
 
                   <button
                     class="btn btn-outline-dark btn-custom"
-                    id="btn_border" v-if="isLogin && !isAdmin"
+                    id="btn_border"
+                    v-if="isLogin && !isAdmin"
                   >
                     <router-link to="/cart" class="nav-link">
                       <div
                         class="icon-badge-container position-relative d-inline-block"
                       >
                         <i class="bi bi-cart4" style="font-size: 18pt"></i>
-                        <span class="badge position-absolute badge-number"
-                          >{{cartCnt}}</span
-                        >
+                        <span class="badge position-absolute badge-number">{{
+                          cartCnt
+                        }}</span>
                       </div>
                     </router-link>
                   </button>
@@ -255,12 +256,9 @@ import FooterView from "./components/FooterView.vue";
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
-  watch: {
-
-  },
+  watch: {},
   methods: {
     createUser() {},
     logout() {
@@ -270,8 +268,7 @@ export default {
       this.$router.push("/");
     },
   },
-  created() {
-  },
+  created() {},
   mounted() {
     console.log("Component is mounted with user:", this.user);
     Kakao.init("0ccb41721465f9078432fdbdc0be2541");
@@ -288,9 +285,9 @@ export default {
       return this.$store.getters.isLogin;
     },
 
-    cartCnt(){
+    cartCnt() {
       return this.$store.getters.getCartCnt;
-    }
+    },
   },
 };
 </script>
@@ -374,7 +371,7 @@ ul a.dropdown-item:active {
   height: 100%; /* 부모 요소의 높이를 자식 요소에 맞춤 */
 }
 .badge-number {
-  top: -10px;  /* 위쪽으로 조금 이동 */
+  top: -10px; /* 위쪽으로 조금 이동 */
   right: -5px; /* 오른쪽으로 조금 이동 */
   transform: translate(50%, -50%); /* 뱃지 위치 세밀 조정 */
   background-color: red;

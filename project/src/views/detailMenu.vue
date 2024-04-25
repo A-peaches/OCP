@@ -12,7 +12,7 @@
           <div style="display: flex">
             <div style="padding-left: 30px; width: 500px; height: auto">
               <h3>{{ deatailData.menuName }}</h3>
-              <p>Pandaricano</p>
+              <p>카테고리 : {{ deatailData.category }}</p>
               <hr style="border-top: 3px black solid" />
               <pre
                 >{{ deatailData.menuintro }}
@@ -111,7 +111,12 @@
                   </button>
                 </div>
                 <div>
-                  <button type="button" class="btn btn-light" style="margin-right: -10px" @click="ordering">
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    style="margin-right: -10px"
+                    @click="ordering"
+                  >
                     장바구니 담기
                   </button>
                   <!-- <button type="button" class="btn btn-light">바보 결제</button> -->
@@ -148,13 +153,14 @@ export default {
       sugar: 0,
       menuimg: null,
       detailmenu: {},
-      imageTest2:'',
+      imageTest2: "",
       //detail 더미
-      deatailData:{
-        image: '', //사진
-        menuName: '', //?
-        menuintro: '',
-        menuPrice: 0
+      deatailData: {
+        image: "", //사진
+        menuName: "", //?
+        menuintro: "",
+        menuPrice: 0,
+        category: "",
       },
     };
   },
@@ -170,7 +176,7 @@ export default {
     async isSameMenu(menuId) {
       let obj = {
         userId: this.userId,
-        menuId: menuId
+        menuId: menuId,
       };
 
       try {
@@ -178,25 +184,23 @@ export default {
         this.ischeck = res.data.exists;
         return this.ischeck; // 함수에서 결과값을 반환합니다.
       } catch (error) {
-        console.error('에러발생', error);
+        console.error("에러발생", error);
         return false; // 에러가 발생했을 때 false를 반환합니다.
       }
     },
 
     cartNew(menuId) {
-      let obj = {userId: this.userId, menuId: menuId, cups: this.cups};
+      let obj = { userId: this.userId, menuId: menuId, cups: this.cups };
 
-      axios.post("http://localhost:3000/cartnewcups", obj)
-      .then(res => {
+      axios.post("http://localhost:3000/cartnewcups", obj).then((res) => {
         console.log(res.data);
       });
     },
-    
-    cartAdd(menuId) {
-      let obj = {userId: this.userId, menuId: menuId, cups: this.cups};
 
-      axios.post("http://localhost:3000/cartaddcups", obj)
-      .then(res => {
+    cartAdd(menuId) {
+      let obj = { userId: this.userId, menuId: menuId, cups: this.cups };
+
+      axios.post("http://localhost:3000/cartaddcups", obj).then((res) => {
         console.log(res.data);
       });
     },
@@ -205,26 +209,25 @@ export default {
       this.menuId = this.$route.params.id;
 
       if (!this.userId) {
-        alert('비회원은 주문할 수 없습니다!')
-        this.$router.push('/login'); // 로그인 페이지로 리다이렉트
+        alert("비회원은 주문할 수 없습니다!");
+        this.$router.push("/login"); // 로그인 페이지로 리다이렉트
         return;
       }
 
       const isMenuSame = await this.isSameMenu(this.menuId);
-      
-      console.log(isMenuSame, '입니다.');
+
+      console.log(isMenuSame, "입니다.");
 
       if (!isMenuSame) {
         //처음 추가할때
         this.cartNew(this.menuId);
-        this.$store.dispatch('addNewItemToCart');
+        this.$store.dispatch("addNewItemToCart");
       } else {
         //이미 있는 메뉴일때
         this.cartAdd(this.menuId);
       }
 
       alert("장바구니에 추가되었습니다.");
-
     },
 
     shotMinus() {
@@ -266,7 +269,8 @@ export default {
         this.deatailData.image = this.getImageSrc(data.menuimg);
         this.deatailData.menuintro = data.menuintro;
         this.deatailData.menuPrice = data.menuPrice;
-      
+        this.deatailData.menuName = data.menuName;
+        this.deatailData.category = data.category;
       } catch (error) {
         console.error("Error fetching menu:", error);
       }
