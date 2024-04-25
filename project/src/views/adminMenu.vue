@@ -74,7 +74,7 @@
               <!-- 모달 버튼 -->
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn btn-secondary"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
                 data-bs-whatever="@fat"
@@ -236,7 +236,7 @@
               </div>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn btn-danger mx-3"
                 data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop"
               >
