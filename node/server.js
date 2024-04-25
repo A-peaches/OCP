@@ -804,6 +804,8 @@ app.get("/sales", (req, res) => {
 SELECT
     DATE_FORMAT(userorder.orderDate, '%Y%m%d') AS orderDate,
     SUM(orderdetail.orderCnt * menu.menuPrice) AS dailySales,
+    SUM(orderdetail.orderCnt * menu.menuPrice) -
+        SUM(orderdetail.orderCnt * (menu.beans * 10 + menu.water * 2 + menu.milk * 2 + menu.sugar * 5)) AS dailyProfit,
     SUM(orderdetail.orderCnt) AS orderCnt
 FROM
     userorder
@@ -820,7 +822,6 @@ GROUP BY
       res.status(500).send("Error fetching daily sales");
     } else {
       res.json(results);
-      console.log(results);
     }
   });
 });
@@ -839,7 +840,6 @@ GROUP BY m.menuName;
       res.status(500).send("Error fetching daily menucnt");
     } else {
       res.json(results);
-      console.log(results);
     }
   });
 });
