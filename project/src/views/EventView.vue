@@ -1,15 +1,27 @@
 <template>
   <div class="content2">
     <p class="title">판다와 함께하는 이벤트</p>
-    <hr>
+    <hr />
     <div class="image-container">
-      <img v-for="(image, index) in images" :src="image.src" :alt="image.alt" :key="index" class="rounded-image" @click="openModal(image)">
+      <img
+        v-for="(image, index) in images"
+        :src="image.src"
+        :alt="image.alt"
+        :key="index"
+        class="rounded-image"
+        @click="openModal(image)"
+      />
     </div>
     <!-- 모달 팝업 -->
     <div v-show="showModal" class="modal" @click.self="closeModal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <img v-if="selectedImage" :src="selectedImage.src" alt="Selected Image" class="modal-image">
+        <img
+          v-if="selectedImage"
+          :src="selectedImage.src"
+          alt="Selected Image"
+          class="modal-image"
+        />
       </div>
     </div>
   </div>
@@ -22,7 +34,7 @@ export default {
       images: [
         { src: require("../assets/event/event1.png"), alt: "Image 1" },
         { src: require("../assets/event/event2.png"), alt: "Image 2" },
-        { src: require("../assets/event/event3.png"), alt: "Image 3" }
+        { src: require("../assets/event/event3.png"), alt: "Image 3" },
       ],
       showModal: false,
       selectedImage: {}, // 빈 객체로 초기화
@@ -37,25 +49,25 @@ export default {
     closeModal() {
       console.log("Closing modal");
       this.showModal = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
 .content2 {
-    margin-left: 400px;
-    margin-right: 400px;
-    margin-bottom: 50px;
-    overflow-x: hidden; /* 상위 컨테이너에서 수평 스크롤바 숨김 */
+  margin-left: 400px;
+  margin-right: 400px;
+  margin-bottom: 50px;
+  overflow-x: hidden; /* 상위 컨테이너에서 수평 스크롤바 숨김 */
 }
 
 .title {
-    font-size: 40px;
-    text-align: left;
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-bottom: 10px;
+  font-size: 40px;
+  text-align: left;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 .image-container {
@@ -65,7 +77,7 @@ export default {
   gap: 30px;
   overflow-x: auto; /* 수평 스크롤바 활성화 */
   white-space: nowrap; /* 줄바꿈 방지 */
-  padding: 20px;  /* 컨테이너 패딩 추가 */
+  padding: 20px; /* 컨테이너 패딩 추가 */
 }
 
 .rounded-image {
@@ -99,7 +111,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-content {
@@ -112,23 +124,21 @@ export default {
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modal-image {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
-
 </style>
-
