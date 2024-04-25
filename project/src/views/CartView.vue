@@ -30,12 +30,14 @@
     </p>
     <div class="cart-buttons">
       <button class="btn btn-secondary" @click="placeOrder">주문하기</button>
+      <KakaoPay ref="kakaoPay" />
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import KakaoPay from "@/components/KakaoPay.vue";
 
 export default {
   data() {
@@ -45,6 +47,7 @@ export default {
       //테스트용
       // cartItems: [],
       selectedItems: [],
+      orderNum: 0,
     };
   },
 
@@ -125,9 +128,86 @@ export default {
     //   }
     // },
 
-    placeOrder() {
-      // 예: 주문 정보를 서버에 전송하는 로직
-      alert("주문이 완료되었습니다!");
+    async placeOrder() {
+      this.$refs.kakaoPay.openModal();
+      await this.findMyOrderNum();
+      await this.addUserOrder(this.orderNum);
+      console.log("유저오더 끝");
+      await this.addOrderDetail(this.orderNum);
+      this.delCartTable();
+      this.stockChange(this.orderNum);
+      this.cartItems = "";
+    },
+
+    async findMyOrderNum() {
+      try {
+        const res = await axios.get("http://localhost:3000/findmyordernum");
+        this.orderNum = res.data.orderNo + 1;
+        console.log(this.orderNum);
+      } catch (error) {
+        console.error("Failed to find order number:", error);
+      }
+    },
+
+    async addUserOrder(orderNum) {
+      let obj = {
+        userId: this.userId,
+        orderNum: orderNum,
+      };
+
+      try {
+        const res = await axios.post("http://localhost:3000/adduserorder", obj);
+        console.log("Response from server:", res.data);
+      } catch (error) {
+        console.error("Failed to add user order:", error);
+      }
+      console.log("유저오더 클라이언트끝");
+    },
+
+    async addOrderDetail(orderNum) {
+      console.log("오더디테일 시작");
+      let obj = {
+        userId: this.userId,
+        orderNum: orderNum,
+      };
+      try {
+        const res = await axios.post(
+          "http://localhost:3000/addorderdetail",
+          obj
+        );
+        console.log(res.data);
+      } catch (error) {
+        console.error("Failed to add user order:", error);
+      }
+      console.log("오더디테일 끝");
+    },
+
+    stockChange(orderNum) {
+      console.log("재고삭제시작");
+      let obj = {
+        orderNum: orderNum,
+      };
+      try {
+        const res = axios.post("http://localhost:3000/stockchange", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Failed to change stock:", error);
+      }
+      console.log("재고삭제끝");
+    },
+
+    delCartTable() {
+      console.log("장바구니 삭제 시작");
+      let obj = {
+        userId: this.userId,
+      };
+      try {
+        const res = axios.post("http://localhost:3000/delcart", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Failed to delete cart:", error);
+      }
+      console.log("장바구니 삭제 끝");
     },
 
     async increaseQuantity(item) {
@@ -137,7 +217,7 @@ export default {
           {
             userId: this.userId,
             menuId: item.menuId,
-            cartCnt: item.cartCnt + 1, // 증가된 수량을 전송
+            cartCnt: item.cartCnt + 1, // 감소된 수량을 전송
           }
         );
         if (response.data.success) {
@@ -186,6 +266,9 @@ export default {
         alert("수량은 1 이상이어야 합니다.");
       }
     },
+  },
+  components: {
+    KakaoPay,
   },
 };
 </script>

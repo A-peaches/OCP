@@ -713,6 +713,7 @@ app.post("/stockupdate", (req, res) => {
 
 /////////////////////////////주문로직/////////////////////////////
 
+//주문번호 찾기
 app.get("/findmyordernum", (req, res) => {
   connection.query(
     "select orderNo from userorder order by orderNo desc limit 1",
@@ -728,6 +729,7 @@ app.get("/findmyordernum", (req, res) => {
   );
 });
 
+//주문번호추가
 app.post("/adduserorder", (req, res) => {
   let data = req.body;
   let userId = data.userId;
@@ -751,6 +753,7 @@ app.post("/adduserorder", (req, res) => {
   });
 });
 
+//주문상세 추가
 app.post("/addorderdetail", (req, res) => {
   let data = req.body;
   let userId = data.userId;
@@ -837,6 +840,171 @@ GROUP BY m.menuName;
     } else {
       res.json(results);
       console.log(results);
+    }
+  });
+});
+
+//재고사용량 추가
+app.post("/stockchange", (req, res) => {
+  let data = req.body;
+  let orderNum = data.orderNum;
+
+  let query = `UPDATE stock SET outStock = CASE 
+                  WHEN stockName = '원두' THEN outStock + (SELECT SUM(m.beans * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+                  WHEN stockName = '우유' THEN outStock + (SELECT SUM(m.milk * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+                  WHEN stockName = '생수' THEN outStock + (SELECT SUM(m.water * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+              END 
+              WHERE stockName IN ('원두', '우유', '생수')`;
+
+  connection.query(
+    query,
+    [orderNum, orderNum, orderNum],
+    (err, result, fields) => {
+      if (err) {
+        console.error("Error in stockchange:", err);
+        res.status(500).json({ success: false, message: "Database error" });
+        return; // 중요: 에러 발생 시 여기서 처리를 멈추고 클라이언트에게 응답
+      }
+      console.log("stockchange:", result);
+      res.json({
+        success: true,
+        message: "stockchange complete",
+        data: result,
+      });
+    }
+  );
+});
+
+///////////////////////유저관리페이지/////////////////////
+
+app.get("/getuserlist", (req, res) => {
+  console.log("유저정보 요청 도달"); //까지 ok
+
+  try {
+    connection.query("select * from userinfo", (error, results, fields) => {
+      console.log("들어왔지롱");
+      // res.json(results);
+      res.status(200).json(results);
+      console.log(results);
+    });
+  } catch (error) {
+    console.error("Error executing query", error.stack);
+    res.status(500).send("Error fetching menus");
+  }
+});
+
+//재고 불러오기
+app.get("/stock", (req, res) => {
+  connection.query("SELECT * FROM stock", (error, results, fields) => {
+    if (error) {
+      console.error("Error fetching stock:", error);
+      res.status(500).json({ error: "Error fetching stock" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+app.post("/orderCoffee", (req, res) => {
+  const updateBeans = req.body.updateBeans;
+
+  let query = `UPDATE stock set inStock = ? WHERE stockName='원두';`;
+
+  connection.query(query, [updateBeans], (err, result, fields) => {
+    if (err) {
+      console.error("database error :", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (result.affectedRows > 0) {
+        console.log("Updated rows:", result.affectedRows);
+        res.json({
+          success: true,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
+});
+
+app.post("/orderMilk", (req, res) => {
+  const updateMilk = req.body.updateMilk;
+
+  let query = `UPDATE stock set inStock = ? WHERE stockName='우유';`;
+
+  connection.query(query, [updateMilk], (err, result, fields) => {
+    if (err) {
+      console.error("database error :", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (result.affectedRows > 0) {
+        console.log("Updated rows:", result.affectedRows);
+        res.json({
+          success: true,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
+});
+
+app.post("/orderWater", (req, res) => {
+  const updateWater = req.body.updateWater;
+
+  let query = `UPDATE stock set inStock = ? WHERE stockName='생수';`;
+
+  connection.query(query, [updateWater], (err, result, fields) => {
+    if (err) {
+      console.error("database error :", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (result.affectedRows > 0) {
+        console.log("Updated rows:", result.affectedRows);
+        res.json({
+          success: true,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
+    }
+  });
+});
+
+app.post("/orderSyrup", (req, res) => {
+  const updateSyrup = req.body.updateSyrup;
+
+  let query = `UPDATE stock set inStock = ? WHERE stockName='시럽';`;
+
+  connection.query(query, [updateSyrup], (err, result, fields) => {
+    if (err) {
+      console.error("database error :", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (result.affectedRows > 0) {
+        console.log("Updated rows:", result.affectedRows);
+        res.json({
+          success: true,
+        });
+      } else {
+        //없는경우
+        res.json({
+          success: false,
+          data: "None",
+        });
+      }
     }
   });
 });

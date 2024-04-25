@@ -38,7 +38,6 @@ export default {
     },
 
     drawLineChart() {
-      console.log("세일즈가들어왔낭? :", this.sales);
       const salesData = this.sales;
       const formattedSalesData = salesData.map((item) => {
         // yyyymmdd 형식의 문자열을 Date 객체로 변환
@@ -136,13 +135,6 @@ export default {
         ["Menu", "numb"],
         ...formattedData,
       ]);
-      // const data = google.visualization.arrayToDataTable([
-      //   ["Menu", "numb"],
-      //   ["Pandaricano", 11],
-      //   ["Panlatte", 2],
-      //   ["Panpuchino", 2],
-      //   ["Pandu brew", 2],
-      // ]);
 
       const options = {
         title: "메뉴 분포도 분석",

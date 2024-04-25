@@ -4,32 +4,7 @@
     <hr />
 
     <div class="order-controls">
-      <h1>PandaCoffee 재고조회</h1>
-      <hr />
-      <br />
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">No.</th>
-            <th scope="col">재고명</th>
-            <th scope="col">현재재고</th>
-            <th scope="col">출고량</th>
-            <th scope="col">UnitPrice</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(stocks, index) in stocks" :key="stocks">
-            <th scope="row">{{ index + 1 }}</th>
-            <td>{{ stocks.stockName }}</td>
-            <td>{{ stocks.inStock }}</td>
-            <td>{{ stocks.outStock }}</td>
-            <td>{{ stocks.unitPrice }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="order-controls">
-      <h1>재고입고</h1>
+      <h2 class="text-center">재고입고</h2>
       <hr />
       <div class="order">
         <div
@@ -40,12 +15,12 @@
             text-align: center;
           "
         >
-          <div style="margin-right: 100px" @change="this.fetchStockData()">
-            <img src="@/assets/coffeebean.png" alt="..." style="width: 80px" />
-            <h4>{{ stocks[3].stockName }}</h4>
+          <div style="margin-right: 100px">
+            <img src="@/assets/water.png" alt="..." style="width: 80px" />
+            <h4>생수</h4>
             <input
               type="number"
-              v-model.number="orderQuantity.coffee"
+              v-model.number="orderQuantity.water"
               style="width: 100px; margin-bottom: 10px"
             />
             <br />
@@ -53,10 +28,26 @@
               type="button"
               value="주문하기"
               style="margin-bottom: 10px"
-              @click="() => updateStock('원두')"
+              @click="waterOrder(orderQuantity.water)"
             />
             <br />
-            <span>초기재고 : {{ stocks[3].inStock }}</span>
+          </div>
+          <div style="margin-right: 100px">
+            <img src="@/assets/syrup.png" alt="..." style="width: 80px" />
+            <h4>시럽</h4>
+            <input
+              type="number"
+              v-model.number="orderQuantity.syrup"
+              style="width: 100px; margin-bottom: 10px"
+            />
+            <br />
+            <input
+              type="button"
+              value="주문하기"
+              style="margin-bottom: 10px"
+              @click="syrupOrder(orderQuantity.syrup)"
+            />
+            <br />
           </div>
           <div style="margin-right: 100px">
             <img src="@/assets/milk.png" alt="..." style="width: 80px" />
@@ -71,35 +62,16 @@
               type="button"
               value="주문하기"
               style="margin-bottom: 10px"
-              @click="() => updateStock('우유')"
+              @click="milkOrder(orderQuantity.milk)"
             />
             <br />
-            <span>초기재고 : {{ stocks.milk }}</span>
-          </div>
-          <div style="margin-right: 100px">
-            <img src="@/assets/water.png" alt="..." style="width: 80px" />
-            <h4>생수</h4>
-            <input
-              type="number"
-              v-model.number="orderQuantity.water"
-              style="width: 100px; margin-bottom: 10px"
-            />
-            <br />
-            <input
-              type="button"
-              value="주문하기"
-              style="margin-bottom: 10px"
-              @click="() => updateStock('물')"
-            />
-            <br />
-            <span>초기재고 : {{ stocks.water }}</span>
           </div>
           <div>
-            <img src="@/assets/syrup.png" alt="..." style="width: 80px" />
-            <h4>시럽</h4>
+            <img src="@/assets/coffeebean.png" alt="..." style="width: 80px" />
+            <h4>원두</h4>
             <input
               type="number"
-              v-model.number="orderQuantity.syrup"
+              v-model.number="orderQuantity.coffee"
               style="width: 100px; margin-bottom: 10px"
             />
             <br />
@@ -107,38 +79,60 @@
               type="button"
               value="주문하기"
               style="margin-bottom: 10px"
-              @click="() => updateStock('시럽')"
+              @click="coffeeOrder(orderQuantity.coffee)"
             />
             <br />
-            <span>초기재고 : {{ stocks.syrup }}</span>
           </div>
         </div>
       </div>
+      <div class="mt-5">
+        <p>* 주문은 10단위로 할 수 있습니다.</p>
+      </div>
     </div>
-    <div id="barChart" style="width: 100%; height: 450px"></div>
+    <div class="order-controls">
+      <h2 class="text-center">재고 조회</h2>
+      <hr />
+      <br />
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">재고명</th>
+            <th scope="col">입고량</th>
+            <th scope="col">출고량</th>
+            <th scope="col">현재 재고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in stocksWithRemaining" :key="index">
+            <th scope="row">{{ index + 1 }}</th>
+            <td>{{ item.stockName }}</td>
+            <td>{{ item.inStock }}</td>
+            <td>{{ item.outStock }}</td>
+            <td>{{ item.remainingStock }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 50px; margin-left: 230px">
+      <img
+        src="@/assets/stockpanda.png"
+        style="height: 30%; width: 30%"
+        class="moving-panda"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+
 export default {
-  name: "MultiCharts",
+  name: "StockView",
 
   data() {
     return {
-      stocks: {
-        stockName: "", // 원두 초기 재고 요것들을 DB에서 가져와야함
-        inStock: 0, // 우유 초기 재고
-        outStock: 0, // 생수 초기 재고
-        unitPrice: 0, // 시럽 초기 재고
-      },
-      stock: {
-        coffee: "",
-        milk: "",
-        water: "",
-        syrup: "",
-      },
-
+      stocks: [],
       orderQuantity: {
         // 주문 수량 객체 추가
         coffee: "",
@@ -148,119 +142,126 @@ export default {
       },
     };
   },
-  created() {
-    this.fetchStockData();
+  computed: {
+    stocksWithRemaining: function () {
+      return this.stocks.map((stock) => ({
+        ...stock,
+        remainingStock:
+          parseInt(stock.inStock, 10) - parseInt(stock.outStock, 10), // 문자열을 정수로 변환
+      }));
+    },
   },
   mounted() {
-    /* eslint-disable no-undef */
-    google.charts.load("current", { packages: ["corechart"] });
-    // eslint-disable-next-line no-undef
-    google.charts.setOnLoadCallback(this.drawAllCharts);
-    window.addEventListener("resize", this.drawAllCharts);
+    this.fetchStockData();
   },
   methods: {
-    orderItem(item, quantity) {
-      this.stocks[item] += Number(quantity);
-      this.drawBarChart();
-      alert("주문이 완료되었습니다.");
-      this.orderQuantity[item] = "";
+    async syrupOrder(orderCnt) {
+      //여기는 시럽 오더~
+      this.stocks[1].inStock = this.stocks[1].inStock + orderCnt;
+
+      try {
+        const response = await axios.post("http://localhost:3000/orderSyrup", {
+          updateSyrup: this.stocks[1].inStock,
+        });
+        if (response.data.success) {
+          // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
+          console.log("Syrup order success:", response);
+          alert("시럽 주문이 완료되었습니다!");
+        } else {
+          // 서버에서 수량 증가 실패 메시지 반환
+          console.error("Syrup order failed", response.data.message);
+          alert("시럽 주문 실패: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error Syrup order ", error);
+        alert("시럽 주문 실패.");
+      }
+      this.orderQuantity.syrup = "";
     },
-    //초기재고 불러오기
+    async waterOrder(orderCnt) {
+      //요기는 생수 오더~
+      this.stocks[0].inStock = this.stocks[0].inStock + orderCnt;
+
+      try {
+        const response = await axios.post("http://localhost:3000/orderWater", {
+          updateWater: this.stocks[0].inStock,
+        });
+        if (response.data.success) {
+          // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
+          console.log("Water order success:", response);
+          alert("생수 주문이 완료되었습니다!");
+        } else {
+          // 서버에서 수량 증가 실패 메시지 반환
+          console.error("Water order failed", response.data.message);
+          alert("물 주문 실패: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error Water order ", error);
+        alert("물 주문 실패.");
+      }
+      this.orderQuantity.water = "";
+    },
+    async milkOrder(orderCnt) {
+      //요기는 우유 오더~
+      this.stocks[2].inStock = this.stocks[2].inStock + orderCnt;
+
+      try {
+        const response = await axios.post("http://localhost:3000/orderMilk", {
+          updateMilk: this.stocks[2].inStock,
+        });
+        if (response.data.success) {
+          // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
+          console.log("milk order success:", response);
+          alert("우유 주문이 완료되었습니다!");
+        } else {
+          // 서버에서 수량 증가 실패 메시지 반환
+          console.error("milk order failed", response.data.message);
+          alert("우유 주문 실패: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error milk order ", error);
+        alert("우유 주문 실패.");
+      }
+      this.orderQuantity.milk = "";
+    },
+    async coffeeOrder(orderCnt) {
+      //요기는 커피오더~
+      this.stocks[3].inStock = this.stocks[3].inStock + orderCnt;
+
+      try {
+        const response = await axios.post("http://localhost:3000/orderCoffee", {
+          updateBeans: this.stocks[3].inStock,
+        });
+        if (response.data.success) {
+          // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
+          console.log("coffee order  success:", response);
+          alert("원두 주문이 완료되었습니다!");
+        } else {
+          // 서버에서 수량 증가 실패 메시지 반환
+          console.error("coffee order failed", response.data.message);
+          alert("커피 주문 실패: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error coffee order ", error);
+        alert("커피 주문 실패.");
+      }
+      this.orderQuantity.coffee = "";
+    },
     async fetchStockData() {
       try {
         const response = await axios.get("http://localhost:3000/stock");
         this.stocks = response.data;
-        console.log(this.stocks[3].inStock);
         console.log("데이터 불러오기 성공:", this.stocks);
       } catch (error) {
         console.error("데이터 불러오기 실패:", error);
       }
     },
   },
-
-  //재고 입고
-  async updateStock(name) {
-    let orderQuantity = 0; // 주문 수량 변수 초기화
-
-    // 조건에 따라 주문 수량 설정
-    if (name === "원두") {
-      orderQuantity = this.orderQuantity.coffee;
-      console.log;
-    }
-    if (name === "물") {
-      orderQuantity = this.orderQuantity.water;
-    }
-    if (name === "우유") {
-      orderQuantity = this.orderQuantity.milk;
-    }
-    if (name === "시럽") {
-      orderQuantity = this.orderQuantity.syrup;
-    }
-    try {
-      const response = await axios.post("http://localhost:3000/stockupdate", {
-        itemName: name, // 아이템 이름
-        orderQuantity: orderQuantity, // 주문 수량
-      });
-      console.log("데이터 업데이트 성공:", response.data);
-    } catch (error) {
-      console.error("데이터 업데이트 실패:", error);
-    }
-  },
-
-  drawAllCharts() {
+  orderItem(item, quantity) {
+    this.stocks[item] += Number(quantity);
     this.drawBarChart();
-  },
-  drawBarChart() {
-    const data = google.visualization.arrayToDataTable([
-      ["Element", "Density", { role: "style" }],
-      ["원두", this.stocks[3].inStock, "#3F1F25"],
-      ["우유", this.stocks[2].inStock, "#EBB9C3"],
-      ["생수", this.stocks[1].inStock, "#78FFFF"],
-      ["시럽", this.stocks[0].inStock, "color: #F7CD4F"],
-    ]);
-
-    const options = {
-      title: "음료 관련 재고현황",
-      titleTextStyle: {
-        color: "#4a4a4a", // specifying font color
-        fontName: "Arial",
-        fontSize: 20, // or use your preferred size
-        bold: true, // true or false
-      },
-      bar: { groupWidth: "95%" },
-      legend: { position: "none" },
-      hAxis: {
-        textStyle: {
-          color: "#4a4a4a",
-          fontName: "Arial",
-          fontSize: 14,
-        },
-      },
-      vAxis: {
-        textStyle: {
-          color: "#4a4a4a",
-          fontName: "Arial",
-          fontSize: 14,
-        },
-      },
-    };
-
-    const chart = new google.visualization.BarChart(
-      document.getElementById("barChart")
-    );
-    chart.draw(data, options);
-  },
-  watch: {
-    orderQuantity: {
-      // 객체 내부의 하위 속성들도 감시할 수 있음
-      deep: true,
-      // 변경될 때 실행할 콜백 함수
-      handler(newVal, oldVal) {
-        console.log("orderQuantity가 변경되었습니다.");
-        console.log("새 값:", newVal);
-        console.log("이전 값:", oldVal);
-      },
-    },
+    alert("주문이 완료되었습니다.");
+    this.orderQuantity[item] = "";
   },
 };
 </script>
@@ -321,5 +322,30 @@ export default {
 }
 .order input[type="button"]:hover {
   background-color: #747c74;
+}
+
+.moving-panda {
+  position: relative;
+  animation: moveLeftRight 15s infinite; /* 6초 동안 반복 */
+}
+
+@keyframes moveLeftRight {
+  0%,
+  100% {
+    transform: scaleX(1); /* 시작과 끝에서 원래 방향 */
+    left: 0; /* 시작과 끝 위치 */
+  }
+  25% {
+    transform: scaleX(1); /* 오른쪽 끝으로 걸어갈 때 원래 방향 */
+    left: 300px; /* 오른쪽 끝 위치 */
+  }
+  50% {
+    transform: scaleX(-1); /* 뒤집힌 상태로 시작 */
+    left: 300px; /* 오른쪽 끝에서 시작 */
+  }
+  75% {
+    transform: scaleX(-1); /* 뒤집힌 상태로 걸어감 */
+    left: 0; /* 왼쪽 끝으로 걸어옴 */
+  }
 }
 </style>
