@@ -45,6 +45,7 @@ export default {
       //테스트용
       // cartItems: [],
       selectedItems: [],
+      orderNum: 0
     };
   },
 
@@ -125,9 +126,70 @@ export default {
     //   }
     // },
 
-    placeOrder() {
-      // 예: 주문 정보를 서버에 전송하는 로직
-      alert("주문이 완료되었습니다!");
+    async placeOrder() {
+
+      await this.findMyOrderNum();
+      await this.addUserOrder(this.orderNum);
+      console.log("유저오더 끝");
+      await this.addOrderDetail(this.orderNum);
+      this.delCartTable();
+      alert("주문이 완료되었습니다.");
+      this.cartItems = '';
+      this.$store.commit("resetMenu");
+    },
+
+    async findMyOrderNum() {
+      try {
+        const res = await axios.get("http://localhost:3000/findmyordernum");
+        this.orderNum = res.data.orderNo + 1;
+        console.log(this.orderNum);
+      } catch (error) {
+        console.error('Failed to find order number:', error);
+      }
+    },
+
+    async addUserOrder(orderNum) {
+      let obj = {
+        userId: this.userId,
+        orderNum: orderNum
+      };
+      
+      try {
+        const res = await axios.post("http://localhost:3000/adduserorder", obj);
+        console.log("Response from server:", res.data);
+      } catch (error) {
+        console.error('Failed to add user order:', error);
+      }
+      console.log("유저오더 클라이언트끝");
+    },
+
+    async addOrderDetail(orderNum) {
+      console.log("오더디테일 시작");
+      let obj = {
+        userId: this.userId,
+        orderNum: orderNum
+      };
+      try {
+        const res = await axios.post("http://localhost:3000/addorderdetail", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error('Failed to add user order:', error);
+      }
+      console.log("오더디테일 끝");
+    },
+
+    delCartTable() {
+      console.log("장바구니 삭제 시작")
+      let obj = {
+        userId: this.userId
+      };
+      try {
+        const res = axios.post("http://localhost:3000/delcart", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error('Failed to delete cart:', error);
+      }
+      console.log("장바구니 삭제 끝")
     },
 
     async increaseQuantity(item) {

@@ -111,7 +111,7 @@
                   </button>
                 </div>
                 <div>
-                  <button type="button" class="btn btn-light" style="margin-right: -10px" @click="addCart">
+                  <button type="button" class="btn btn-light" style="margin-right: -10px" @click="ordering">
                     장바구니 담기
                   </button>
                   <!-- <button type="button" class="btn btn-light">바보 결제</button> -->
@@ -210,18 +210,18 @@ export default {
         return;
       }
 
-      // const isMenuSame = await this.isSameMenu(menuId);
+      const isMenuSame = await this.isSameMenu(this.menuId);
       
-      // console.log(isMenuSame, '입니다.');
+      console.log(isMenuSame, '입니다.');
 
-      // if (!isMenuSame) {
-      //   //처음 추가할때
-      //   this.cartNew(menuId);
-      //   this.$store.dispatch('addNewItemToCart');
-      // } else {
-      //   //이미 있는 메뉴일때
-      //   this.cartAdd(menuId);
-      // }
+      if (!isMenuSame) {
+        //처음 추가할때
+        this.cartNew(this.menuId);
+        this.$store.dispatch('addNewItemToCart');
+      } else {
+        //이미 있는 메뉴일때
+        this.cartAdd(this.menuId);
+      }
 
       alert("장바구니에 추가되었습니다.");
 

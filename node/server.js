@@ -465,6 +465,43 @@ app.post("/cartadd", (req, res) => {
 });
 
 
+/////////////////////다중컵 요청 처리하기///////////////////////////////////////장바구니 추가시 첫추가 메뉴인경우//////////////////
+app.post("/cartnewcups", (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let menuId = data.menuId;
+  let cups = data.cups;
+
+  let query = "insert into cart values (?, ?, ?)";
+
+  connection.query(query, [userId, menuId, cups], (err, result, fields) => {
+    if (err) throw err;
+
+    console.log(result);
+  });
+});
+
+
+/////////////////////다중컵 요청 처리하기///////////////////////////////////////장바구니 추가시 중복 메뉴인경우//////////////////
+app.post("/cartaddcups", (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let menuId = data.menuId;
+  let cups = data.cups;
+
+  let query =
+    "update cart set cartCnt = (select cartCnt from (select * from cart where userid= ? and menuId= ? ) as cnt) + ? where userid= ? and menuId= ?";
+
+  connection.query(
+    query,
+    [userId, menuId, cups, userId, menuId],
+    (err, result, fields) => {
+      if (err) throw err;
+
+      console.log(result);
+    }
+  );
+});
 
 
 
@@ -628,3 +665,78 @@ app.post("/userInfoList", async (req, res) => {
     }
   });
 });
+
+
+
+/////////////////////////////주문로직/////////////////////////////
+
+app.get('/findmyordernum', (req,res) => {
+  connection.query('select orderNo from userorder order by orderNo desc limit 1', (err, rows) => {
+      if(err) throw err;
+      if(rows[0]) {
+          // console.log(rows[0]);
+          res.json(rows[0]);
+      } else {
+        res.json({ orderNo : 0 })
+      }
+  })
+})
+
+app.post('/adduserorder', (req, res) => {
+  let data = req.body;
+  let userId = data.userId;
+  let orderNum = data.orderNum;
+
+  let query = 'insert into userorder (orderNo, userId, orderState) values (?, ?, ?)';
+  connection.query(query, [orderNum, userId, 1], (err, result) => {
+    if (err) {
+      console.error("Error in user order insert:", err);
+      res.status(500).json({ success: false, message: 'Database error' });
+      return; // 중요: 에러 발생 시 여기서 처리를 멈추고 클라이언트에게 응답
+    }
+    console.log("User order added:", result);
+    res.json({ success: true, message: 'User order successfully added', data: result });
+    console.log("유저오더서버끝");
+  });
+});
+
+app.post('/addorderdetail', (req, res) => {
+
+  let data = req.body;
+  let userId = data.userId;
+  let orderNum = data.orderNum;
+  console.log('하이');
+  console.log(userId, orderNum);
+
+  let query = 'INSERT INTO orderdetail (orderNo, menuId, orderCnt) SELECT ?, menuId, cartCnt FROM cart WHERE userId = ?';
+  console.log(query);
+
+  connection.query(query, [orderNum, userId], (err, result) => {
+    if (err) {
+      console.error("Error in user order insert:", err);
+      res.status(500).json({ success: false, message: 'Database error' });
+      return; // 중요: 에러 발생 시 여기서 처리를 멈추고 클라이언트에게 응답
+    }
+    console.log("addorderdetail:", result);
+    res.json({ success: true, message: 'addorderdetail complete', data: result });
+  })
+})
+
+app.post('/delcart', (req, res) => {
+
+  let data = req.body;
+  let userId = data.userId;
+
+  let query = 'delete from cart where userId = ?';
+  console.log(query);
+
+  connection.query(query, [userId], (err, result, fields) => {
+    if (err) {
+      console.error("Error in delete cart:", err);
+      res.status(500).json({ success: false, message: 'Database error' });
+      return; // 중요: 에러 발생 시 여기서 처리를 멈추고 클라이언트에게 응답
+    }
+    console.log("delete cart:", result);
+    res.json({ success: true, message: 'delete cart complete', data: result });
+  })
+})
