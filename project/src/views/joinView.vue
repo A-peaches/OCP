@@ -173,15 +173,23 @@ export default {
     signIn(event) {
       event.preventDefault();
       this.checkInput();
+
+
+      if (this.isCheck == 0) {
+        alert("ID 중복체크를 진행해주세요.");
+        return;
+      }
+
+      if (this.userPw != this.userPw2) {
+        alert("비밀번호가 서로 다릅니다.");
+        return;
+      }
+
       if(!this.isInput) {
         alert("입력항목을 빠짐없이 기입해주세요.");
         return;
       }
 
-      if (this.isCheck == 0) {
-        alert("ID 중복체크를 진행해주세요.");
-        return;
-      } 
 
       //회원가입로직진행
         let obj = {};
