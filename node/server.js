@@ -814,6 +814,8 @@ LEFT JOIN
 LEFT JOIN
     menu ON orderdetail.menuID = menu.menuID
 GROUP BY
+    DATE_FORMAT(userorder.orderDate, '%Y%m%d')
+    order BY
     DATE_FORMAT(userorder.orderDate, '%Y%m%d');
   `;
   connection.query(query, (error, results, fields) => {
