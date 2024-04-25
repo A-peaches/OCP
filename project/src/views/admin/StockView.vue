@@ -333,7 +333,7 @@ export default {
 
 .moving-panda {
   position: relative;
-  animation: moveLeftRight 15s infinite; /* 6초 동안 반복 */
+  animation: moveLeftRight 10s infinite; /* 6초 동안 반복 */
 }
 
 @keyframes moveLeftRight {
