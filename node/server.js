@@ -329,7 +329,7 @@ app.post("/orderState", async (req, res) => {
 
   // console.log(userId);
   const query =
-    "SELECT c.orderNo, c.orderDate, m.menuName, c.orderCnt, m.menuPrice FROM ( SELECT A.orderNo, A.orderDate, menuId, B.orderCnt, A.userId FROM userorder AS A LEFT OUTER JOIN orderdetail AS B ON A.orderNo =B.orderNo WHERE A.userId = ? AND A.orderDate = ( SELECT MAX(orderDate) FROM userorder WHERE userId = ? AND orderNo = A.orderNo ) ) AS c LEFT OUTER JOIN menu AS m ON c.menuId = m.menuId";
+    "SELECT c.orderNo, c.orderDate, m.menuName, c.orderCnt, m.menuPrice FROM ( SELECT A.orderNo, A.orderDate, menuId, B.orderCnt, A.userId FROM userorder AS A LEFT OUTER JOIN orderdetail AS B ON A.orderNo =B.orderNo WHERE A.userId = ? AND A.orderDate = ( SELECT MAX(orderDate) FROM userorder WHERE userId = ? AND orderNo = A.orderNo ) ) AS c LEFT OUTER JOIN menu AS m ON c.menuId = m.menuId order by c.orderDate desc";
 
   connection.query(query, [userId, userId], async (error, results, fields) => {
     if (error) {
@@ -360,7 +360,7 @@ app.post("/orderList", async (req, res) => {
 
   // console.log(userId);
   const query =
-    "select orderNo,orderDate,menuName,orderCnt,menuPrice from (SELECT A.orderNo , orderDate, menuId, orderCnt,userId from userorder AS A left outer join orderdetail AS B on A.orderNo=B.orderNo) as c left outer join menu on c.menuId = menu.menuId where userId = ?";
+    "select orderNo,orderDate,menuName,orderCnt,menuPrice from (SELECT A.orderNo , orderDate, menuId, orderCnt,userId from userorder AS A left outer join orderdetail AS B on A.orderNo=B.orderNo) as c left outer join menu on c.menuId = menu.menuId where userId = ? order by orderDate desc";
 
   connection.query(query, [userId], async (error, results, fields) => {
     if (error) {
@@ -854,13 +854,14 @@ app.post("/stockchange", (req, res) => {
   let query = `UPDATE stock SET outStock = CASE 
                   WHEN stockName = '원두' THEN outStock + (SELECT SUM(m.beans * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
                   WHEN stockName = '우유' THEN outStock + (SELECT SUM(m.milk * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
-                  WHEN stockName = '생수' THEN outStock + (SELECT SUM(m.water * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+                  WHEN stockName = '생수' THEN outStock + (SELECT SUM(m.water * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?)
+                  WHEN stockName = '시럽' THEN outStock + (SELECT SUM(m.sugar * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?)
               END 
-              WHERE stockName IN ('원두', '우유', '생수')`;
+              WHERE stockName IN ('원두', '우유', '생수', '시럽')`;
 
   connection.query(
     query,
-    [orderNum, orderNum, orderNum],
+    [orderNum, orderNum, orderNum, orderNum],
     (err, result, fields) => {
       if (err) {
         console.error("Error in stockchange:", err);
