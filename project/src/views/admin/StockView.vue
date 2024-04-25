@@ -185,6 +185,7 @@ export default {
     // 조건에 따라 주문 수량 설정
     if (name === "원두") {
       orderQuantity = this.orderQuantity.coffee;
+      console.log;
     }
     if (name === "물") {
       orderQuantity = this.orderQuantity.water;

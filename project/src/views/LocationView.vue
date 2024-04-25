@@ -4,7 +4,7 @@
     <p class="title">오시는 길</p>
     <p class="txt_sub">서울특별시 서초구 서초대로74길33 비트빌 3층</p>
     <hr />
-    <KakaoMap/>
+    <KakaoMap />
     <hr />
     <p class="txt_sub">
       <b>지하철</b> : <br />지하철 2호선/신분당선 강남역 5번 출구 도보 3분
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import KakaoMap from "@/components/KakaoMap.vue"
+import KakaoMap from "@/components/KakaoMap.vue";
 export default {
   components: {
     KakaoMap,

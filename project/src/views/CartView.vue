@@ -106,7 +106,7 @@ export default {
         if (response.data.success) {
           console.log("Item removed successfully:", response);
           this.cartItems.splice(index, 1); // 서버에서 삭제 성공 후 클라이언트에서 삭제
-          this.$store.dispatch('decreaseItemToCart');
+          this.$store.dispatch("decreaseItemToCart");
         } else {
           console.error("Failed to remove item", response.data.message);
           alert("장바구니 항목 삭제에 실패했습니다: " + response.data.message);
@@ -137,7 +137,7 @@ export default {
           {
             userId: this.userId,
             menuId: item.menuId,
-            cartCnt: item.cartCnt + 1, // 감소된 수량을 전송
+            cartCnt: item.cartCnt + 1, // 증가된 수량을 전송
           }
         );
         if (response.data.success) {

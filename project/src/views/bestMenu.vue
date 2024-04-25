@@ -209,7 +209,11 @@ export default {
   padding: 0 80px;
 }
 .card-img-bottom {
-  border-radius: 5px; /* 상하 모든 모서리에 라운드 처리 */
+  width: 100%; /* 이미지를 카드 너비에 맞게 조정 */
+  height: 270px; /* 이미지의 높이를 고정 */
+  object-fit: cover; /* 이미지 비율을 유지하면서 요소에 맞게 조절 */
+  border-top-left-radius: 5px; /* 카드 디자인에 맞게 상단 모서리를 둥글게 */
+  border-top-right-radius: 5px;
 }
 .card_best {
   width: 18rem; /* 너비 설정 */

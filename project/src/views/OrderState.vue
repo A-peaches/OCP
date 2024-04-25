@@ -37,6 +37,7 @@
     <!-- 주문 상세에는 최근 주문 내역의 order번호 중 LIMIT 1 하여 불러오기.-->
     <div class="text-center" style="margin-top: 100px">
       <h3 class="my-4">전자 영수증</h3>
+      <div v-if="orderList.length > 0">
       <table class="table table-striped" >
         <thead>
           <tr>
@@ -57,6 +58,10 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div v-else >
+        <p>주문한 내역이 없습니다!</p>
+      </div>
     </div>
   </div>
 </template>

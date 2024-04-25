@@ -23,6 +23,9 @@ const store = createStore({
     },
     decreaseMenu(state) {
       state.cart.cartCnt--; // 장바구니 항목 수 감소
+    },
+    resetMenu(state) {
+      state.cart.cartCnt = 0; // 장바구니 항목 수 초기화
     }
   },
   actions: {
