@@ -111,14 +111,10 @@
                   </button>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    class="btn btn-light"
-                    style="margin-right: 20px"
-                  >
-                    담기
+                  <button type="button" class="btn btn-light" style="margin-right: -10px" @click="ordering">
+                    장바구니 담기
                   </button>
-                  <button type="button" class="btn btn-light">바로 결제</button>
+                  <!-- <button type="button" class="btn btn-light">바보 결제</button> -->
                 </div>
               </div>
             </div>
@@ -164,8 +160,73 @@ export default {
   },
   created() {
     this.fetchMenuDetail();
+    this.userIdLoad();
   },
   methods: {
+    userIdLoad() {
+      this.userId = this.$store.getters.getUserId;
+    },
+
+    async isSameMenu(menuId) {
+      let obj = {
+        userId: this.userId,
+        menuId: menuId
+      };
+
+      try {
+        const res = await axios.post("http://localhost:3000/samecheck", obj);
+        this.ischeck = res.data.exists;
+        return this.ischeck; // 함수에서 결과값을 반환합니다.
+      } catch (error) {
+        console.error('에러발생', error);
+        return false; // 에러가 발생했을 때 false를 반환합니다.
+      }
+    },
+
+    cartNew(menuId) {
+      let obj = {userId: this.userId, menuId: menuId, cups: this.cups};
+
+      axios.post("http://localhost:3000/cartnewcups", obj)
+      .then(res => {
+        console.log(res.data);
+      });
+    },
+    
+    cartAdd(menuId) {
+      let obj = {userId: this.userId, menuId: menuId, cups: this.cups};
+
+      axios.post("http://localhost:3000/cartaddcups", obj)
+      .then(res => {
+        console.log(res.data);
+      });
+    },
+
+    async ordering() {
+      this.menuId = this.$route.params.id;
+
+      if (!this.userId) {
+        alert('비회원은 주문할 수 없습니다!')
+        this.$router.push('/login'); // 로그인 페이지로 리다이렉트
+        return;
+      }
+
+      const isMenuSame = await this.isSameMenu(this.menuId);
+      
+      console.log(isMenuSame, '입니다.');
+
+      if (!isMenuSame) {
+        //처음 추가할때
+        this.cartNew(this.menuId);
+        this.$store.dispatch('addNewItemToCart');
+      } else {
+        //이미 있는 메뉴일때
+        this.cartAdd(this.menuId);
+      }
+
+      alert("장바구니에 추가되었습니다.");
+
+    },
+
     shotMinus() {
       if (this.shotadd > 0) {
         this.shotadd--;

@@ -47,6 +47,7 @@ export default {
       //테스트용
       // cartItems: [],
       selectedItems: [],
+      orderNum: 0
     };
   },
 
@@ -128,7 +129,70 @@ export default {
     // },
 
     async placeOrder() {
+
       this.$refs.kakaoPay.openModal();
+      await this.findMyOrderNum();
+      await this.addUserOrder(this.orderNum);
+      console.log("유저오더 끝");
+      await this.addOrderDetail(this.orderNum);
+      this.delCartTable();
+      this.cartItems = '';
+      
+    },
+
+    async findMyOrderNum() {
+      try {
+        const res = await axios.get("http://localhost:3000/findmyordernum");
+        this.orderNum = res.data.orderNo + 1;
+        console.log(this.orderNum);
+      } catch (error) {
+        console.error('Failed to find order number:', error);
+      }
+    },
+
+    async addUserOrder(orderNum) {
+      let obj = {
+        userId: this.userId,
+        orderNum: orderNum
+      };
+      
+      try {
+        const res = await axios.post("http://localhost:3000/adduserorder", obj);
+        console.log("Response from server:", res.data);
+      } catch (error) {
+        console.error('Failed to add user order:', error);
+      }
+      console.log("유저오더 클라이언트끝");
+    },
+
+    async addOrderDetail(orderNum) {
+      console.log("오더디테일 시작");
+      let obj = {
+        userId: this.userId,
+        orderNum: orderNum
+      };
+      try {
+        const res = await axios.post("http://localhost:3000/addorderdetail", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error('Failed to add user order:', error);
+      }
+      console.log("오더디테일 끝");
+    },
+
+    delCartTable() {
+      console.log("장바구니 삭제 시작")
+      let obj = {
+        userId: this.userId
+      };
+      try {
+        const res = axios.post("http://localhost:3000/delcart", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error('Failed to delete cart:', error);
+      }
+      console.log("장바구니 삭제 끝")
+      
     },
 
 

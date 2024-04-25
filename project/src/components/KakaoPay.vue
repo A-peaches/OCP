@@ -2,7 +2,7 @@
     <div>
       <!-- Modal -->
       <div class="modal fade" id="KakaoPayModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" ref="kakaoPayModal">
-        <div class="modal-dialog"> <!-- 모달 사이즈를 large로 설정 -->
+        <div class="modal-dialog modal-lg"> <!-- 모달 사이즈를 large로 설정 -->
           <div class="modal-content" style="height: 80vh;"> <!-- 모달 내용물의 높이 설정 -->
             <div class="modal-header">
               <h5 class="modal-title" id="modalLabel">KaKaoPay 결제</h5>
@@ -45,6 +45,7 @@
         this.$refs.kakaoPayModal.classList.remove('show');
         this.$refs.kakaoPayModal.style.display = 'none';
         alert('결제가 완료되었습니다!')
+        this.$store.commit("resetMenu");
       }
 
     },
