@@ -15,7 +15,7 @@
             text-align: center;
           "
         >
-        <div style="margin-right: 100px">
+          <div style="margin-right: 100px">
             <img src="@/assets/water.png" alt="..." style="width: 80px" />
             <h4>생수</h4>
             <input
@@ -23,7 +23,7 @@
               v-model.number="orderQuantity.water"
               style="width: 100px; margin-bottom: 10px"
             />
-            <br /> 
+            <br />
             <input
               type="button"
               value="주문하기"
@@ -66,7 +66,7 @@
             />
             <br />
           </div>
-          <div >
+          <div>
             <img src="@/assets/coffeebean.png" alt="..." style="width: 80px" />
             <h4>원두</h4>
             <input
@@ -74,7 +74,7 @@
               v-model.number="orderQuantity.coffee"
               style="width: 100px; margin-bottom: 10px"
             />
-            <br /> 
+            <br />
             <input
               type="button"
               value="주문하기"
@@ -83,17 +83,14 @@
             />
             <br />
           </div>
-          
-          
-         
         </div>
       </div>
       <div class="mt-5">
-      <p> * 주문은 10단위로 할 수 있습니다. </p>
-    </div>
+        <p>* 주문은 10단위로 할 수 있습니다.</p>
+      </div>
     </div>
     <div class="order-controls">
-      <h2 class="text-center"> 재고 조회</h2>
+      <h2 class="text-center">재고 조회</h2>
       <hr />
       <br />
       <table class="table table-hover">
@@ -107,7 +104,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in  stocksWithRemaining" :key="index">
+          <tr v-for="(item, index) in stocksWithRemaining" :key="index">
             <th scope="row">{{ index + 1 }}</th>
             <td>{{ item.stockName }}</td>
             <td>{{ item.inStock }}</td>
@@ -117,8 +114,12 @@
         </tbody>
       </table>
     </div>
-    <div style="margin-top:50px; margin-left:230px">
-      <img src="@/assets/stockpanda.png" style="height:30%; width:30%" class="moving-panda">
+    <div style="margin-top: 50px; margin-left: 230px">
+      <img
+        src="@/assets/stockpanda.png"
+        style="height: 30%; width: 30%"
+        class="moving-panda"
+      />
     </div>
   </div>
 </template>
@@ -145,30 +146,27 @@ export default {
     stocksWithRemaining: function () {
       return this.stocks.map((stock) => ({
         ...stock,
-        remainingStock: parseInt(stock.inStock, 10) - parseInt(stock.outStock, 10)  // 문자열을 정수로 변환
-        
+        remainingStock:
+          parseInt(stock.inStock, 10) - parseInt(stock.outStock, 10), // 문자열을 정수로 변환
       }));
-
     },
   },
   mounted() {
     this.fetchStockData();
   },
   methods: {
-    async syrupOrder(orderCnt){
+    async syrupOrder(orderCnt) {
       //여기는 시럽 오더~
-      this.stocks[1].inStock = this.stocks[1].inStock+orderCnt;
+      this.stocks[1].inStock = this.stocks[1].inStock + orderCnt;
 
       try {
-        const response = await axios.post(
-          "http://localhost:3000/orderSyrup",
-          { updateSyrup : this.stocks[1].inStock}
-        );
+        const response = await axios.post("http://localhost:3000/orderSyrup", {
+          updateSyrup: this.stocks[1].inStock,
+        });
         if (response.data.success) {
           // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
           console.log("Syrup order success:", response);
-          alert('시럽 주문이 완료되었습니다!');
-
+          alert("시럽 주문이 완료되었습니다!");
         } else {
           // 서버에서 수량 증가 실패 메시지 반환
           console.error("Syrup order failed", response.data.message);
@@ -178,21 +176,20 @@ export default {
         console.error("Error Syrup order ", error);
         alert("시럽 주문 실패.");
       }
-      this.orderQuantity.syrup = '';
+      this.orderQuantity.syrup = "";
     },
     async waterOrder(orderCnt) {
       //요기는 생수 오더~
-      this.stocks[0].inStock = this.stocks[0].inStock+orderCnt;
+      this.stocks[0].inStock = this.stocks[0].inStock + orderCnt;
 
       try {
-        const response = await axios.post(
-          "http://localhost:3000/orderWater",
-          { updateWater : this.stocks[0].inStock}
-        );
+        const response = await axios.post("http://localhost:3000/orderWater", {
+          updateWater: this.stocks[0].inStock,
+        });
         if (response.data.success) {
           // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
           console.log("Water order success:", response);
-          alert('생수 주문이 완료되었습니다!');
+          alert("생수 주문이 완료되었습니다!");
         } else {
           // 서버에서 수량 증가 실패 메시지 반환
           console.error("Water order failed", response.data.message);
@@ -202,21 +199,20 @@ export default {
         console.error("Error Water order ", error);
         alert("물 주문 실패.");
       }
-      this.orderQuantity.water = '';
+      this.orderQuantity.water = "";
     },
-    async milkOrder(orderCnt){
+    async milkOrder(orderCnt) {
       //요기는 우유 오더~
-      this.stocks[2].inStock = this.stocks[2].inStock+orderCnt;
+      this.stocks[2].inStock = this.stocks[2].inStock + orderCnt;
 
       try {
-        const response = await axios.post(
-          "http://localhost:3000/orderMilk",
-          { updateMilk : this.stocks[2].inStock}
-        );
+        const response = await axios.post("http://localhost:3000/orderMilk", {
+          updateMilk: this.stocks[2].inStock,
+        });
         if (response.data.success) {
           // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
           console.log("milk order success:", response);
-          alert('우유 주문이 완료되었습니다!');
+          alert("우유 주문이 완료되었습니다!");
         } else {
           // 서버에서 수량 증가 실패 메시지 반환
           console.error("milk order failed", response.data.message);
@@ -226,22 +222,20 @@ export default {
         console.error("Error milk order ", error);
         alert("우유 주문 실패.");
       }
-      this.orderQuantity.milk = '';
+      this.orderQuantity.milk = "";
     },
-    async coffeeOrder(orderCnt){
+    async coffeeOrder(orderCnt) {
       //요기는 커피오더~
-      this.stocks[3].inStock = this.stocks[3].inStock+orderCnt;
+      this.stocks[3].inStock = this.stocks[3].inStock + orderCnt;
 
       try {
-        const response = await axios.post(
-          "http://localhost:3000/orderCoffee",
-          { updateBeans : this.stocks[3].inStock}
-
-        );
+        const response = await axios.post("http://localhost:3000/orderCoffee", {
+          updateBeans: this.stocks[3].inStock,
+        });
         if (response.data.success) {
           // 서버 측 업데이트 성공 후 클라이언트 측 데이터 업데이트
           console.log("coffee order  success:", response);
-          alert('원두 주문이 완료되었습니다!');
+          alert("원두 주문이 완료되었습니다!");
         } else {
           // 서버에서 수량 증가 실패 메시지 반환
           console.error("coffee order failed", response.data.message);
@@ -251,8 +245,7 @@ export default {
         console.error("Error coffee order ", error);
         alert("커피 주문 실패.");
       }
-      this.orderQuantity.coffee = '';
-
+      this.orderQuantity.coffee = "";
     },
     async fetchStockData() {
       try {
@@ -269,8 +262,8 @@ export default {
     this.drawBarChart();
     alert("주문이 완료되었습니다.");
     this.orderQuantity[item] = "";
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -337,7 +330,8 @@ export default {
 }
 
 @keyframes moveLeftRight {
-  0%, 100% {
+  0%,
+  100% {
     transform: scaleX(1); /* 시작과 끝에서 원래 방향 */
     left: 0; /* 시작과 끝 위치 */
   }

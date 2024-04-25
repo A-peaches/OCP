@@ -30,14 +30,14 @@
     </p>
     <div class="cart-buttons">
       <button class="btn btn-secondary" @click="placeOrder">주문하기</button>
-      <KakaoPay ref="kakaoPay"/>
+      <KakaoPay ref="kakaoPay" />
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import KakaoPay from '@/components/KakaoPay.vue';
+import KakaoPay from "@/components/KakaoPay.vue";
 
 export default {
   data() {
@@ -47,7 +47,7 @@ export default {
       //테스트용
       // cartItems: [],
       selectedItems: [],
-      orderNum: 0
+      orderNum: 0,
     };
   },
 
@@ -109,7 +109,7 @@ export default {
         if (response.data.success) {
           console.log("Item removed successfully:", response);
           this.cartItems.splice(index, 1); // 서버에서 삭제 성공 후 클라이언트에서 삭제
-          this.$store.dispatch('decreaseItemToCart');
+          this.$store.dispatch("decreaseItemToCart");
         } else {
           console.error("Failed to remove item", response.data.message);
           alert("장바구니 항목 삭제에 실패했습니다: " + response.data.message);
@@ -129,15 +129,14 @@ export default {
     // },
 
     async placeOrder() {
-
       this.$refs.kakaoPay.openModal();
       await this.findMyOrderNum();
       await this.addUserOrder(this.orderNum);
       console.log("유저오더 끝");
       await this.addOrderDetail(this.orderNum);
       this.delCartTable();
-      this.cartItems = '';
-      
+      this.stockChange(this.orderNum);
+      this.cartItems = "";
     },
 
     async findMyOrderNum() {
@@ -146,21 +145,21 @@ export default {
         this.orderNum = res.data.orderNo + 1;
         console.log(this.orderNum);
       } catch (error) {
-        console.error('Failed to find order number:', error);
+        console.error("Failed to find order number:", error);
       }
     },
 
     async addUserOrder(orderNum) {
       let obj = {
         userId: this.userId,
-        orderNum: orderNum
+        orderNum: orderNum,
       };
-      
+
       try {
         const res = await axios.post("http://localhost:3000/adduserorder", obj);
         console.log("Response from server:", res.data);
       } catch (error) {
-        console.error('Failed to add user order:', error);
+        console.error("Failed to add user order:", error);
       }
       console.log("유저오더 클라이언트끝");
     },
@@ -169,32 +168,47 @@ export default {
       console.log("오더디테일 시작");
       let obj = {
         userId: this.userId,
-        orderNum: orderNum
+        orderNum: orderNum,
       };
       try {
-        const res = await axios.post("http://localhost:3000/addorderdetail", obj);
+        const res = await axios.post(
+          "http://localhost:3000/addorderdetail",
+          obj
+        );
         console.log(res.data);
       } catch (error) {
-        console.error('Failed to add user order:', error);
+        console.error("Failed to add user order:", error);
       }
       console.log("오더디테일 끝");
     },
 
-    delCartTable() {
-      console.log("장바구니 삭제 시작")
+    stockChange(orderNum) {
+      console.log("재고삭제시작");
       let obj = {
-        userId: this.userId
+        orderNum: orderNum,
+      };
+      try {
+        const res = axios.post("http://localhost:3000/stockchange", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Failed to change stock:", error);
+      }
+      console.log("재고삭제끝");
+    },
+
+    delCartTable() {
+      console.log("장바구니 삭제 시작");
+      let obj = {
+        userId: this.userId,
       };
       try {
         const res = axios.post("http://localhost:3000/delcart", obj);
         console.log(res.data);
       } catch (error) {
-        console.error('Failed to delete cart:', error);
+        console.error("Failed to delete cart:", error);
       }
-      console.log("장바구니 삭제 끝")
-      
+      console.log("장바구니 삭제 끝");
     },
-
 
     async increaseQuantity(item) {
       try {
@@ -253,10 +267,10 @@ export default {
       }
     },
   },
-  components:{
-    KakaoPay
-  }
-}
+  components: {
+    KakaoPay,
+  },
+};
 </script>
 <style scoped>
 .cart-container {

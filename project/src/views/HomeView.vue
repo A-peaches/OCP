@@ -41,7 +41,7 @@
     transform: translateX(100%);
   }
   100% {
-    transform: translateX(35%);
+    transform: translateX(10%);
   }
 }
 
@@ -53,7 +53,7 @@
   bottom: 0;
   transform: translateX(100%);
   animation: slideInFromRight 3s forwards ease-out;  /* 애니메이션 실행 */
-  animation-delay: 2s;
+  animation-delay: 1s;
 }
 
 @keyframes slideIn {
