@@ -622,3 +622,51 @@ app.post("/userInfoList", async (req, res) => {
     }
   });
 });
+
+//재고 불러오기
+app.get("/stock", (req, res) => {
+  connection.query("SELECT * FROM stock", (error, results, fields) => {
+    if (error) {
+      console.error("Error fetching stock:", error);
+      res.status(500).json({ error: "Error fetching stock" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+//재고 입고량 추가
+app.post("/stockupdate", (req, res) => {
+  const { itemName, orderQuantity } = req.body;
+  console.log(orderQuantity);
+  // itemName에 따라 SQL 쿼리문 동적 생성
+  let sql = "";
+  switch (itemName) {
+    case "원두":
+      sql = `UPDATE stocks SET inStock = inStock + ${orderQuantity} WHERE stockName = '원두'`;
+      break;
+    case "물":
+      sql = `UPDATE stocks SET inStock = inStock + ${orderQuantity} WHERE stockName = '물'`;
+      break;
+    case "우유":
+      sql = `UPDATE stocks SET inStock = inStock + ${orderQuantity} WHERE stockName = '우유'`;
+      break;
+    case "시럽":
+      sql = `UPDATE stocks SET inStock = inStock + ${orderQuantity} WHERE stockName = '시럽'`;
+      break;
+    default:
+      res.status(400).json({ error: "잘못된 아이템 이름입니다." });
+      return;
+  }
+
+  // SQL 쿼리 실행
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error("재고 업데이트 오류:", err);
+      res.status(500).json({ error: "재고 업데이트에 실패했습니다." });
+      return;
+    }
+    console.log(`${itemName} 재고 업데이트 완료`);
+    res.status(200).json({ message: `${itemName} 재고 업데이트 완료` });
+  });
+});
