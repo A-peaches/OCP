@@ -136,6 +136,7 @@ export default {
       console.log("유저오더 끝");
       await this.addOrderDetail(this.orderNum);
       this.delCartTable();
+      this.stockChange(this.orderNum);
       this.cartItems = '';
       
     },
@@ -178,6 +179,20 @@ export default {
         console.error('Failed to add user order:', error);
       }
       console.log("오더디테일 끝");
+    },
+
+    stockChange(orderNum) {
+      console.log("재고삭제시작");
+      let obj = {
+        orderNum: orderNum
+      };
+      try {
+        const res = axios.post("http://localhost:3000/stockchange", obj);
+        console.log(res.data);
+      } catch (error) {
+        console.error('Failed to change stock:', error);
+      }
+      console.log("재고삭제끝");
     },
 
     delCartTable() {

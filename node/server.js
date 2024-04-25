@@ -672,6 +672,7 @@ app.post("/userInfoList", async (req, res) => {
 
 /////////////////////////////주문로직/////////////////////////////
 
+//주문번호 찾기
 app.get('/findmyordernum', (req,res) => {
   connection.query('select orderNo from userorder order by orderNo desc limit 1', (err, rows) => {
       if(err) throw err;
@@ -684,6 +685,7 @@ app.get('/findmyordernum', (req,res) => {
   })
 })
 
+//주문번호추가
 app.post('/adduserorder', (req, res) => {
   let data = req.body;
   let userId = data.userId;
@@ -702,6 +704,8 @@ app.post('/adduserorder', (req, res) => {
   });
 });
 
+
+//주문상세 추가
 app.post('/addorderdetail', (req, res) => {
 
   let data = req.body;
@@ -724,6 +728,7 @@ app.post('/addorderdetail', (req, res) => {
   })
 })
 
+//장바구니 삭제
 app.post('/delcart', (req, res) => {
 
   let data = req.body;
@@ -743,6 +748,48 @@ app.post('/delcart', (req, res) => {
   })
 })
 
+//재고사용량 추가
+app.post('/stockchange', (req, res) => {
+
+  let data = req.body;
+  let orderNum = data.orderNum;
+
+  let query = `UPDATE stock SET outStock = CASE 
+                  WHEN stockName = '원두' THEN outStock + (SELECT SUM(m.beans * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+                  WHEN stockName = '우유' THEN outStock + (SELECT SUM(m.milk * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+                  WHEN stockName = '생수' THEN outStock + (SELECT SUM(m.water * o.orderCnt) FROM orderdetail o JOIN menu m ON o.menuId = m.menuId WHERE o.orderNo = ?) 
+              END 
+              WHERE stockName IN ('원두', '우유', '생수')`;
+
+  connection.query(query, [orderNum, orderNum, orderNum], (err, result, fields) => {
+    if (err) {
+      console.error("Error in stockchange:", err);
+      res.status(500).json({ success: false, message: 'Database error' });
+      return; // 중요: 에러 발생 시 여기서 처리를 멈추고 클라이언트에게 응답
+    }
+    console.log("stockchange:", result);
+    res.json({ success: true, message: 'stockchange complete', data: result });
+  })
+})
+
+///////////////////////유저관리페이지/////////////////////
+
+app.get("/getuserlist", (req, res) => {
+  console.log("유저정보 요청 도달"); //까지 ok
+
+
+  try {
+    connection.query("select * from userinfo", (error, results, fields) => {
+      console.log('들어왔지롱');
+      // res.json(results);
+      res.status(200).json(results);
+      console.log(results);
+      });
+  } catch (error) {
+    console.error("Error executing query", error.stack);
+    res.status(500).send("Error fetching menus");
+  }
+});
 
 
 //재고 불러오기
