@@ -4,87 +4,83 @@
       <div class="intro">
         <h1>회원관리</h1>
         <hr />
-      </div>
+        <div>
+          검색 : 
+          <select v-model="searchType">
+            <option value="userId">ID</option>
+            <option value="userName">고객명</option>
+            <option value="nickName">닉네임</option>
+            <option value="phone">전화번호</option>
+          </select>&nbsp;
+          <input type="text" v-model="searchQuery" placeholder="검색" style="height:24.5px">
 
-      <div
-        style="
-          border: 1px gainsboro solid;
-          padding: 30px 15px 30px 15px;
-          border-radius: 5px;
-        "
-      >
-        <div style="text-align: left; display: inline-block">
-          <span style="font-size: 15pt; display: inline-block">고객검색</span
-          >&nbsp;&nbsp;&nbsp;
-          <input type="text" style="border-radius: 5px" />&nbsp;&nbsp;&nbsp;
-          <button>검색</button>
         </div>
-        <br /><br /><br />
+      </div>
+      <div style="border: 1px gainsboro solid; padding: 40px 20px 40px 20px; border-radius: 5px; margin-bottom: 40px;">
         <div>
           <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">ID</th>
+                <th scope="col">고객명</th>
+                <th scope="col">닉네임</th>
+                <th scope="col">전화번호</th>
+                <th scope="col">이메일</th>
+                <th scope="col">관리자 여부</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>
-                  <router-link
-                    to="/userdetail"
-                    class="nav-link"
-                    aria-current="page"
-                    style="h"
-                  >
-                    Mark</router-link
-                  >
-                </td>
-
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
+              <tr v-for="(user, index) in filteredUsers" :key="user.userId">
+                <th scope="row">{{ index + 1 }}</th>
+                <td>{{ user.userId }}</td>
+                <td>{{ user.userName }}</td>
+                <td>{{ user.nickName }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.is_admin ? 'Yes' : 'No' }}</td>
               </tr>
             </tbody>
           </table>
-          <div style="display: flex; justify-content: center">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
         </div>
       </div>
     </div>
   </div>
-  <router-view />
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+    data() {
+        return {
+            userList: [],
+            searchQuery: '',
+            searchType: 'userId'
+        };
+    },
+    created() {
+        this.fetchUsers();
+    },
+    computed: {
+        filteredUsers() {
+            return this.userList.filter((user) => {
+                return user[this.searchType].toString().toLowerCase().includes(this.searchQuery.toLowerCase());
+            });
+        }
+    },
+    methods: {
+        async fetchUsers() {
+            try {
+                const res = await axios.get("http://localhost:3000/getuserlist");
+                this.userList = res.data;
+            } catch (error) {
+                console.error("유저리스트 불러오기 오류", error);
+            }
+        }
+    }
+};
+</script>
+
 <style>
 .container {
   text-align: center;
