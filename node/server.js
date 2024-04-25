@@ -742,3 +742,123 @@ app.post('/delcart', (req, res) => {
     res.json({ success: true, message: 'delete cart complete', data: result });
   })
 })
+
+
+
+//재고 불러오기
+app.get("/stock", (req, res) => {
+    connection.query("SELECT * FROM stock", (error, results, fields) => {
+      if (error) {
+        console.error("Error fetching stock:", error);
+        res.status(500).json({ error: "Error fetching stock" });
+      } else {
+        res.status(200).json(results);
+      }
+    });
+  });
+
+
+
+  app.post('/orderCoffee', (req, res) => {
+    const updateBeans = req.body.updateBeans;
+
+    let query = `UPDATE stock set inStock = ? WHERE stockName='원두';`
+  
+    connection.query(query, [updateBeans], (err, result, fields) => {
+        if (err) {
+            console.error("database error :", err);
+            res.status(500).send("Internal Server Error");
+          } else {
+            if (result.affectedRows > 0) {
+                console.log("Updated rows:", result.affectedRows);
+              res.json({
+                success: true,
+              });
+            } else {
+              //없는경우
+              res.json({
+                success: false,
+                data: "None",
+              })
+            }
+        }
+    })
+});
+
+app.post('/orderMilk', (req, res) => {
+    const updateMilk = req.body.updateMilk;
+
+    let query = `UPDATE stock set inStock = ? WHERE stockName='우유';`
+  
+    connection.query(query, [updateMilk], (err, result, fields) => {
+        if (err) {
+            console.error("database error :", err);
+            res.status(500).send("Internal Server Error");
+          } else {
+            if (result.affectedRows > 0) {
+                console.log("Updated rows:", result.affectedRows);
+              res.json({
+                success: true,
+              });
+            } else {
+              //없는경우
+              res.json({
+                success: false,
+                data: "None",
+              })
+            }
+        }
+    })
+});
+
+app.post('/orderWater', (req, res) => {
+    const updateWater = req.body.updateWater;
+
+    let query = `UPDATE stock set inStock = ? WHERE stockName='생수';`
+  
+    connection.query(query, [updateWater], (err, result, fields) => {
+        if (err) {
+            console.error("database error :", err);
+            res.status(500).send("Internal Server Error");
+          } else {
+            if (result.affectedRows > 0) {
+                console.log("Updated rows:", result.affectedRows);
+              res.json({
+                success: true,
+              });
+            } else {
+              //없는경우
+              res.json({
+                success: false,
+                data: "None",
+              })
+            }
+        }
+    })
+});
+
+app.post('/orderSyrup', (req, res) => {
+    const updateSyrup = req.body.updateSyrup;
+
+    let query = `UPDATE stock set inStock = ? WHERE stockName='시럽';`
+  
+    connection.query(query, [updateSyrup], (err, result, fields) => {
+        if (err) {
+            console.error("database error :", err);
+            res.status(500).send("Internal Server Error");
+          } else {
+            if (result.affectedRows > 0) {
+                console.log("Updated rows:", result.affectedRows);
+              res.json({
+                success: true,
+              });
+            } else {
+              //없는경우
+              res.json({
+                success: false,
+                data: "None",
+              })
+            }
+        }
+    })
+});
