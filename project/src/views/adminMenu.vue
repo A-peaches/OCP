@@ -207,7 +207,7 @@
                             type="text"
                             class="form-control"
                             id="recipient-name"
-                            v-model="syrup"
+                            v-model="sugar"
                             style="width: 70px"
                             required
                           />
@@ -411,51 +411,9 @@ export default {
       this.menuimg = "";
     },
   },
-  // async deleteCheckedItems() {
-  //   alert("함수가 호출됐어용");
-  //   const checkedIds = [];
-
-  //   //체크된 항목 불러오기
-
-  //   if (menuList.checked) {
-  //     checkedIds.push(menuList.value);
-  //   }
-
-  //   if (checkedIds.length === 0) {
-  //     alert("삭제할 항목을 선택해주세요.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post("http://localhost:3000/menudelete", {
-  //       menuIds: checkedIds,
-  //     });
-  //     console.log("삭제 요청 결과:", response.data);
-  //     this.fetchMenus();
-  //     alert("선택된 항목이 삭제되었습니다.");
-  //   } catch (error) {
-  //     console.error("삭제 요청 실패:", error);
-  //     alert("선택된 항목을 삭제하는 중에 오류가 발생했습니다.");
-  //   }
-  // },
 
   sendSelectedMenus() {
     this.deleteMsg = "삭제가 완료되었습니다.";
-    // const selectedMenuIds = this.menus
-    //   .filter((menu) => menu.checked)
-    //   .map((menu) => menu.menuId);
-
-    // axios
-    //   .post("http://localhost:3000/menudelete", { selectedMenuIds })
-    //   .then((response) => {
-    //     console.log(
-    //       "선택된 메뉴 ID가 성공적으로 전송되었습니다:",
-    //       response.data
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     console.error("선택된 메뉴 ID 전송 중 오류 발생:", error);
-    //   });
   },
 };
 </script>

@@ -56,6 +56,7 @@
                 value="tall"
                 v-model="selectedSize"
                 @change="sizeUp"
+                checked
               />&nbsp;tall(350ml)&nbsp;&nbsp;
               <input
                 type="radio"
