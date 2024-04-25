@@ -30,12 +30,14 @@
     </p>
     <div class="cart-buttons">
       <button class="btn btn-secondary" @click="placeOrder">주문하기</button>
+      <KakaoPay ref="kakaoPay"/>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import KakaoPay from '@/components/KakaoPay.vue';
 
 export default {
   data() {
@@ -125,10 +127,10 @@ export default {
     //   }
     // },
 
-    placeOrder() {
-      // 예: 주문 정보를 서버에 전송하는 로직
-      alert("주문이 완료되었습니다!");
+    async placeOrder() {
+      this.$refs.kakaoPay.openModal();
     },
+
 
     async increaseQuantity(item) {
       try {
@@ -187,7 +189,10 @@ export default {
       }
     },
   },
-};
+  components:{
+    KakaoPay
+  }
+}
 </script>
 <style scoped>
 .cart-container {
