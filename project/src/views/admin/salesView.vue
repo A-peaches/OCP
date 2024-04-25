@@ -49,11 +49,15 @@ export default {
         );
         // 날짜 부분만 추출 (월/일)
         const dateString = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
-        return [dateString, parseInt(item.dailySales)];
+        return [
+          dateString,
+          parseInt(item.dailySales),
+          parseInt(item.dailyProfit),
+        ];
       });
 
       const data = google.visualization.arrayToDataTable([
-        ["date", "Sales"],
+        ["date", "Sales", "Profit"],
         ...formattedSalesData,
       ]);
 
@@ -67,12 +71,13 @@ export default {
         },
         hAxis: {
           title: "Date",
+
           format: "M/d", // 축 레이블 형식 지정 (월/일)
         },
         colors: ["rgb(255, 0, 0)", "blue", "green"],
 
         curveType: "function",
-        legend: { position: "bottom" },
+        legend: { position: "top" },
       };
 
       const chart = new google.visualization.LineChart(
@@ -97,7 +102,7 @@ export default {
       });
 
       const data = google.visualization.arrayToDataTable([
-        ["date", "orderCnt"],
+        ["date", "일별 주문량"],
         ...formattedSalesData,
       ]);
 
@@ -115,7 +120,7 @@ export default {
         },
 
         curveType: "function",
-        legend: { position: "bottom" },
+        legend: { position: "top" },
       };
 
       const chart = new google.visualization.LineChart(
