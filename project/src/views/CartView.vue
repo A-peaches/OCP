@@ -30,12 +30,14 @@
     </p>
     <div class="cart-buttons">
       <button class="btn btn-secondary" @click="placeOrder">주문하기</button>
+      <KakaoPay ref="kakaoPay"/>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import KakaoPay from '@/components/KakaoPay.vue';
 
 export default {
   data() {
@@ -128,14 +130,14 @@ export default {
 
     async placeOrder() {
 
+      this.$refs.kakaoPay.openModal();
       await this.findMyOrderNum();
       await this.addUserOrder(this.orderNum);
       console.log("유저오더 끝");
       await this.addOrderDetail(this.orderNum);
       this.delCartTable();
-      alert("주문이 완료되었습니다.");
       this.cartItems = '';
-      this.$store.commit("resetMenu");
+      
     },
 
     async findMyOrderNum() {
@@ -190,7 +192,9 @@ export default {
         console.error('Failed to delete cart:', error);
       }
       console.log("장바구니 삭제 끝")
+      
     },
+
 
     async increaseQuantity(item) {
       try {
@@ -249,7 +253,10 @@ export default {
       }
     },
   },
-};
+  components:{
+    KakaoPay
+  }
+}
 </script>
 <style scoped>
 .cart-container {

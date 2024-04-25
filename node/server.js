@@ -4,6 +4,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const app = express();
+const axios = require('axios');
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mysql = require("mysql2");
@@ -18,6 +19,7 @@ const storage = multer.memoryStorage(); // 메모리에 이미지를 저장
 const upload = multer({ storage });
 
 connection.connect(); //db연결
+app.use(express.json());  
 app.use(cors()); // cors 설정
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
