@@ -29,7 +29,7 @@
   export default {
     data() {
       return {
-        modalSrc: "https://online-pay.kakao.com/mockup/v1/13daf82238f00ae027af5863b4a3880e6f54dd5c5e665f500014a6b24d8f4578/info" // 원본 링크
+        modalSrc: "https://online-pay.kakao.com/mockup/v1/2306382f76c028b131b47d40c1dd7d2be33c4b52d3e0242823ac71f0aefc1d7b/info" // 원본 링크
       };
     },
     methods: {
