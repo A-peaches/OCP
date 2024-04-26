@@ -1,0 +1,101 @@
+CREATE TABLE `cart` (
+  `userId` varchar(30) NOT NULL,
+  `menuId` int NOT NULL,
+  `cartCnt` int DEFAULT '1',
+  PRIMARY KEY (`userId`,`menuId`),
+  KEY `menuId` (`menuId`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `userinfo` (`userId`),
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`menuId`) REFERENCES `menu` (`menuId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `level` (
+  `userLevel` int NOT NULL,
+  `grade` varchar(20) NOT NULL,
+  `standard` int NOT NULL,
+  PRIMARY KEY (`userLevel`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `menu` (
+  `menuId` int NOT NULL AUTO_INCREMENT,
+  `menuName` varchar(30) NOT NULL,
+  `menuPrice` int DEFAULT NULL,
+  `beans` int DEFAULT NULL,
+  `milk` int DEFAULT NULL,
+  `water` int DEFAULT NULL,
+  `sugar` int DEFAULT NULL,
+  `menuimg` blob,
+  `menuintro` text,
+  `category` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`menuId`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `notice` (
+  `noticeId` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  `is_event` tinyint DEFAULT '0',
+  `noticeimg` blob,
+  PRIMARY KEY (`noticeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `orderdetail` (
+  `orderNo` int NOT NULL,
+  `menuId` int NOT NULL,
+  `sizeUp` tinyint DEFAULT '0',
+  `shotAdd` tinyint DEFAULT '0',
+  `orderCnt` int DEFAULT '1',
+  PRIMARY KEY (`orderNo`,`menuId`),
+  KEY `menuId` (`menuId`),
+  CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`orderNo`) REFERENCES `userorder` (`orderNo`),
+  CONSTRAINT `orderdetail_ibfk_2` FOREIGN KEY (`menuId`) REFERENCES `menu` (`menuId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `pick` (
+  `userId` varchar(30) NOT NULL,
+  `menuId` int NOT NULL,
+  PRIMARY KEY (`userId`,`menuId`),
+  KEY `menuId` (`menuId`),
+  CONSTRAINT `pick_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `userinfo` (`userId`),
+  CONSTRAINT `pick_ibfk_2` FOREIGN KEY (`menuId`) REFERENCES `menu` (`menuId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `stock` (
+  `stockName` varchar(30) NOT NULL,
+  `inStock` int DEFAULT '0',
+  `outStock` int DEFAULT '0',
+  `unitPrice` int DEFAULT '0',
+  PRIMARY KEY (`stockName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `useract` (
+  `userId` varchar(30) NOT NULL,
+  `star` int DEFAULT '0',
+  `coupon` int DEFAULT '0',
+  PRIMARY KEY (`userId`),
+  CONSTRAINT `useract_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `userinfo` (`userId`),
+  CONSTRAINT `star_check` CHECK ((`star` between 0 and 10))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `userinfo` (
+  `userId` varchar(30) NOT NULL,
+  `userName` varchar(30) DEFAULT NULL,
+  `userPw` varchar(50) NOT NULL,
+  `nickName` varchar(50) DEFAULT NULL,
+  `phone` varchar(30) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `is_admin` tinyint DEFAULT '0',
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `userorder` (
+  `orderNo` int NOT NULL AUTO_INCREMENT,
+  `userId` varchar(30) NOT NULL,
+  `orderDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `orderState` tinyint DEFAULT '0',
+  PRIMARY KEY (`orderNo`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `userorder_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `userinfo` (`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
