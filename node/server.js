@@ -329,7 +329,7 @@ app.post("/orderState", async (req, res) => {
 
   // console.log(userId);
   const query =
-    "SELECT c.orderNo, c.orderDate, m.menuName, c.orderCnt, m.menuPrice FROM ( SELECT A.orderNo, A.orderDate, menuId, B.orderCnt, A.userId FROM userorder AS A LEFT OUTER JOIN orderdetail AS B ON A.orderNo =B.orderNo WHERE A.userId = ? AND A.orderDate = ( SELECT MAX(orderDate) FROM userorder WHERE userId = ? AND orderNo = A.orderNo ) ) AS c LEFT OUTER JOIN menu AS m ON c.menuId = m.menuId order by c.orderDate desc";
+    "SELECT c.orderNo, c.orderDate, m.menuName, c.orderCnt, m.menuPrice FROM ( SELECT A.orderNo, A.orderDate, menuId, B.orderCnt, A.userId FROM userorder AS A LEFT OUTER JOIN orderdetail AS B ON A.orderNo =B.orderNo WHERE A.userId = ? AND A.orderDate = ( SELECT MAX(orderDate) FROM userorder WHERE userId = ? ) ) AS c LEFT OUTER JOIN menu AS m ON c.menuId = m.menuId order by c.orderDate desc";
 
   connection.query(query, [userId, userId], async (error, results, fields) => {
     if (error) {

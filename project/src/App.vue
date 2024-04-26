@@ -267,6 +267,7 @@ export default {
       this.$store.commit("logoutUser");
       this.$router.push("/");
     },
+
   },
   created() {},
   mounted() {
